@@ -2,11 +2,13 @@
 using Microsoft.Data.SqlClient;
 using System.Configuration;
 using CDB.Model;
+using log4net;
 
 namespace CDB
 {
     public class DataWrapper
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(DataWrapper));
         public CdbContext context;
         public static string DatabaseConnectionString = string.Empty;
 
@@ -17,6 +19,10 @@ namespace CDB
             if (string.IsNullOrEmpty(DatabaseConnectionString))
             {
                 throw new ConfigurationErrorsException("Unable to determine database connection string from configuration file!");
+            }
+            else
+            {
+                log.Debug($"Database connection string successfully initialised as {DatabaseConnectionString}.");
             }
         }
 
@@ -46,25 +52,54 @@ namespace CDB
             try
             {
                 List<Customer> customerList = context.Customers.FromSqlRaw("SelectAllCustomers").ToList();
+                log.Info($"Customers successfully queried from CDB database. {customerList.Count} results returned.");
                 return customerList;
             }
             catch (Exception exception)
             {
-                // throw exception;
+                log.Error($"Exception of type {exception.GetType().FullName} occurred attempting to select customers from database.\r\nException message: {exception.Message}.");
                 return new List<Customer>();
             }
         }
 
-        public void InsertNewCustomer()
+        /// <summary>
+        /// Inserts a new customer into the database by invoking a stored procedure.
+        /// </summary>
+        /// <param name="companyName"></param>
+        /// <param name="businessContact"></param>
+        /// <param name="emailAddress"></param>
+        /// <param name="contactNumber"></param>
+        /// <returns></returns>
+        public Customer InsertNewCustomer(string companyName, string businessContact, string emailAddress, string contactNumber)
         {
-            string companyName = "Test company name";
-            string businessContact = "test bus contact (jefferey rogers)";
-            string emailAddress = "test.email@hotmail.com";
-            string contactNumber = "012345678";
-
             FormattableString sql = $"InsertCustomer {companyName}, {businessContact}, {emailAddress}, {contactNumber}";
 
-            var result = context.Customers.FromSql(sql);
+            Customer customerInsertResult = new Customer();
+
+            try
+            {
+                customerInsertResult = context.Customers.FromSql(sql).First();
+            } catch (Exception exception) {
+                string errorMessage = $"Exception of type: {exception.GetType().FullName} occurred attempting to insert new customer record into CDB database.\r\n";
+                errorMessage += $"Exception message: {exception.Message}.";
+                log.Error(exception);
+            }
+
+
+            string logMessage = string.Empty;
+
+            if (customerInsertResult.Id != 0)
+            {
+                logMessage = "Error occurred attempting to insert new customer. Customer ID was returned as 0.";
+                log.Error(logMessage);
+            }
+            else
+            {
+                logMessage = $"New customer successfully inserted into the database. New customer ID is {customerInsertResult.Id}.";
+                log.Info(logMessage);
+            }
+
+            return customerInsertResult;
         }
     }
 }
