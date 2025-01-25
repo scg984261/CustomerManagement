@@ -12,3 +12,6 @@
 /Test/CustomerManagement.Test/obj
 /Src/DataModel/obj
 /Src/DataModel/bin/Debug/net9.0-windows
+/Src/CDB/obj
+/Src/CDB/bin/Debug/net9.0-windows
+/Src/CDB/bin/Debug/net9.0
