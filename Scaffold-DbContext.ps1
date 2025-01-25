@@ -1,0 +1,1 @@
+Scaffold-DbContext "Server=DESKTOP-3GIU7MF\SQLEXPRESS;Initial Catalog=CDB;trustservercertificate=True;trusted_connection=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir C:\Users\scott\dev-work\CustomerManagement\Src\CDB
