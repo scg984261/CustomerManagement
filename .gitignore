@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/CustomerManagement
+/Src/CustomerManagement/obj
+/Src/CustomerManagement/CustomerManagement.csproj.user
+/.vs/ProjectEvaluation
+/Src/CustomerManagement/bin/Debug/net9.0-windows
+/Test/CustomerManagement.Test/bin/Debug
+/Test/CustomerManagement.Test/obj/Debug
+/Test/CustomerManagement.Test/obj
