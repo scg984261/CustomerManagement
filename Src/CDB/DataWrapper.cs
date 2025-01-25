@@ -43,8 +43,28 @@ namespace CDB
 
         public List<Customer> SelectAllCustomers()
         {
-            List<Customer> customerList = context.Customers.FromSqlRaw("SelectAllCustomers").ToList();
-            return customerList;
+            try
+            {
+                List<Customer> customerList = context.Customers.FromSqlRaw("SelectAllCustomers").ToList();
+                return customerList;
+            }
+            catch (Exception exception)
+            {
+                // throw exception;
+                return new List<Customer>();
+            }
+        }
+
+        public void InsertNewCustomer()
+        {
+            string companyName = "Test company name";
+            string businessContact = "test bus contact (jefferey rogers)";
+            string emailAddress = "test.email@hotmail.com";
+            string contactNumber = "012345678";
+
+            FormattableString sql = $"InsertCustomer {companyName}, {businessContact}, {emailAddress}, {contactNumber}";
+
+            var result = context.Customers.FromSql(sql);
         }
     }
 }

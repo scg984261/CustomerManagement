@@ -17,6 +17,7 @@ namespace CustomerManagement.View.UserControls
         {
             this.wrapper = new DataWrapper();
             this.Customers = new ObservableCollection<Customer>(wrapper.SelectAllCustomers());
+            wrapper.InsertNewCustomer();
             InitializeComponent();
         }
 
