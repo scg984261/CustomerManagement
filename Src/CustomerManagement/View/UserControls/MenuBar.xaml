@@ -17,6 +17,7 @@
                 <MenuItem Header="File" Height="30" FontSize="12">
                     <MenuItem Name="MenuItemOpen" Header="Open" Click="MenuItemOpen_Click" />
                     <MenuItem Name="MenuItemExit" Header="Exit" Click="MenuItemExit_Click"/>
+                    <MenuItem Name="MenuItemLoadData" Header="Load Data" Click="MenuItemLoadData_Click" />
                 </MenuItem>
                 <MenuItem Header="Edit" FontSize="12">
                     <MenuItem Header="Undo" />
