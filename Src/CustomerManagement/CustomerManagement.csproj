@@ -9,4 +9,8 @@
 	<AssemblyVersion>1.0.0.1</AssemblyVersion>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataModel\DataModel.csproj" />
+  </ItemGroup>
+
 </Project>
