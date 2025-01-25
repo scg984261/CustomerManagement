@@ -17,7 +17,6 @@ namespace CustomerManagement.View.UserControls
         {
             this.wrapper = new DataWrapper();
             this.Customers = new ObservableCollection<Customer>(wrapper.SelectAllCustomers());
-            wrapper.InsertNewCustomer();
             InitializeComponent();
         }
 
@@ -29,7 +28,8 @@ namespace CustomerManagement.View.UserControls
         private void CustomerTable_RowEditEnding(object sender, DataGridRowEditEndingEventArgs rowEventArgs)
         {
             Customer customerToUpdate = (Customer) this.CustomerTable.SelectedValue;
-            // this.DataProvider.UpdateCustomer(customerToUpdate);
         }
+
+
     }
 }
