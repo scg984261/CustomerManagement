@@ -9,6 +9,7 @@ namespace CustomerManagement.View.UserControls
     public partial class MenuBar : UserControl
     {
         private CsvDataLoader dataLoader = new CsvDataLoader();
+        private MainWindow? mainWindow = Application.Current.MainWindow as MainWindow;
 
         public MenuBar()
         {
@@ -25,7 +26,7 @@ namespace CustomerManagement.View.UserControls
             }
         }
 
-        private void MenuItemOpen_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void MenuItemOpen_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.InitialDirectory = @"C:\Users\Downloads";
@@ -42,14 +43,44 @@ namespace CustomerManagement.View.UserControls
 
         private void MenuItemLoadData_Click(object sender, RoutedEventArgs e)
         {
+            if (this.mainWindow != null)
+            {
+                this.mainWindow.Opacity = 0.7;
+            }
+
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.InitialDirectory = @"C:\Users\Downloads";
+            dialog.InitialDirectory = @"C:\Users\scott\OneDrive\Documents\CMS";
+            dialog.Filter = "Excel and CSV|*.csv;*.xlsx;*.xls";
+            dialog.Multiselect = false;
             bool? fileSelected = dialog.ShowDialog();
 
             if (fileSelected == true)
             {
+                string fileName = dialog.SafeFileName;
+                bool hasHeaders = false;
+                MessageBoxResult result = MessageBox.Show($"{fileName} selected for customer data load. Does this file contain headers?", "File select", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.No);
+
+                if (result == MessageBoxResult.Cancel)
+                {
+                    if (this.mainWindow != null)
+                    {
+                        this.mainWindow.Opacity = 1.0;
+                    }
+
+                    return;
+                }
+                else if (result == MessageBoxResult.Yes)
+                {
+                    hasHeaders = true;
+                }
+
                 string filePath = dialog.FileName;
-                this.dataLoader.LoadCustomersFromFile(filePath);
+                this.dataLoader.LoadCustomersFromFile(filePath, hasHeaders);
+            }
+
+            if (this.mainWindow != null)
+            {
+                this.mainWindow.Opacity = 1.0;
             }
         }
 

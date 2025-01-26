@@ -1,2 +1,3 @@
 dotnet clean
-dotnet build
+dotnet build --configuration=Debug
+dotnet test --configuration=Debug
