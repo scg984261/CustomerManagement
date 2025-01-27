@@ -18,7 +18,7 @@
 
         <TabControl Name="TabCollection" Grid.Row="1">
             <TabItem  Header="Main Details">
-                <userControls:CustomerDataGrid Grid.Row="1" />
+                <userControls:CustomerDataGrid x:Name="CustomerDataGrid" Grid.Row="1" />
             </TabItem>
 
             <TabItem Header="Tab 2" Content="Hello, World" />

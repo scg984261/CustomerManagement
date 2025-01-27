@@ -25,6 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="testhost.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="DataLoader\Resources\CustomerData.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

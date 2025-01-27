@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using CDB;
 using CDB.Model;
 using log4net;
 
@@ -8,6 +9,8 @@ namespace CustomerManagement.DataLoader
     {
         private readonly ILog log = LogManager.GetLogger(typeof(CsvDataLoader));
 
+        private readonly DataWrapper dataWrapper = new DataWrapper();
+
         // Integers to represent the index positions of the
         // columns with respective data.
         public int companyNameColumn = -1;
@@ -15,9 +18,7 @@ namespace CustomerManagement.DataLoader
         public int emailAddressColumn = -1;
         public int contactNumberColumn = -1;
 
-        // TODO: could potentially use a dictionay to make this a bit more elegant.
-
-        public List<Customer> LoadCustomersFromFile(string filePath, bool hasHeaders = false)
+        public List<Customer> LoadCustomersFromFile(string filePath, bool hasHeaders = true)
         {
             log.Info($"Starting customer data load from file {filePath}.");
 
@@ -31,7 +32,10 @@ namespace CustomerManagement.DataLoader
                 log.Info("Headers will be ignored when loading ");
             }
 
-            return new List<Customer>();
+            string[] lines = File.ReadAllLines(filePath).Skip(1).ToArray();
+            List<Customer> customerList = this.ConvertLinesToCustomers(lines);
+
+            return customerList;
         }
 
         public void DetermineHeaderColumns(string file)
@@ -72,6 +76,66 @@ namespace CustomerManagement.DataLoader
 
             this.contactNumberColumn = Array.IndexOf(headers, "CONTACTNUMBER");
             log.Debug($"Contact number column determined as {this.contactNumberColumn}");
+        }
+
+        public List<Customer> ConvertLinesToCustomers(string[] lines)
+        {
+            List<Customer> customers = new List<Customer>();
+
+            foreach (string line in lines)
+            {
+                try
+                {
+                    Customer customer = this.InsertCustomer(line);
+                    customers.Add(customer);
+                }
+                catch (Exception exception)
+                {
+                    string errorMessage = $"Exception of type {exception.GetType().FullName} occurred attemtping to insert customer into database from line {line}.\r\nError message: {exception.Message}.";
+                    log.Error(errorMessage);
+                }
+            }
+
+            log.Debug($"Customer data load complete. {customers.Count} rows inserted");
+            return customers;
+        }
+
+        public Customer InsertCustomer(string line)
+        {
+            try
+            {
+                string[] columns = line.Split(',');
+                string companyName = columns[this.companyNameColumn];
+                string businessContact = columns[this.businessContactColumn];
+                string emailAddress = columns[this.emailAddressColumn];
+                string contactNumber = columns[this.contactNumberColumn];
+                return this.InsertCustomer(companyName, businessContact, emailAddress, contactNumber);
+            }
+            catch (Exception exception)
+            {
+                string errorMessage = $"Exception of type {exception.GetType().FullName} occurred attempting to insert customer from line {line} into the database.\r\nException message {exception.Message}.";
+                log.Error(errorMessage);
+                log.Error(exception);
+                throw;
+            }
+        }
+
+        public Customer InsertCustomer(string companyName, string businessContact, string emailAddress, string contactNumber)
+        {
+            try
+            {
+                Customer customer = dataWrapper.InsertNewCustomer(companyName, businessContact, emailAddress, contactNumber);
+                log.Debug($"New customer with ID {customer.Id} inserted into the database.");
+                return customer;
+            }
+            catch (Exception exception)
+            {
+                string errorMessage = $"Exception of type {exception.GetType().FullName} occurred attempting to insert customer with company name {companyName}, business contact {businessContact}, email address {emailAddress}, and contact number {contactNumber} into the database\r\n.";
+                errorMessage += $"Exception message: {exception.Message}.";
+                log.Error(errorMessage);
+                log.Error(exception);
+                throw;
+            }
         }
     }
 }

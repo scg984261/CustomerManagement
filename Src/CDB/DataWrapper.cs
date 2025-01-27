@@ -78,25 +78,13 @@ namespace CDB
 
             try
             {
-                customerInsertResult = context.Customers.FromSql(sql).First();
+                customerInsertResult = context.Customers.FromSql(sql).AsEnumerable().First();
             } catch (Exception exception) {
                 string errorMessage = $"Exception of type: {exception.GetType().FullName} occurred attempting to insert new customer record into CDB database.\r\n";
                 errorMessage += $"Exception message: {exception.Message}.";
+                log.Error(errorMessage);
                 log.Error(exception);
-            }
-
-
-            string logMessage = string.Empty;
-
-            if (customerInsertResult.Id != 0)
-            {
-                logMessage = "Error occurred attempting to insert new customer. Customer ID was returned as 0.";
-                log.Error(logMessage);
-            }
-            else
-            {
-                logMessage = $"New customer successfully inserted into the database. New customer ID is {customerInsertResult.Id}.";
-                log.Info(logMessage);
+                throw;
             }
 
             return customerInsertResult;

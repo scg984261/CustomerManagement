@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using CustomerManagement.DataLoader;
+using CDB.Model;
 
 namespace CustomerManagement.View.UserControls
 {
@@ -76,6 +77,10 @@ namespace CustomerManagement.View.UserControls
 
                 string filePath = dialog.FileName;
                 this.dataLoader.LoadCustomersFromFile(filePath, hasHeaders);
+                
+                // not actually needed - could just add the new custoemr to IObservable.
+               this.mainWindow?.CustomerDataGrid.Refresh();
+                // this.mainWindow?.CustomerDataGrid.Customers.(customers);
             }
 
             if (this.mainWindow != null)
@@ -88,5 +93,6 @@ namespace CustomerManagement.View.UserControls
         {
 
         }
+
     }
 }

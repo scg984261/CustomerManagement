@@ -5,27 +5,29 @@ namespace CustomerManagement.Test.DataLoader
     public class DataLoaderTest
     {
         [Test]
-        public void TestSetColumnIndices()
+        public void TestLoadCustomersFromFile()
         {
             // Arrange
             CsvDataLoader testLoader = new CsvDataLoader();
 
-            string[] headers =
-            {
-                "COMPANYNAME",
-                "EMAILADDRESS",
-                "CONTACTNUMBER",
-                "BUSINESSCONTACT",
-            };
+
+        }
+
+        [Test]
+        public void TestDetermineHeaderColumns()
+        {
+            // Arrange.
+            string testCustomerDataFile = @$"{Environment.CurrentDirectory}\DataLoader\Resources\CustomerData.csv";
+
+            CsvDataLoader testLoader = new CsvDataLoader();
 
             // Act.
-            testLoader.SetColumnIndices(headers);
+            testLoader.DetermineHeaderColumns(testCustomerDataFile);
 
-            // Assert.
-            Assert.That(testLoader.companyNameColumn, Is.EqualTo(0));
-            Assert.That(testLoader.businessContactColumn, Is.EqualTo(3));
-            Assert.That(testLoader.emailAddressColumn, Is.EqualTo(1));
-            Assert.That(testLoader.contactNumberColumn, Is.EqualTo(2));
+            Assert.That(testLoader.businessContactColumn, Is.EqualTo(0));
+            Assert.That(testLoader.contactNumberColumn, Is.EqualTo(1));
+            Assert.That(testLoader.emailAddressColumn, Is.EqualTo(2));
+            Assert.That(testLoader.companyNameColumn, Is.EqualTo(3));
         }
 
         [Test]
@@ -38,7 +40,7 @@ namespace CustomerManagement.Test.DataLoader
                 "business contact",
                 "email address",
                 "post code",
-            }; 
+            };
 
             CsvDataLoader testLoader = new CsvDataLoader();
 
@@ -121,20 +123,27 @@ namespace CustomerManagement.Test.DataLoader
         }
 
         [Test]
-        public void TestDetermineHeaderColumns()
+        public void TestSetColumnIndices()
         {
-            // Arrange.
-            string testCustomerDataFile = @$"{Environment.CurrentDirectory}\DataLoader\Resources\CustomerData.csv";
-
+            // Arrange
             CsvDataLoader testLoader = new CsvDataLoader();
 
-            // Act.
-            testLoader.DetermineHeaderColumns(testCustomerDataFile);
+            string[] headers =
+            {
+                "COMPANYNAME",
+                "EMAILADDRESS",
+                "CONTACTNUMBER",
+                "BUSINESSCONTACT",
+            };
 
-            Assert.That(testLoader.businessContactColumn, Is.EqualTo(0));
-            Assert.That(testLoader.contactNumberColumn, Is.EqualTo(1));
-            Assert.That(testLoader.emailAddressColumn, Is.EqualTo(2));
-            Assert.That(testLoader.companyNameColumn, Is.EqualTo(3));
+            // Act.
+            testLoader.SetColumnIndices(headers);
+
+            // Assert.
+            Assert.That(testLoader.companyNameColumn, Is.EqualTo(0));
+            Assert.That(testLoader.businessContactColumn, Is.EqualTo(3));
+            Assert.That(testLoader.emailAddressColumn, Is.EqualTo(1));
+            Assert.That(testLoader.contactNumberColumn, Is.EqualTo(2));
         }
     }
 }

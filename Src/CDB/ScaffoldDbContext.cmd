@@ -1,0 +1,1 @@
+dotnet ef dbcontext scaffold "Server=DESKTOP-3GIU7MF\SQLEXPRESS;Initial Catalog=CDB;trustservercertificate=True;trusted_connection=true" Microsoft.EntityFrameworkCore.SqlServer --context CdbContext --context-dir . --output-dir .\Models 
