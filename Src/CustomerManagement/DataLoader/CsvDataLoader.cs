@@ -28,7 +28,7 @@ namespace CustomerManagement.DataLoader
             }
             else
             {
-                log.Info("Headers will be ignord when loading ");
+                log.Info("Headers will be ignored when loading ");
             }
 
             return new List<Customer>();
