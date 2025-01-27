@@ -20,7 +20,6 @@ namespace CustomerManagement.View.UserControls
                 return Assembly.GetAssembly(this.GetType())?.GetName().Version?.ToString();
             }
         }
-        
 
         public FooterBar()
         {

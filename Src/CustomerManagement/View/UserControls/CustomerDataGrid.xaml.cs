@@ -29,7 +29,5 @@ namespace CustomerManagement.View.UserControls
         {
             Customer customerToUpdate = (Customer) this.CustomerTable.SelectedValue;
         }
-
-
     }
 }
