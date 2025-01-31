@@ -76,11 +76,12 @@ namespace CustomerManagement.View.UserControls
                 }
 
                 string filePath = dialog.FileName;
-                this.dataLoader.LoadCustomersFromFile(filePath, hasHeaders);
-                
-                // not actually needed - could just add the new custoemr to IObservable.
-               this.mainWindow?.CustomerDataGrid.Refresh();
-                // this.mainWindow?.CustomerDataGrid.Customers.(customers);
+                List<Customer> customers = this.dataLoader.LoadCustomersFromFile(filePath, hasHeaders);
+
+                foreach (Customer customer in customers)
+                {
+                    this.mainWindow?.CustomerDataGrid?.Customers?.Add(customer);
+                }
             }
 
             if (this.mainWindow != null)
