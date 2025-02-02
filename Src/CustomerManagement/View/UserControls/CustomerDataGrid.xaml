@@ -10,6 +10,7 @@
     <Grid>
         <DataGrid AutoGenerateColumns="False" Name="CustomerTable" RowEditEnding="CustomerTable_RowEditEnding">
             <DataGrid.Columns>
+                <DataGridTextColumn Header="Customer ID" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Account Name" Binding="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Business Contact" Binding="{Binding BusinessContact, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Email" Binding="{Binding EmailAddress, UpdateSourceTrigger=PropertyChanged}" />

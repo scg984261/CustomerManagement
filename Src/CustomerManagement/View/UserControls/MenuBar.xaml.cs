@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using CustomerManagement.DataLoader;
+using CDB.Model;
 
 namespace CustomerManagement.View.UserControls
 {
@@ -50,32 +51,20 @@ namespace CustomerManagement.View.UserControls
 
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.InitialDirectory = @"C:\Users\scott\OneDrive\Documents\CMS";
-            dialog.Filter = "Excel and CSV|*.csv;*.xlsx;*.xls";
+            dialog.Filter = "Excel and CSV|*.csv;*.xlsx;";
             dialog.Multiselect = false;
             bool? fileSelected = dialog.ShowDialog();
 
             if (fileSelected == true)
             {
                 string fileName = dialog.SafeFileName;
-                bool hasHeaders = false;
-                MessageBoxResult result = MessageBox.Show($"{fileName} selected for customer data load. Does this file contain headers?", "File select", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.No);
+                MessageBoxResult result = MessageBox.Show($"Are you sure you want to load customer data from file {fileName}?", "File select", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
 
-                if (result == MessageBoxResult.Cancel)
+                if (result == MessageBoxResult.Yes)
                 {
-                    if (this.mainWindow != null)
-                    {
-                        this.mainWindow.Opacity = 1.0;
-                    }
-
-                    return;
+                    string filePath = dialog.FileName;
+                    this.LoadCustomersFromFile(filePath);
                 }
-                else if (result == MessageBoxResult.Yes)
-                {
-                    hasHeaders = true;
-                }
-
-                string filePath = dialog.FileName;
-                this.dataLoader.LoadCustomersFromFile(filePath, hasHeaders);
             }
 
             if (this.mainWindow != null)
@@ -84,7 +73,17 @@ namespace CustomerManagement.View.UserControls
             }
         }
 
-        private void NewCustomerButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void LoadCustomersFromFile(string filePath)
+        {
+            List<Customer> customers = this.dataLoader.LoadCustomersFromFile(filePath);
+
+            foreach (Customer customer in customers)
+            {
+                this.mainWindow?.CustomerDataGrid?.Customers?.Add(customer);
+            }
+        }
+
+        private void NewCustomerButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
