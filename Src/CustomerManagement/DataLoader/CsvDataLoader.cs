@@ -18,19 +18,12 @@ namespace CustomerManagement.DataLoader
         public int emailAddressColumn = -1;
         public int contactNumberColumn = -1;
 
-        public List<Customer> LoadCustomersFromFile(string filePath, bool hasHeaders = true)
+        public List<Customer> LoadCustomersFromFile(string filePath)
         {
             log.Info($"Starting customer data load from file {filePath}.");
 
-            if (hasHeaders)
-            {
-                log.Info("Loading data from file with headers.");
-                DetermineHeaderColumns(filePath);
-            }
-            else
-            {
-                log.Info("Headers will be ignored when loading ");
-            }
+            log.Info("Loading data from file with headers.");
+            DetermineHeaderColumns(filePath);
 
             string[] lines = File.ReadAllLines(filePath).Skip(1).ToArray();
             List<Customer> customerList = this.ConvertLinesToCustomers(lines);
