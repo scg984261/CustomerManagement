@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace CDB.Model;
+﻿namespace CDB.Model;
 
 public partial class Subscription
 {
