@@ -22,7 +22,6 @@ namespace CustomerManagement.DataLoader
         {
             log.Info($"Starting customer data load from file {filePath}.");
 
-            log.Info("Loading data from file with headers.");
             DetermineHeaderColumns(filePath);
 
             string[] lines = File.ReadAllLines(filePath).Skip(1).ToArray();
