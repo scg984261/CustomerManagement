@@ -9,7 +9,7 @@ namespace CustomerManagement.DataLoader
     {
         private readonly ILog log = LogManager.GetLogger(typeof(CsvDataLoader));
 
-        private readonly DataWrapper dataWrapper = new DataWrapper();
+        public DataWrapper dataWrapper = new DataWrapper();
 
         // Integers to represent the index positions of the
         // columns with respective data.
@@ -71,7 +71,7 @@ namespace CustomerManagement.DataLoader
             log.Debug($"Contact number column determined as {this.contactNumberColumn}");
         }
 
-        public List<Customer> ConvertLinesToCustomers(string[] lines)
+        public virtual List<Customer> ConvertLinesToCustomers(string[] lines)
         {
             List<Customer> customers = new List<Customer>();
 
@@ -93,7 +93,7 @@ namespace CustomerManagement.DataLoader
             return customers;
         }
 
-        public Customer InsertCustomer(string line)
+        public virtual Customer InsertCustomer(string line)
         {
             try
             {
