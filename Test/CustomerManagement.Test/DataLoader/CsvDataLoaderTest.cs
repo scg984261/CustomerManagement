@@ -1,6 +1,8 @@
-﻿using Moq;
-using CDB.Model;
+﻿using System.Data;
 using CustomerManagement.DataLoader;
+using CDB;
+using CDB.Model;
+using Moq;
 
 namespace CustomerManagement.Test.DataLoader
 {
@@ -235,13 +237,53 @@ namespace CustomerManagement.Test.DataLoader
             string[] lines =
             {
                 "Clayton Bowen,(01644) 29265,parturient.montes@google.org,Non Incorporated",
-                "Katell Garcia,(011732) 81816,enim@icloud.couk,Vivamus Nibh Corp.",
-                "Alyssa Valencia,07854 519297,eu.tempor@protonmail.couk,Risus Donec Institute"
+                "Katell Garcia,(011732) 81816,enim@icloud.co.uk,Vivamus Nibh Corp.",
+                "Alyssa Valencia,07854 519297,eu.tempor@protonmail.co.uk,Risus Donec Institute"
             };
 
             Mock<CsvDataLoader> mockDataLoader = new Mock<CsvDataLoader>();
 
-            mockDataLoader.Setup(dataLoader => dataLoader.InsertCustomer(It.IsAny<string>())).Returns(new Customer());
+            Customer customer1 = new Customer
+            {
+                Id = 256,
+                CompanyName = "Non Incorporated",
+                BusinessContact = "Clayton Bowen",
+                ContactNumber = "(01644) 29265",
+                EmailAddress = "parturient.montes@google.org",
+                IsActive = true,
+                CreatedDateTime = new DateTime(2024, 5, 3, 21, 52, 57),
+                LastUpdateDateTime = new DateTime(2024, 7, 22, 19, 41, 44)
+            };
+
+            Customer customer2 = new Customer
+            {
+                Id = 484,
+                CompanyName = "Vivamus Nibh Corp.",
+                BusinessContact = "Katell Garcia",
+                ContactNumber = "(011732) 81816",
+                EmailAddress = "enim@icloud.co.uk",
+                IsActive = true,
+                CreatedDateTime = new DateTime(2025, 2, 1, 11, 01, 23),
+                LastUpdateDateTime = new DateTime(2025, 2, 1, 10, 33, 12)
+            };
+
+            Customer customer3 = new Customer
+            {
+                Id = 151,
+                CompanyName = "Risus Donec Institute",
+                BusinessContact = "Alyssa Valencia",
+                ContactNumber = "07854 519297",
+                EmailAddress = "eu.tempor@protonmail.co.uk",
+                IsActive = true,
+                CreatedDateTime = new DateTime(2025, 1, 30, 20, 59, 01),
+                LastUpdateDateTime = new DateTime(2025, 1, 30, 20, 59, 00)
+            };
+
+            mockDataLoader.SetupSequence(dataLoader => dataLoader.InsertCustomer(It.IsAny<string>()))
+                .Returns(customer1)
+                .Returns(customer2)
+                .Returns(customer3);
+
             mockDataLoader.Setup(dataLoader => dataLoader.ConvertLinesToCustomers(It.IsAny<string[]>())).CallBase();
 
             CsvDataLoader testDataLoader = mockDataLoader.Object;
@@ -250,7 +292,214 @@ namespace CustomerManagement.Test.DataLoader
             List<Customer> testCustomers = testDataLoader.ConvertLinesToCustomers(lines);
 
             // Assert.
+            Assert.That(testCustomers.Count, Is.EqualTo(3));
 
+            this.ValidateCustomer(testCustomers[0], 256, "Non Incorporated", "Clayton Bowen", "parturient.montes@google.org", "(01644) 29265", true, new DateTime(2024, 5, 3, 21, 52, 57), new DateTime(2024, 7, 22, 19, 41, 44));
+            this.ValidateCustomer(testCustomers[1], 484, "Vivamus Nibh Corp.", "Katell Garcia", "enim@icloud.co.uk", "(011732) 81816", true, new DateTime(2025, 2, 1, 11, 01, 23), new DateTime(2025, 2, 1, 10, 33, 12));
+            this.ValidateCustomer(testCustomers[2], 151, "Risus Donec Institute", "Alyssa Valencia", "eu.tempor@protonmail.co.uk", "07854 519297", true, new DateTime(2025, 1, 30, 20, 59, 01), new DateTime(2025, 1, 30, 20, 59, 00));
+        }
+
+        [Test]
+        public void TestConvertLinesToCustomers_ShouldCatchException()
+        {
+            // Arrange
+            string[] csvFileLines =
+            {
+                "Paul Everett,(01746) 433844,curabitur.egestas.nunc@aol.ca,Cursus A Incorporated",
+                "Fitzgerald Rivas,(01337) 39353,id.libero@yahoo.edu,Et Rutrum Non LLP",
+                "Keegan Briggs,07624 307025,mauris.rhoncus.id@hotmail.org,Libero Proin Sed Incorporated"
+            };
+
+            Mock<CsvDataLoader> mockDataLoader = new Mock<CsvDataLoader>();
+
+            Customer customer1 = new Customer
+            {
+                Id = 456664,
+                BusinessContact = "Paul Everett",
+                ContactNumber = "(01746) 433844",
+                EmailAddress = "curabitur.egestas.nunc@aol.ca",
+                CompanyName = "Cursus A Incorporated",
+                IsActive = true,
+                CreatedDateTime = new DateTime(2024, 09, 27, 18, 47, 36),
+                LastUpdateDateTime = new DateTime(2024, 06, 16, 15, 32, 20)
+            };
+
+            // Second attempt to insert customer should throw and catch exception.
+            Exception testException = new Exception("Test Exception message.");
+
+            Customer customer3 = new Customer
+            {
+                Id = 456665,
+                BusinessContact = "Keegan Briggs",
+                ContactNumber = "07624 307025",
+                EmailAddress = "mauris.rhoncus.id@hotmail.org",
+                CompanyName = "Libero Proin Sed Incorporated",
+                IsActive = true,
+                CreatedDateTime = new DateTime(2024, 07, 18, 19, 02, 42),
+                LastUpdateDateTime = new DateTime(2024, 02, 14, 04, 41, 13)
+            };
+
+            mockDataLoader.SetupSequence(dataLoader => dataLoader.InsertCustomer(It.IsAny<string>()))
+                .Returns(customer1)
+                .Throws(testException)
+                .Returns(customer3);
+
+            mockDataLoader.Setup(dataLoader => dataLoader.ConvertLinesToCustomers(It.IsAny<string[]>())).CallBase();
+
+            CsvDataLoader testDataLoader = mockDataLoader.Object;
+
+            // Act
+            List<Customer> testCustomers = testDataLoader.ConvertLinesToCustomers(csvFileLines);
+
+            // Assert
+            Assert.That(testCustomers.Count, Is.EqualTo(2));
+
+            this.ValidateCustomer(testCustomers[0], 456664, "Cursus A Incorporated", "Paul Everett", "curabitur.egestas.nunc@aol.ca", "(01746) 433844", true, new DateTime(2024, 09, 27, 18, 47, 36), new DateTime(2024, 06, 16, 15, 32, 20));
+            this.ValidateCustomer(testCustomers[1], 456665, "Libero Proin Sed Incorporated", "Keegan Briggs", "mauris.rhoncus.id@hotmail.org", "07624 307025", true, new DateTime(2024, 07, 18, 19, 02, 42), new DateTime(2024, 02, 14, 04, 41, 13));
+        }
+
+        [Test]
+        public void TestInsertCustomer_ShouldInsertCustomer()
+        {
+            // Arrange
+            string line = "Ray Mckenzie,(016977) 6234,pretium.et@google.com,Nunc In At Inc.";
+
+            Mock<CsvDataLoader> mockDataLoader = new Mock<CsvDataLoader>();
+
+            mockDataLoader.Setup(dataLoader => dataLoader.InsertCustomer(It.IsAny<string>())).CallBase();
+            mockDataLoader.Setup(dataLoader => dataLoader.InsertCustomer(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(
+                    new Customer
+                    {
+                        Id = 1,
+                        BusinessContact = "Ray Mckenzie",
+                        ContactNumber = "(016977) 6234",
+                        EmailAddress = "pretium.et@google.com",
+                        CompanyName = "Nunc In At Inc.",
+                        IsActive = true,
+                        CreatedDateTime = new DateTime(2024, 02, 11, 07, 24, 43),
+                        LastUpdateDateTime = new DateTime(2024, 10, 06, 15, 58, 35)
+                    }
+                );
+
+            CsvDataLoader testDataLoader = mockDataLoader.Object;
+
+            testDataLoader.businessContactColumn = 0;
+            testDataLoader.contactNumberColumn = 1;
+            testDataLoader.emailAddressColumn = 2;
+            testDataLoader.companyNameColumn = 3;
+
+            // Act
+            Customer testCustomer = testDataLoader.InsertCustomer(line);
+
+            // Assert
+            this.ValidateCustomer(testCustomer, 1, "Nunc In At Inc.", "Ray Mckenzie", "pretium.et@google.com", "(016977) 6234", true, new DateTime(2024, 02, 11, 07, 24, 43), new DateTime(2024, 10, 06, 15, 58, 35));
+        }
+
+        [Test]
+        public void TestInsertCustomer_CustomerDataColumnsNotSet_ShouldThrowOutOfRangeException()
+        {
+            // Arrange.
+            string line = "Wallace Padilla,(0111) 257 5655,diam.dictum @google.couk,Faucibus Company";
+
+            Mock<CsvDataLoader> mockDataLoader = new Mock<CsvDataLoader>();
+            mockDataLoader.Setup(dataLoader => dataLoader.InsertCustomer(It.IsAny<string>())).CallBase();
+
+            CsvDataLoader testDataLoader = mockDataLoader.Object;
+
+            // Act & Assert.
+            Assert.That(() => testDataLoader.InsertCustomer(line), Throws.Exception.TypeOf<IndexOutOfRangeException>());
+        }
+
+        [Test]
+        public void TestInsertCustomer_ExceptionThrownInsertingCustomer_ShouldThrowException()
+        {
+            // Arrange.
+            string line = "William James,0368 124 1829,purus.duis@yahoo.ca,Phasellus Ornare Consulting";
+
+            Mock<CsvDataLoader> mockDataLoader = new Mock<CsvDataLoader>();
+            mockDataLoader.Setup(dataLoader => dataLoader.InsertCustomer(It.IsAny<string>())).CallBase();
+
+            DataException testException = new DataException("Test exception message.");
+            mockDataLoader.Setup(dataLoader => dataLoader.InsertCustomer(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(testException);
+
+            CsvDataLoader testDataLoader = mockDataLoader.Object;
+
+            testDataLoader.businessContactColumn = 0;
+            testDataLoader.contactNumberColumn = 1;
+            testDataLoader.emailAddressColumn = 2;
+            testDataLoader.companyNameColumn = 3;
+
+            // Act and assert.
+            Assert.That(() => testDataLoader.InsertCustomer(line), Throws.Exception.TypeOf<DataException>());
+        }
+
+        [Test]
+        public void TestInsertCustomer_ShouldInsertNewCustomer()
+        {
+            // Arrange.
+            Mock<IDataWrapper> mockDatabaseWrapper = new Mock<IDataWrapper>();
+            string companyName = "Capital Business Centre";
+            string businessContact = "Kayla Clements";
+            string emailAddress = "Kayla.clements@weroad.co.uk";
+            string contactNumber = "0131 221 1234";
+            DateTime createdDateTime = new DateTime(2024, 05, 16, 19, 58, 30);
+            DateTime lastUpdateDateTime = new DateTime(2024, 06, 22, 02, 26, 45);
+
+            Customer newCustomer = new Customer
+            {
+                Id = 584,
+                CompanyName = companyName,
+                BusinessContact = businessContact,
+                EmailAddress = emailAddress,
+                ContactNumber = contactNumber,
+                IsActive = true,
+                CreatedDateTime = createdDateTime,
+                LastUpdateDateTime = lastUpdateDateTime
+            };
+
+            mockDatabaseWrapper.Setup(dataWrapper => dataWrapper.InsertNewCustomer(companyName, businessContact, emailAddress, contactNumber)).Returns(newCustomer);
+
+            IDataWrapper testDataWrapper = mockDatabaseWrapper.Object;
+
+            CsvDataLoader testDataLoader = new CsvDataLoader
+            {
+                dataWrapper = testDataWrapper
+            };
+
+            // Act.
+            Customer newlyInsertedCustomer = testDataLoader.InsertCustomer(companyName, businessContact, emailAddress, contactNumber);
+
+            // Assert.
+            this.ValidateCustomer(newlyInsertedCustomer, 584, companyName, businessContact, emailAddress, contactNumber, true, createdDateTime, lastUpdateDateTime);
+        }
+
+        [Test]
+        public void TestInsertCustomer_ShouldThrowException()
+        {
+            // Arrange.
+            Mock<IDataWrapper> mockDatabaseWrapper = new Mock<IDataWrapper>();
+
+            string companyName = "Capital Business Centre";
+            string businessContact = "Kayla Clements";
+            string emailAddress = "Kayla.clements@weroad.co.uk";
+            string contactNumber = "0131 221 1234";
+            DateTime createdDateTime = new DateTime(2024, 05, 16, 19, 58, 30);
+            DateTime lastUpdateDateTime = new DateTime(2024, 06, 22, 02, 26, 45);
+
+            DataException dataException = new DataException("Test Data Exception");
+
+            mockDatabaseWrapper.Setup(dataWrapper => dataWrapper.InsertNewCustomer(companyName, businessContact, emailAddress, contactNumber)).Throws(dataException);
+
+            IDataWrapper testDataWrapper = mockDatabaseWrapper.Object;
+
+            CsvDataLoader testDataLoader = new CsvDataLoader
+            {
+                dataWrapper = testDataWrapper
+            };
+
+            Assert.That(() => testDataLoader.InsertCustomer(companyName, businessContact, emailAddress, contactNumber), Throws.Exception.TypeOf<DataException>());
         }
     }
 }

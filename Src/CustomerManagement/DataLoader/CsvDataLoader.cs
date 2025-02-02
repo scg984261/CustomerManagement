@@ -9,7 +9,7 @@ namespace CustomerManagement.DataLoader
     {
         private readonly ILog log = LogManager.GetLogger(typeof(CsvDataLoader));
 
-        public DataWrapper dataWrapper = new DataWrapper();
+        public IDataWrapper dataWrapper = new DataWrapper();
 
         // Integers to represent the index positions of the
         // columns with respective data.
@@ -113,7 +113,7 @@ namespace CustomerManagement.DataLoader
             }
         }
 
-        public Customer InsertCustomer(string companyName, string businessContact, string emailAddress, string contactNumber)
+        public virtual Customer InsertCustomer(string companyName, string businessContact, string emailAddress, string contactNumber)
         {
             try
             {

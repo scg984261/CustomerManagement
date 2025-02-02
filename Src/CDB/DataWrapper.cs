@@ -6,7 +6,7 @@ using log4net;
 
 namespace CDB
 {
-    public class DataWrapper
+    public class DataWrapper : IDataWrapper
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DataWrapper));
         public CdbContext context;
