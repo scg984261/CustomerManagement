@@ -89,4 +89,9 @@ public partial class CdbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+    public virtual IQueryable<TEntity> RunSql<TEntity>(string sql, params object[] parameters) where TEntity : class
+    {
+        return this.Set<TEntity>().FromSqlRaw(sql, parameters);
+    }
 }

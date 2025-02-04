@@ -51,7 +51,7 @@ namespace CDB
         {
             try
             {
-                List<Customer> customerList = context.Customers.FromSqlRaw("SelectAllCustomers").ToList();
+                List<Customer> customerList = context.RunSql<Customer>("SelectAllCustomers").ToList();
                 log.Info($"Customers successfully queried from CDB database. {customerList.Count} results returned.");
                 return customerList;
             }
