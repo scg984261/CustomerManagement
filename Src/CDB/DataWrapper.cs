@@ -78,7 +78,7 @@ namespace CDB
 
             try
             {
-                customerInsertResult = context.Customers.FromSql(sql).AsEnumerable().First();
+                customerInsertResult = context.RunSql<Customer>(sql).AsEnumerable().First();
             } catch (Exception exception) {
                 string errorMessage = $"Exception of type: {exception.GetType().FullName} occurred attempting to insert new customer record into CDB database.\r\n";
                 errorMessage += $"Exception message: {exception.Message}.";

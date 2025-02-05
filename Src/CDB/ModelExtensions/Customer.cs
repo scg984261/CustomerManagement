@@ -5,6 +5,7 @@
         public Customer()
         {
             this.Id = 0;
+            this.SageRef = string.Empty;
             this.CompanyName = string.Empty;
             this.BusinessContact = string.Empty;
             this.EmailAddress = string.Empty;
