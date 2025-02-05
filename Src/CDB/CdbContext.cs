@@ -1,5 +1,4 @@
-﻿using System;
-using CDB.Model;
+﻿using CDB.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace CDB;
@@ -46,6 +45,7 @@ public partial class CdbContext : DbContext
             entity.Property(e => e.LastUpdateDateTime)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.SageRef).HasMaxLength(32);
         });
 
         modelBuilder.Entity<Service>(entity =>
@@ -89,9 +89,4 @@ public partial class CdbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-    public virtual IQueryable<TEntity> RunSql<TEntity>(string sql, params object[] parameters) where TEntity : class
-    {
-        return this.Set<TEntity>().FromSqlRaw(sql, parameters);
-    }
 }
