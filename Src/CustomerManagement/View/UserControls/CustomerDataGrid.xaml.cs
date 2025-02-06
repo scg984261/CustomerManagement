@@ -11,7 +11,7 @@ namespace CustomerManagement.View.UserControls
     public partial class CustomerDataGrid : UserControl
     {
         public ObservableCollection<Customer>? Customers { get; set; }
-        private DataWrapper wrapper;
+        public IDataWrapper? wrapper;
 
         public CustomerDataGrid()
         {
