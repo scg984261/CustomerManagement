@@ -22,13 +22,20 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Column="0" Height="40" Margin="15,0,0,0" Text="New Customer" VerticalAlignment="Center" FontSize="24" />
-        <Rectangle Grid.Row="1" Fill="Gray"/>
+        <Rectangle Grid.Row="1" />
 
         <StackPanel Grid.Row="1">
             <userControls:DialogTextBlock Label="Company Name" />
             <userControls:DialogTextBlock Label="Business Contact" />
             <userControls:DialogTextBlock Label="Contact Number" />
             <userControls:DialogTextBlock Label="Email Address" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <TextBox Height="40" FontSize="24" />
+            <TextBox Height="40" FontSize="24" />
+            <TextBox Height="40" FontSize="24" />
+            <TextBox Height="40" FontSize="24" />
         </StackPanel>
 
         <Button Name="SaveButton" Grid.Row="2" Grid.Column="1" Width="100" Margin="10,0,0,0" HorizontalAlignment="Left" Content="Save" Click="SaveButton_Click"/>

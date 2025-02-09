@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:CustomerManagement.View.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="200">
-    <Grid Background="Gray">
-        <TextBlock FontSize="16" Height="40" Margin="15,0,0,0" Text="{Binding Label}"/>
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" FontSize="16" Height="40" Padding="0,10,0,0" Margin="15,0,0,0" Text="{Binding Label}" />
     </Grid>
 </UserControl>
