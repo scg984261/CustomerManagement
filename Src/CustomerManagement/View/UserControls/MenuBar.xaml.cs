@@ -42,7 +42,7 @@ namespace CustomerManagement.View.UserControls
             }
         }
 
-        private void MenuItemLoadData_Click(object sender, RoutedEventArgs e)
+        public void MenuItemLoadData_Click(object sender, RoutedEventArgs e)
         {
             if (this.mainWindow != null)
             {
