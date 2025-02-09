@@ -21,7 +21,6 @@ namespace CDB.Test
             Customer testCustomer = new Customer()
             {
                 Id = 4,
-                SageRef = "NUNCE",
                 CompanyName = "Nunc Est LLC",
                 BusinessContact = "Cruz Pugh",
                 EmailAddress = "sed.nec@aol.edu",

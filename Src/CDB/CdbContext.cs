@@ -1,4 +1,6 @@
-﻿using CDB.Model;
+﻿using System;
+using System.Collections.Generic;
+using CDB.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace CDB;
@@ -45,7 +47,6 @@ public partial class CdbContext : DbContext
             entity.Property(e => e.LastUpdateDateTime)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.SageRef).HasMaxLength(32);
         });
 
         modelBuilder.Entity<Service>(entity =>
