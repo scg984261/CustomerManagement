@@ -11,24 +11,19 @@ namespace CustomerManagement.View.UserControls
     public partial class CustomerDataGrid : UserControl
     {
         public ObservableCollection<Customer>? Customers { get; set; }
-        private DataWrapper wrapper;
+        public IDataWrapper? wrapper;
 
         public CustomerDataGrid()
         {
             DataContext = this;
             this.wrapper = new DataWrapper();
-            this.Customers = new ObservableCollection<Customer>(wrapper.SelectAllCustomers());
             InitializeComponent();
         }
 
         public void Window_Loaded(object sender, EventArgs e)
         {
+            this.Customers = new ObservableCollection<Customer>(wrapper.SelectAllCustomers());
             this.CustomerTable.ItemsSource = this.Customers;
-        }
-
-        private void CustomerTable_RowEditEnding(object sender, DataGridRowEditEndingEventArgs rowEventArgs)
-        {
-            Customer customerToUpdate = (Customer) this.CustomerTable.SelectedValue;
         }
 
         // Todo: use observable collection to refresh the UI without needing to re-query the database.

@@ -79,22 +79,10 @@ namespace CustomerManagement.Test.DataLoader
             // Assert.
             Assert.That(newlyLoadedCustomers.Count, Is.EqualTo(4));
 
-            this.ValidateCustomer(newlyLoadedCustomers[0], 1, "Test company name", "Jeffery Rogers", "test.email@hotmail.com", "012345678", true, new DateTime(2025, 2, 1, 19, 15, 22), new DateTime(2025, 2, 1, 19, 15, 25));
-            this.ValidateCustomer(newlyLoadedCustomers[1], 2, "Albany House Business Centres", "Niall Gillen", "niallgillen@hudsonhouse.co.uk", "07919367388", true, new DateTime(2025, 2, 1, 19, 15, 10), new DateTime(2025, 2, 1, 19, 15, 08));
-            this.ValidateCustomer(newlyLoadedCustomers[2], 3, "Thistle Court", "Christopher Wilkinson", "Chris.Wilkinson@hotmail.com", "+447990199712", true, new DateTime(2025, 2, 1, 19, 14, 57), new DateTime(2025, 2, 1, 19, 14, 59));
-            this.ValidateCustomer(newlyLoadedCustomers[3], 4, "Information Solutions", "Joe Smith", "joe.smith@outlook.com", "1598426984256", true, new DateTime(2025, 2, 1, 19, 14, 55), new DateTime(2025, 2, 1, 19, 14, 51));
-        }
-
-        private void ValidateCustomer(Customer customer, int Id, string companyName, string businessContact, string emailAddress, string contactNumber, bool isActive, DateTime createdDateTime, DateTime lastUpdateDateTime)
-        {
-            Assert.That(customer.Id, Is.EqualTo(Id));
-            Assert.That(customer.CompanyName, Is.EqualTo(companyName));
-            Assert.That(customer.BusinessContact, Is.EqualTo(businessContact));
-            Assert.That(customer.EmailAddress, Is.EqualTo(emailAddress));
-            Assert.That(customer.ContactNumber, Is.EqualTo(contactNumber));
-            Assert.That(customer.IsActive, Is.True);
-            Assert.That(customer.CreatedDateTime, Is.EqualTo(createdDateTime));
-            Assert.That(customer.LastUpdateDateTime, Is.EqualTo(lastUpdateDateTime));
+            for (int i = 0; i < newlyLoadedCustomers.Count; i++)
+            {
+                Assert.That(newlyLoadedCustomers[i].Equals(mockCustomerList[i]));
+            }
         }
 
         [Test]
@@ -294,9 +282,9 @@ namespace CustomerManagement.Test.DataLoader
             // Assert.
             Assert.That(testCustomers.Count, Is.EqualTo(3));
 
-            this.ValidateCustomer(testCustomers[0], 256, "Non Incorporated", "Clayton Bowen", "parturient.montes@google.org", "(01644) 29265", true, new DateTime(2024, 5, 3, 21, 52, 57), new DateTime(2024, 7, 22, 19, 41, 44));
-            this.ValidateCustomer(testCustomers[1], 484, "Vivamus Nibh Corp.", "Katell Garcia", "enim@icloud.co.uk", "(011732) 81816", true, new DateTime(2025, 2, 1, 11, 01, 23), new DateTime(2025, 2, 1, 10, 33, 12));
-            this.ValidateCustomer(testCustomers[2], 151, "Risus Donec Institute", "Alyssa Valencia", "eu.tempor@protonmail.co.uk", "07854 519297", true, new DateTime(2025, 1, 30, 20, 59, 01), new DateTime(2025, 1, 30, 20, 59, 00));
+            Assert.That(testCustomers[0].Equals(customer1));
+            Assert.That(testCustomers[1].Equals(customer2));
+            Assert.That(testCustomers[2].Equals(customer3));
         }
 
         [Test]
@@ -354,8 +342,8 @@ namespace CustomerManagement.Test.DataLoader
             // Assert
             Assert.That(testCustomers.Count, Is.EqualTo(2));
 
-            this.ValidateCustomer(testCustomers[0], 456664, "Cursus A Incorporated", "Paul Everett", "curabitur.egestas.nunc@aol.ca", "(01746) 433844", true, new DateTime(2024, 09, 27, 18, 47, 36), new DateTime(2024, 06, 16, 15, 32, 20));
-            this.ValidateCustomer(testCustomers[1], 456665, "Libero Proin Sed Incorporated", "Keegan Briggs", "mauris.rhoncus.id@hotmail.org", "07624 307025", true, new DateTime(2024, 07, 18, 19, 02, 42), new DateTime(2024, 02, 14, 04, 41, 13));
+            Assert.That(testCustomers[0].Equals(customer1));
+            Assert.That(testCustomers[1].Equals(customer3));
         }
 
         [Test]
@@ -366,21 +354,21 @@ namespace CustomerManagement.Test.DataLoader
 
             Mock<CsvDataLoader> mockDataLoader = new Mock<CsvDataLoader>();
 
+            Customer mockCustomer = new Customer
+            {
+                Id = 1,
+                BusinessContact = "Ray Mckenzie",
+                ContactNumber = "(016977) 6234",
+                EmailAddress = "pretium.et@google.com",
+                CompanyName = "Nunc In At Inc.",
+                IsActive = true,
+                CreatedDateTime = new DateTime(2024, 02, 11, 07, 24, 43),
+                LastUpdateDateTime = new DateTime(2024, 10, 06, 15, 58, 35)
+            };
+
             mockDataLoader.Setup(dataLoader => dataLoader.InsertCustomer(It.IsAny<string>())).CallBase();
             mockDataLoader.Setup(dataLoader => dataLoader.InsertCustomer(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(
-                    new Customer
-                    {
-                        Id = 1,
-                        BusinessContact = "Ray Mckenzie",
-                        ContactNumber = "(016977) 6234",
-                        EmailAddress = "pretium.et@google.com",
-                        CompanyName = "Nunc In At Inc.",
-                        IsActive = true,
-                        CreatedDateTime = new DateTime(2024, 02, 11, 07, 24, 43),
-                        LastUpdateDateTime = new DateTime(2024, 10, 06, 15, 58, 35)
-                    }
-                );
+                .Returns(mockCustomer);
 
             CsvDataLoader testDataLoader = mockDataLoader.Object;
 
@@ -393,7 +381,7 @@ namespace CustomerManagement.Test.DataLoader
             Customer testCustomer = testDataLoader.InsertCustomer(line);
 
             // Assert
-            this.ValidateCustomer(testCustomer, 1, "Nunc In At Inc.", "Ray Mckenzie", "pretium.et@google.com", "(016977) 6234", true, new DateTime(2024, 02, 11, 07, 24, 43), new DateTime(2024, 10, 06, 15, 58, 35));
+            Assert.That(testCustomer.Equals(testCustomer));
         }
 
         [Test]
@@ -472,7 +460,7 @@ namespace CustomerManagement.Test.DataLoader
             Customer newlyInsertedCustomer = testDataLoader.InsertCustomer(companyName, businessContact, emailAddress, contactNumber);
 
             // Assert.
-            this.ValidateCustomer(newlyInsertedCustomer, 584, companyName, businessContact, emailAddress, contactNumber, true, createdDateTime, lastUpdateDateTime);
+            Assert.That(newlyInsertedCustomer.Equals(newCustomer));
         }
 
         [Test]
