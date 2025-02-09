@@ -17,11 +17,18 @@ namespace CustomerManagement.View.Windows
     /// <summary>
     /// Interaction logic for NewCustomer.xaml
     /// </summary>
-    public partial class NewCustomer : Window
+    public partial class NewCustomerWindow : Window
     {
-        public NewCustomer()
+
+
+        public NewCustomerWindow()
         {
             InitializeComponent();
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -9,8 +9,8 @@
         Title="CMS" Height="900" Width="1500">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="80" />
+            <RowDefinition />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
 

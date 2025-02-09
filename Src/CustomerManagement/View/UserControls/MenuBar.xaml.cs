@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using CustomerManagement.DataLoader;
 using CDB.Model;
+using CustomerManagement.View.Windows;
 
 namespace CustomerManagement.View.UserControls
 {
@@ -50,7 +51,7 @@ namespace CustomerManagement.View.UserControls
             }
 
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.InitialDirectory = @"C:\Users\scott\OneDrive\Documents\CMS";
+            dialog.InitialDirectory = @"C:\";
             dialog.Filter = "Excel and CSV|*.csv;*.xlsx;";
             dialog.Multiselect = false;
             bool? fileSelected = dialog.ShowDialog();
@@ -85,7 +86,8 @@ namespace CustomerManagement.View.UserControls
 
         private void NewCustomerButton_Click(object sender, RoutedEventArgs e)
         {
-
+            NewCustomerWindow newCustomerWindow = new NewCustomerWindow();
+            newCustomerWindow.ShowDialog();
         }
     }
 }
