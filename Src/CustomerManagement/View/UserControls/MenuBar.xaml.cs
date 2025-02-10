@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using CustomerManagement.DataLoader;
-using CDB.Model;
 using CustomerManagement.View.Windows;
+using CDB.Model;
 
 namespace CustomerManagement.View.UserControls
 {
@@ -86,8 +86,18 @@ namespace CustomerManagement.View.UserControls
 
         private void NewCustomerButton_Click(object sender, RoutedEventArgs e)
         {
+            if (this.mainWindow != null)
+            {
+                this.mainWindow.Opacity = 0.7;
+            }
+
             NewCustomerWindow newCustomerWindow = new NewCustomerWindow();
             newCustomerWindow.ShowDialog();
+
+            if (this.mainWindow != null)
+            {
+                this.mainWindow.Opacity = 1.0;
+            }
         }
     }
 }

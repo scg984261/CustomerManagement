@@ -34,8 +34,8 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal">
-                <Button Name="NewCustomerButton" Grid.Column="0" Width="100" Margin="5" Content="New Customer" FontFamily="Consolas" Click="NewCustomerButton_Click" />
-                <Button Grid.Column="1" Width="100" Margin="5" Content="Edit Customer" FontFamily="Consolas" />
+                <Button Name="NewCustomerButton" Grid.Column="0" Width="100" Margin="5" Content="New Customer" Click="NewCustomerButton_Click" />
+                <Button Grid.Column="1" Width="100" Margin="5" Content="Edit Customer" />
             </StackPanel>
         </Grid>
     </Grid>

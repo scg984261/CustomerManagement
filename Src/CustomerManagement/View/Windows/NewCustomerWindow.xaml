@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:CustomerManagement.View.Windows"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="New Customer" Height="450" Width="400">
+        Title="New Customer" Height="500" Width="450">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -17,14 +17,14 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Column="0" Height="40" Margin="15,0,0,0" Text="New Customer" VerticalAlignment="Center" FontSize="24" />
         <Rectangle Grid.Row="1" />
 
-        <StackPanel Grid.Row="1">
+        <StackPanel Grid.Row="1" Grid.Column="0">
             <userControls:DialogTextBlock Label="Company Name" />
             <userControls:DialogTextBlock Label="Business Contact" />
             <userControls:DialogTextBlock Label="Contact Number" />
@@ -32,12 +32,13 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1">
-            <TextBox Height="40" FontSize="24" />
-            <TextBox Height="40" FontSize="24" />
-            <TextBox Height="40" FontSize="24" />
-            <TextBox Height="40" FontSize="24" />
+            <TextBox Height="30" FontSize="16" Margin="0,5,10,5" VerticalContentAlignment="Center" Padding="5,0,0,0" Text="{Binding CompanyName}" />
+            <TextBox Height="30" FontSize="16" Margin="0,5,10,5" VerticalContentAlignment="Center" Padding="5,0,0,0" Text="{Binding BusinessContact}" />
+            <TextBox Height="30" FontSize="16" Margin="0,5,10,5" VerticalContentAlignment="Center" Padding="5,0,0,0" Text="{Binding ContactNumber}"/>
+            <TextBox Height="30" FontSize="16" Margin="0,5,10,5" VerticalContentAlignment="Center" Padding="5,0,0,0" Text="{Binding EmailAddress}" />
         </StackPanel>
 
+        <Button Name="CancelButton" Grid.Row="2" Grid.Column="0" Width="100" Margin="0,0,10,0" HorizontalAlignment="Right" Content="Cancel" Click="CancelButton_Click" />
         <Button Name="SaveButton" Grid.Row="2" Grid.Column="1" Width="100" Margin="10,0,0,0" HorizontalAlignment="Left" Content="Save" Click="SaveButton_Click"/>
     </Grid>
 </Window>

@@ -2,7 +2,6 @@
 using CDB.Model;
 using CustomerManagement.View.UserControls;
 using Moq;
-using System.Windows.Controls;
 
 namespace CustomerManagement.Test
 {
