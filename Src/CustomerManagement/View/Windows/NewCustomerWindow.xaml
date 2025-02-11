@@ -25,19 +25,19 @@
         <Rectangle Grid.Row="1" />
 
         <StackPanel Grid.Row="1" Grid.Column="0">
-            <userControls:DialogTextBlock Label="Company Name" />
-            <userControls:DialogTextBlock Label="Business Contact" />
-            <userControls:DialogTextBlock Label="Contact Number" />
-            <userControls:DialogTextBlock Label="Email Address" />
+            <TextBlock Style="{StaticResource FormTextBlock}" Text="Company Name" />
+            <TextBlock Style="{StaticResource FormTextBlock}" Text="Business Contact" />
+            <TextBlock Style="{StaticResource FormTextBlock}" Text="Contact Number" />
+            <TextBlock Style="{StaticResource FormTextBlock}" Text="Email Address" />
         </StackPanel>
-
-        <StackPanel Grid.Row="1" Grid.Column="1">
-            <TextBox Height="30" FontSize="16" Margin="0,5,10,5" VerticalContentAlignment="Center" Padding="5,0,0,0" Text="{Binding CompanyName}" />
-            <TextBox Height="30" FontSize="16" Margin="0,5,10,5" VerticalContentAlignment="Center" Padding="5,0,0,0" Text="{Binding BusinessContact}" />
-            <TextBox Height="30" FontSize="16" Margin="0,5,10,5" VerticalContentAlignment="Center" Padding="5,0,0,0" Text="{Binding ContactNumber}"/>
-            <TextBox Height="30" FontSize="16" Margin="0,5,10,5" VerticalContentAlignment="Center" Padding="5,0,0,0" Text="{Binding EmailAddress}" />
+        
+        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Width="225">
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding CompanyName}" />
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding BusinessContact}" />
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding ContactNumber}"/>
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding EmailAddress}" />
         </StackPanel>
-
+        
         <Button Name="CancelButton" Grid.Row="2" Grid.Column="0" Width="100" Margin="0,0,10,0" HorizontalAlignment="Right" Content="Cancel" Click="CancelButton_Click" />
         <Button Name="SaveButton" Grid.Row="2" Grid.Column="1" Width="100" Margin="10,0,0,0" HorizontalAlignment="Left" Content="Save" Click="SaveButton_Click"/>
     </Grid>
