@@ -76,12 +76,11 @@ namespace CustomerManagement.View.UserControls
 
         private void LoadCustomersFromFile(string filePath)
         {
-            List<Customer> customers = this.dataLoader.LoadCustomersFromFile(filePath);
+            // List<Customer> customers = this.dataLoader.LoadCustomersFromFile(filePath);
 
-            foreach (Customer customer in customers)
-            {
-                this.mainWindow?.CustomerDataGrid?.Customers?.Add(customer);
-            }
+            // foreach (Customer customer in customers)
+            // {
+            // }
         }
 
         private void NewCustomerButton_Click(object sender, RoutedEventArgs e)

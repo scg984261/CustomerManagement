@@ -96,8 +96,8 @@ namespace CustomerManagement.View.Windows
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            Customer customer = this.dataWrapper.InsertNewCustomer(this.CompanyName, this.BusinessContact, this.EmailAddress, this.ContactNumber);
-            MessageBoxResult result = MessageBox.Show($"New Customer inserted with ID {customer.Id}", "New Customer Inserted", MessageBoxButton.OK, MessageBoxImage.Information);
+            // Customer customer = this.dataWrapper.InsertNewCustomer(this.CompanyName, this.BusinessContact, this.EmailAddress, this.ContactNumber);
+            // MessageBoxResult result = MessageBox.Show($"New Customer inserted with ID {customer.Id}", "New Customer Inserted", MessageBoxButton.OK, MessageBoxImage.Information);
             // Could be a good idea to amalgamate the buttons with the data grid.
             // Add the newly inserted customer to the DataGrid observable collection.
             // this.dataGrid.Customers.Add(customer);
