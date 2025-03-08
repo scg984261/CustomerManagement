@@ -31,13 +31,13 @@
         </StackPanel>
         
         <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Width="225">
-            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding CompanyName}" />
-            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding BusinessContact}" />
-            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding ContactNumber}"/>
-            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding EmailAddress}" />
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding BusinessContact, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding ContactNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
         
         <Button Name="CancelButton" Grid.Row="2" Grid.Column="0" Width="100" Margin="0,0,10,0" HorizontalAlignment="Right" Content="Cancel" Click="CancelButton_Click" />
-        <Button Name="SaveButton" Grid.Row="2" Grid.Column="1" Width="100" Margin="10,0,0,0" HorizontalAlignment="Left" Content="Save" Click="SaveButton_Click"/>
+        <Button Name="SaveButton" Grid.Row="2" Grid.Column="1" Width="100" Margin="10,0,0,0" HorizontalAlignment="Left" Content="Save" Command="{Binding AddCustomerCommand}" Click="SaveButton_Click" />
     </Grid>
 </Window>

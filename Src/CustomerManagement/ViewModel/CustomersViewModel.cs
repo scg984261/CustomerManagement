@@ -67,25 +67,14 @@ namespace CustomerManagement.ViewModel
             NewCustomerWindow window = new NewCustomerWindow();
             window.ShowDialog();
             
-
-            if (window.SaveCustomerOnClose)
+            if (window.CustomerViewModel.AddCustomerOnClose)
             {
-                string? companyName = window.CompanyName;
-                string? businessContact = window.BusinessContact;
-                string? contactNumber = window.ContactNumber;
-                string? emailAddress = window.EmailAddress;
-
-                if (companyName is not null && businessContact is not null && contactNumber is not null && emailAddress is not null)
-                {
-                    Customer customer = new Customer(10, companyName, businessContact, emailAddress, contactNumber, DateTime.Now, DateTime.Now);
-                    CustomerItemViewModel viewModel = new CustomerItemViewModel(customer);
-                    this.Customers.Add(viewModel);
-                    log.Info($"New customer with ID {customer.Id} added to the customer grid.");
-                }
-                else
-                {
-                    log.Info("Request to add new customer was cancelled.");
-                }
+                this.Customers.Add(window.CustomerViewModel);
+                log.Info("New customer added.");
+            }
+            else
+            {
+                log.Info("Request to add new customer was cancelled.");
             }
         }
 

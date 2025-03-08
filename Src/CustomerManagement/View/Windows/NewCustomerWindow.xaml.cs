@@ -8,96 +8,22 @@ using log4net;
 
 namespace CustomerManagement.View.Windows
 {
-    /// <summary>
-    /// Interaction logic for NewCustomer.xaml
-    /// </summary>
-    public partial class NewCustomerWindow : Window, INotifyPropertyChanged
+    public partial class NewCustomerWindow : Window
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(NewCustomerWindow));
-        public bool SaveCustomerOnClose { get; set; }
-
-        private string? companyName;
-
-        public string? CompanyName
-        {
-            get
-            {
-                return this.companyName;
-            }
-            set
-            {
-                this.companyName = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        private string? businessContact;
-
-        public string? BusinessContact
-        {
-            get
-            {
-                return this.businessContact;
-            }
-            set
-            {
-                this.businessContact = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        private string? contactNumber;
-
-        public string? ContactNumber
-        {
-            get
-            {
-                return this.contactNumber;
-            }
-            set
-            {
-                this.contactNumber = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        private string? emailAddress;
-
-        public string? EmailAddress
-        {
-            get
-            {
-                return this.emailAddress;
-            }
-            set
-            {
-                this.emailAddress = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public CustomerItemViewModel CustomerViewModel;
 
         public NewCustomerWindow()
         {
             InitializeComponent();
-            DataContext = this;
-            this.CompanyName = string.Empty;
-            this.BusinessContact = string.Empty;
-            this.ContactNumber = string.Empty;
-            this.EmailAddress = string.Empty;
-            this.SaveCustomerOnClose = false;
+            Customer customer = new Customer();
+            this.CustomerViewModel = new CustomerItemViewModel(customer);
+            this.DataContext = this.CustomerViewModel;
             log.Debug("New Customer Window successfully initialised.");
-        }
-
-        public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            this.SaveCustomerOnClose = true;
             this.Close();
         }
 

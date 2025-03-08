@@ -14,25 +14,37 @@ namespace CustomerManagement.ViewModel
         private static readonly ILog log = LogManager.GetLogger(typeof(CustomerItemViewModel));
         private Customer customer;
         public DelegateCommand UpdateCustomerCommand { get; }
+        public DelegateCommand AddCustomerCommand { get; }
+        public bool AddCustomerOnClose { get; set; }
 
         public CustomerItemViewModel(Customer customer)
         {
             this.customer = customer;
-            this.UpdateCustomerCommand = new DelegateCommand(this.UpdateCustomer, this.CanUpdateCustomer);
+            this.UpdateCustomerCommand = new DelegateCommand(this.UpdateCustomer, this.CanSaveCustomer);
+            this.AddCustomerCommand = new DelegateCommand(this.InsertCustomer, this.CanSaveCustomer);
+            this.AddCustomerOnClose = false;
         }
 
         public void UpdateCustomer(object? parameters)
         {
+            // Update Customer in CDB
             log.Info($"Updating customer with ID {this.Id}");
-            
         }
 
-        public bool CanUpdateCustomer(object? parameters)
+        public void InsertCustomer(object? parameter)
         {
-            if (this.HasErrors)
-            {
-                return false;
-            }
+            // Insert new Customer in CDB.
+            log.Info("Inserting new Customer");
+            this.AddCustomerOnClose = true;
+        }
+
+        public bool CanSaveCustomer(object? parameter)
+        {
+            if (this.HasErrors) return false;
+            if (string.IsNullOrEmpty(this.CompanyName)) return false;
+            if (string.IsNullOrEmpty(this.BusinessContact)) return false;
+            if (string.IsNullOrEmpty(this.ContactNumber)) return false;
+            if (string.IsNullOrEmpty(this.EmailAddress)) return false;
 
             return true;
         }
@@ -67,6 +79,7 @@ namespace CustomerManagement.ViewModel
                 }
 
                 this.UpdateCustomerCommand.RaiseCanExecuteChanged();
+                this.AddCustomerCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -92,6 +105,7 @@ namespace CustomerManagement.ViewModel
                 }
 
                 this.UpdateCustomerCommand.RaiseCanExecuteChanged();
+                this.AddCustomerCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -117,6 +131,7 @@ namespace CustomerManagement.ViewModel
                 }
 
                 this.UpdateCustomerCommand.RaiseCanExecuteChanged();
+                this.AddCustomerCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -142,6 +157,7 @@ namespace CustomerManagement.ViewModel
                 }
 
                 this.UpdateCustomerCommand.RaiseCanExecuteChanged();
+                this.AddCustomerCommand.RaiseCanExecuteChanged();
             }
         }
 
