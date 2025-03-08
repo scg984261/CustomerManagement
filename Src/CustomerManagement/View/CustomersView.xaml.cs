@@ -1,50 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using CDB.Model;
+using CustomerManagement.Data;
+using CustomerManagement.ViewModel;
 
 namespace CustomerManagement.View
 {
-    /// <summary>
-    /// Interaction logic for CustomersView.xaml
-    /// </summary>
     public partial class CustomersView : UserControl
     {
-        public ObservableCollection<Customer> Customers { get; set; } = new ObservableCollection<Customer>();
+        private readonly CustomersViewModel customersViewModel;
 
         public CustomersView()
         {
             InitializeComponent();
-
-            // Placeholder data for the customers list.
-            this.Customers.Add(new Customer("Scott", "Gillen"));
-            this.Customers.Add(new Customer("Niall", "Gillen"));
-            this.Customers.Add(new Customer("Kirsty", "Gillen"));
-            this.Customers.Add(new Customer("Eethan", "Hawkins"));
-            this.DataContext = this;
+            this.customersViewModel = new CustomersViewModel(new CustomerDataProvider());
+            this.DataContext = this.customersViewModel;
+            this.Loaded += this.CustomersView_Loaded;
         }
-    }
 
-    public class Customer
-    {
-        public string FirstName { get; set;}
-        public string LastName { get; set; }
-
-        public Customer(string firstName, string lastName)
+        public async void CustomersView_Loaded(object sender, RoutedEventArgs args)
         {
-            this.FirstName = firstName;
-            this.LastName = lastName;
+            await this.customersViewModel.LoadAsync();
         }
     }
 }

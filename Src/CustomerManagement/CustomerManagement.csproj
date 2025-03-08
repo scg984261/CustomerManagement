@@ -22,8 +22,4 @@
     <ProjectReference Include="..\CDB\CDB.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
-
 </Project>

@@ -1,4 +1,4 @@
-﻿<Window x:Class="CustomerManagement.View.Windows.NewCustomerWindow"
+﻿<Window x:Class="CustomerManagement.View.Windows.EditCustomerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CustomerManagement.View.Windows"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="New Customer" Height="500" Width="450">
+        Title="Edit Customer" Height="500" Width="600">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -16,12 +16,9 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="200" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-
-        <TextBlock Grid.Column="0" Height="40" Margin="15,0,0,0" Text="New Customer" VerticalAlignment="Center" FontSize="24" />
-        <Rectangle Grid.Row="1" />
 
         <StackPanel Grid.Row="1" Grid.Column="0">
             <TextBlock Style="{StaticResource FormTextBlock}" Text="Company Name" />
@@ -29,14 +26,17 @@
             <TextBlock Style="{StaticResource FormTextBlock}" Text="Contact Number" />
             <TextBlock Style="{StaticResource FormTextBlock}" Text="Email Address" />
         </StackPanel>
-        
-        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Width="225">
-            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding ComanyName}" />
+
+        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Width="Auto">
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding CompanyName}" />
             <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding BusinessContact}" />
             <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding ContactNumber}"/>
             <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding EmailAddress}" />
         </StackPanel>
-        
+
+        <TextBlock Grid.Column="0" Height="40" Margin="15,0,0,0" Text="Edit Customer" VerticalAlignment="Center" FontSize="24" />
+        <Rectangle Grid.Row="1" />
+
         <Button Name="CancelButton" Grid.Row="2" Grid.Column="0" Width="100" Margin="0,0,10,0" HorizontalAlignment="Right" Content="Cancel" Click="CancelButton_Click" />
         <Button Name="SaveButton" Grid.Row="2" Grid.Column="1" Width="100" Margin="10,0,0,0" HorizontalAlignment="Left" Content="Save" Click="SaveButton_Click"/>
     </Grid>

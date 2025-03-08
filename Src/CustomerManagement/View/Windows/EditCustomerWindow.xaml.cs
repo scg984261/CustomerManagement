@@ -1,21 +1,24 @@
-﻿using System.ComponentModel;
+﻿using CustomerManagement.ViewModel;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
-using CDB;
-using CDB.Model;
-using CustomerManagement.ViewModel;
-using log4net;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
 namespace CustomerManagement.View.Windows
 {
-    /// <summary>
-    /// Interaction logic for NewCustomer.xaml
-    /// </summary>
-    public partial class NewCustomerWindow : Window, INotifyPropertyChanged
+    public partial class EditCustomerWindow : Window
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(NewCustomerWindow));
-        public bool SaveCustomerOnClose { get; set; }
-
         private string? companyName;
 
         public string? CompanyName
@@ -78,16 +81,14 @@ namespace CustomerManagement.View.Windows
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public NewCustomerWindow()
+        public EditCustomerWindow(CustomerItemViewModel selectedCustomer)
         {
             InitializeComponent();
-            DataContext = this;
-            this.CompanyName = string.Empty;
-            this.BusinessContact = string.Empty;
-            this.ContactNumber = string.Empty;
-            this.EmailAddress = string.Empty;
-            this.SaveCustomerOnClose = false;
-            log.Debug("New Customer Window successfully initialised.");
+            this.DataContext = this;
+            this.CompanyName = selectedCustomer.CompanyName;
+            this.BusinessContact = selectedCustomer.BusinessContact;
+            this.ContactNumber = selectedCustomer.ContactNumber;
+            this.EmailAddress = selectedCustomer.EmailAddress;
         }
 
         public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -95,15 +96,14 @@ namespace CustomerManagement.View.Windows
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        public void CancelButton_Click(object sender, RoutedEventArgs args)
         {
-            this.SaveCustomerOnClose = true;
-            this.Close();
+
         }
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        public void SaveButton_Click(object sender, RoutedEventArgs args)
         {
-            this.Close();
+
         }
     }
 }
