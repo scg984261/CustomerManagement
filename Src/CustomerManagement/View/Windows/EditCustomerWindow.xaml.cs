@@ -25,8 +25,6 @@ namespace CustomerManagement.View.Windows
         private readonly string? contactNumber;
         private readonly string? emailAddress;
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         public EditCustomerWindow(CustomerItemViewModel selectedCustomer)
         {
             InitializeComponent();
@@ -36,11 +34,6 @@ namespace CustomerManagement.View.Windows
             this.contactNumber = selectedCustomer.ContactNumber;
             this.emailAddress = selectedCustomer.EmailAddress;
             this.DataContext = SelectedCustomer;
-        }
-
-        public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         public void CancelButton_Click(object sender, RoutedEventArgs args)

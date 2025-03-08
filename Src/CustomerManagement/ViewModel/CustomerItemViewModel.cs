@@ -24,6 +24,7 @@ namespace CustomerManagement.ViewModel
         public void UpdateCustomer(object? parameters)
         {
             log.Info($"Updating customer with ID {this.Id}");
+            
         }
 
         public bool CanUpdateCustomer(object? parameters)

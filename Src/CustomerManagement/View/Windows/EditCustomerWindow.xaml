@@ -38,6 +38,6 @@
         <Rectangle Grid.Row="1" />
 
         <Button Name="CancelButton" Grid.Row="2" Grid.Column="0" Width="100" Margin="0,0,10,0" HorizontalAlignment="Right" Content="Cancel" Click="CancelButton_Click" />
-        <Button Name="SaveButton" Grid.Row="2" Grid.Column="1" Width="100" Margin="10,0,0,0" HorizontalAlignment="Left" Content="Save" Command="{Binding UpdateCustomerCommand}"/>
+        <Button Name="SaveButton" Grid.Row="2" Grid.Column="1" Width="100" Margin="10,0,0,0" HorizontalAlignment="Left" Content="Save" Command="{Binding UpdateCustomerCommand}" Click="SaveButton_Click" />
     </Grid>
 </Window>

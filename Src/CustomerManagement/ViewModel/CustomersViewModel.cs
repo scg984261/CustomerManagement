@@ -67,6 +67,7 @@ namespace CustomerManagement.ViewModel
             NewCustomerWindow window = new NewCustomerWindow();
             window.ShowDialog();
             
+
             if (window.SaveCustomerOnClose)
             {
                 string? companyName = window.CompanyName;
