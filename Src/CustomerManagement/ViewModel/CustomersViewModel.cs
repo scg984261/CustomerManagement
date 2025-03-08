@@ -97,6 +97,8 @@ namespace CustomerManagement.ViewModel
         {
             EditCustomerWindow editCustomerWindow = new EditCustomerWindow(this.SelectedCustomer);
             editCustomerWindow.ShowDialog();
+
+            log.Info($"Customer with ID {this.SelectedCustomer.Id} successfully updated.");
         }
     }
 }

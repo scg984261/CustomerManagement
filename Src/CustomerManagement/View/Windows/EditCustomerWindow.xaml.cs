@@ -19,76 +19,23 @@ namespace CustomerManagement.View.Windows
 {
     public partial class EditCustomerWindow : Window
     {
-        private string? companyName;
-
-        public string? CompanyName
-        {
-            get
-            {
-                return this.companyName;
-            }
-            set
-            {
-                this.companyName = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        private string? businessContact;
-
-        public string? BusinessContact
-        {
-            get
-            {
-                return this.businessContact;
-            }
-            set
-            {
-                this.businessContact = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        private string? contactNumber;
-
-        public string? ContactNumber
-        {
-            get
-            {
-                return this.contactNumber;
-            }
-            set
-            {
-                this.contactNumber = value;
-                this.OnPropertyChanged();
-            }
-        }
-
-        private string? emailAddress;
-
-        public string? EmailAddress
-        {
-            get
-            {
-                return this.emailAddress;
-            }
-            set
-            {
-                this.emailAddress = value;
-                this.OnPropertyChanged();
-            }
-        }
+        public CustomerItemViewModel SelectedCustomer { get; set; }
+        private readonly string? companyName;
+        private readonly string? businessContact;
+        private readonly string? contactNumber;
+        private readonly string? emailAddress;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public EditCustomerWindow(CustomerItemViewModel selectedCustomer)
         {
             InitializeComponent();
-            this.DataContext = this;
-            this.CompanyName = selectedCustomer.CompanyName;
-            this.BusinessContact = selectedCustomer.BusinessContact;
-            this.ContactNumber = selectedCustomer.ContactNumber;
-            this.EmailAddress = selectedCustomer.EmailAddress;
+            this.SelectedCustomer = selectedCustomer;
+            this.companyName = selectedCustomer.CompanyName;
+            this.businessContact = selectedCustomer.BusinessContact;
+            this.contactNumber = selectedCustomer.ContactNumber;
+            this.emailAddress = selectedCustomer.EmailAddress;
+            this.DataContext = SelectedCustomer;
         }
 
         public void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -98,12 +45,17 @@ namespace CustomerManagement.View.Windows
 
         public void CancelButton_Click(object sender, RoutedEventArgs args)
         {
-
+            // Reset Customer values to what they were originally.
+            this.SelectedCustomer.CompanyName = this.companyName;
+            this.SelectedCustomer.BusinessContact = this.businessContact;
+            this.SelectedCustomer.ContactNumber = this.contactNumber;
+            this.SelectedCustomer.EmailAddress = this.emailAddress;
+            this.Close();
         }
 
         public void SaveButton_Click(object sender, RoutedEventArgs args)
         {
-
+            this.Close();
         }
     }
 }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CustomerManagement.View.Windows"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Edit Customer" Height="500" Width="600">
+        Title="Edit Customer" Height="600" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -28,16 +28,16 @@
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Width="Auto">
-            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding CompanyName}" />
-            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding BusinessContact}" />
-            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding ContactNumber}"/>
-            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding EmailAddress}" />
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding BusinessContact, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding ContactNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
         <TextBlock Grid.Column="0" Height="40" Margin="15,0,0,0" Text="Edit Customer" VerticalAlignment="Center" FontSize="24" />
         <Rectangle Grid.Row="1" />
 
         <Button Name="CancelButton" Grid.Row="2" Grid.Column="0" Width="100" Margin="0,0,10,0" HorizontalAlignment="Right" Content="Cancel" Click="CancelButton_Click" />
-        <Button Name="SaveButton" Grid.Row="2" Grid.Column="1" Width="100" Margin="10,0,0,0" HorizontalAlignment="Left" Content="Save" Click="SaveButton_Click"/>
+        <Button Name="SaveButton" Grid.Row="2" Grid.Column="1" Width="100" Margin="10,0,0,0" HorizontalAlignment="Left" Content="Save" Command="{Binding UpdateCustomerCommand}"/>
     </Grid>
 </Window>
