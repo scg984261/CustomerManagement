@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CustomerManagement.View.Windows"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="New Customer" Height="500" Width="600">
+        Title="New Customer" Height="600" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -16,12 +16,11 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="200" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Column="0" Height="40" Margin="15,0,0,0" Text="New Customer" VerticalAlignment="Center" FontSize="24" />
-        <Rectangle Grid.Row="1" />
 
         <StackPanel Grid.Row="1" Grid.Column="0">
             <TextBlock Style="{StaticResource FormTextBlock}" Text="Company Name" />
@@ -29,8 +28,8 @@
             <TextBlock Style="{StaticResource FormTextBlock}" Text="Contact Number" />
             <TextBlock Style="{StaticResource FormTextBlock}" Text="Email Address" />
         </StackPanel>
-        
-        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Width="225">
+
+        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" Width="Auto">
             <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding BusinessContact, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox Style="{StaticResource InputFormTextBox}" Text="{Binding ContactNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
