@@ -13,8 +13,8 @@
         <DataTemplate DataType="{x:Type viewModel:CustomersViewModel}">
             <view:CustomersView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:ProductsViewModel}">
-            <view:ProductsView />
+        <DataTemplate DataType="{x:Type viewModel:ServicesViewModel}">
+            <view:ServicesView />
         </DataTemplate>
     </Window.Resources>
     <Grid>
@@ -29,13 +29,13 @@
             <Menu Background="LightBlue" Height="30">
                 <MenuItem Header="File" Height="30" FontSize="12">
                     <MenuItem Name="MenuItemOpen" Header="Open" />
-                    <MenuItem Name="MenuItemExit" Header="Exit" Click="MenuItemExit_Click"/>
+                    <MenuItem Name="MenuItemExit" Header="Exit" />
                     <MenuItem Name="MenuItemLoadData" Header="Load Data" />
                 </MenuItem>
                 <!-- Control the Main View between Customers and Products -->
                 <MenuItem Header="View" FontSize="12">
                     <MenuItem Header="Customers" Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding CustomersViewModel}" />
-                    <MenuItem Header="Products" Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ProductsViewModel}" />
+                    <MenuItem Header="Products" Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ServicesViewModel}" />
                     <MenuItem Header="Subscriptions" />
                 </MenuItem>
             </Menu>

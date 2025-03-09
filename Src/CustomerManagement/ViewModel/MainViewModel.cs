@@ -9,7 +9,7 @@ namespace CustomerManagement.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        public ProductsViewModel ProductsViewModel { get; }
+        public ServicesViewModel ServicesViewModel { get; }
         public CustomersViewModel CustomersViewModel { get; }
         public DelegateCommand SelectViewModelCommand { get; }
         private ViewModelBase? selectedViewModel;
@@ -27,10 +27,10 @@ namespace CustomerManagement.ViewModel
             }
         }
 
-        public MainViewModel(CustomersViewModel customersViewModel, ProductsViewModel productsViewModel)
+        public MainViewModel(CustomersViewModel customersViewModel, ServicesViewModel servicesViewModel)
         {
             this.CustomersViewModel = customersViewModel;
-            this.ProductsViewModel = productsViewModel;
+            this.ServicesViewModel = servicesViewModel;
             this.SelectedViewModel = customersViewModel;
             this.SelectViewModelCommand = new DelegateCommand(SelectViewModel);
         }

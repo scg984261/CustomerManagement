@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="CustomerManagement.View.ProductsView"
+﻿<UserControl x:Class="CustomerManagement.View.ServicesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,6 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1500">
     <Grid>
-        <TextBlock Text="Products View" FontSize="36" Background="Blue"/>
+        <TextBlock Text="Services View" FontSize="36" Background="Red"/>
     </Grid>
 </UserControl>

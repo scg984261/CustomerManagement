@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace CustomerManagement.ViewModel
 {
-    public class ProductsViewModel : ViewModelBase
+    public class ServicesViewModel : ViewModelBase
     {
+        public ServicesViewModel()
+        {
+
+        }
     }
 }

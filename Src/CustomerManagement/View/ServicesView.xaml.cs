@@ -15,12 +15,9 @@ using System.Windows.Shapes;
 
 namespace CustomerManagement.View
 {
-    /// <summary>
-    /// Interaction logic for ProductsView.xaml
-    /// </summary>
-    public partial class ProductsView : UserControl
+    public partial class ServicesView : UserControl
     {
-        public ProductsView()
+        public ServicesView()
         {
             InitializeComponent();
         }
