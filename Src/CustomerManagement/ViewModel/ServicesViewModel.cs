@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using log4net;
 using CustomerManagement.Command;
 using CustomerManagement.Data;
+using CustomerManagement.View.Windows;
 using CDB.Model;
 
 namespace CustomerManagement.ViewModel
@@ -39,9 +40,8 @@ namespace CustomerManagement.ViewModel
 
         public void AddNewService(object? parameter)
         {
-            Service service = new Service(5, "new service", 5m);
-            ServiceItemViewModel serviceItemViewModel = new ServiceItemViewModel(service);
-            this.Services.Add(serviceItemViewModel);
+            NewServiceWindow newServiceWindow = new NewServiceWindow();
+            newServiceWindow.ShowDialog();
         }
     }
 }

@@ -20,7 +20,7 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Column="0" Height="40" Margin="15,0,0,0" Text="Edit Customer" VerticalAlignment="Center" FontSize="24" />
+        <TextBlock Grid.Column="0" Text="Edit Customer" Style="{StaticResource WindowHeaderTextBlock}" />
 
         <StackPanel Grid.Row="1" Grid.Column="0">
             <TextBlock Style="{StaticResource FormTextBlock}" Text="Company Name" />

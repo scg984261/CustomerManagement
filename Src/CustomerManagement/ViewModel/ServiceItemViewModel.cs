@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 using CDB.Model;
+using System.Printing;
 
 namespace CustomerManagement.ViewModel
 {
-    public class ServiceItemViewModel : ViewModelBase
+    public class ServiceItemViewModel : ValidationViewModelBase
     {
         private Service service;
+        private static readonly ILog log = LogManager.GetLogger(typeof(ServiceItemViewModel));
 
         public ServiceItemViewModel(Service service)
         {
             this.service = service;
+            this.priceString = string.Empty;
         }
 
         public int Id
@@ -40,15 +44,44 @@ namespace CustomerManagement.ViewModel
             }
         }
 
-        public decimal Price
+        private string priceString;
+
+        public string PriceString
         {
             get
             {
-                return this.service.Price;
+                return this.priceString;
             }
+
             set
             {
-                this.service.Price = value;
+                this.priceString = value;
+
+                if (string.IsNullOrEmpty(this.priceString))
+                {
+                    const string errorMessage = "Price cannot be blank!";
+                    this.AddError(errorMessage);
+                    return;
+                }
+                else
+                {
+                    this.ClearErrors();
+                }
+
+                decimal price;
+                if (Decimal.TryParse(value, out price))
+                {
+                    this.service.Price = price;
+                    this.ClearErrors();
+                }
+                else
+                {
+                    const string errorMessage = $"Value must be a valid decimal.";
+                    this.service.Price = 0m;
+                    this.AddError(errorMessage);
+                }
+
+                this.NotifyPropertyChanged(nameof(PriceFormatted));
             }
         }
 
@@ -56,7 +89,7 @@ namespace CustomerManagement.ViewModel
         {
             get
             {
-                string formattedString = $"£{this.Price.ToString("0.00")}";
+                string formattedString = $"£{this.service.Price.ToString("0.00")}";
                 return formattedString;
             }
         }
