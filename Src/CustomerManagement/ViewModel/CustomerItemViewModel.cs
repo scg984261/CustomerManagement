@@ -15,6 +15,10 @@ namespace CustomerManagement.ViewModel
         private Customer customer;
         public DelegateCommand UpdateCustomerCommand { get; }
         public DelegateCommand AddCustomerCommand { get; }
+
+       /// <summary>
+       /// Whether the CustomersViewModel should add a new customer when this Window closes.
+       /// </summary>
         public bool AddCustomerOnClose { get; set; }
 
         public CustomerItemViewModel(Customer customer)
@@ -22,7 +26,6 @@ namespace CustomerManagement.ViewModel
             this.customer = customer;
             this.UpdateCustomerCommand = new DelegateCommand(this.UpdateCustomer, this.CanSaveCustomer);
             this.AddCustomerCommand = new DelegateCommand(this.InsertCustomer, this.CanSaveCustomer);
-            this.AddCustomerOnClose = false;
         }
 
         public void UpdateCustomer(object? parameters)
@@ -35,7 +38,7 @@ namespace CustomerManagement.ViewModel
         {
             // Insert new Customer in CDB.
             log.Info("Inserting new Customer");
-            this.AddCustomerOnClose = true;
+            // this.AddCustomerOnClose = true;
         }
 
         public bool CanSaveCustomer(object? parameter)

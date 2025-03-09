@@ -12,17 +12,28 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Background="Gray">
-            <Grid.RowDefinitions />
+        
 
-            <TextBlock Grid.Row="0" Text="Services View" Style="{StaticResource HeaderTextBlock}" />
+        <Grid Grid.Row="0" Background="Gray">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Services View" Style="{StaticResource HeaderTextBlock}" />
+            <Button Grid.Row="0" Grid.Column="1" Content="New Service" Command="{Binding AddServiceCommand}" />
         </Grid>
 
         <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding Services}" AutoGenerateColumns="False" SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Service ID" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Price" Binding="{Binding Price, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Price" Binding="{Binding PriceFormatted, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

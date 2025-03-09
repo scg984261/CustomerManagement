@@ -1,24 +1,26 @@
-﻿using CDB.Model;
-using CustomerManagement.Data;
-using log4net;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
+using CustomerManagement.Command;
+using CustomerManagement.Data;
+using CDB.Model;
 
 namespace CustomerManagement.ViewModel
 {
     public class ServicesViewModel : ViewModelBase
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ServicesViewModel));
-        public ObservableCollection<Service> Services { get; } = new ObservableCollection<Service>();
+        public ObservableCollection<ServiceItemViewModel> Services { get; } = new ObservableCollection<ServiceItemViewModel>();
         private readonly IServiceDataProvider serviceDataProvider;
+        public DelegateCommand AddServiceCommand { get; }
 
         public ServicesViewModel(IServiceDataProvider serviceDataProvider)
         {
             this.serviceDataProvider = new ServiceDataProvider();
+            this.AddServiceCommand = new DelegateCommand(this.AddNewService);
         }
 
         public override async Task LoadAsync()
@@ -29,9 +31,17 @@ namespace CustomerManagement.ViewModel
             {
                 foreach (Service service in services)
                 {
-                    this.Services.Add(service);
+                    ServiceItemViewModel serviceItemViewModel = new ServiceItemViewModel(service);
+                    this.Services.Add(serviceItemViewModel);
                 }
             }
+        }
+
+        public void AddNewService(object? parameter)
+        {
+            Service service = new Service(5, "new service", 5m);
+            ServiceItemViewModel serviceItemViewModel = new ServiceItemViewModel(service);
+            this.Services.Add(serviceItemViewModel);
         }
     }
 }
