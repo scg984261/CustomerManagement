@@ -7,6 +7,23 @@
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1500">
     <Grid>
-        <TextBlock Text="Services View" FontSize="36" Background="Red"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Background="Gray">
+            <Grid.RowDefinitions />
+
+            <TextBlock Grid.Row="0" Text="Services View" Style="{StaticResource HeaderTextBlock}" />
+        </Grid>
+
+        <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding Services}" AutoGenerateColumns="False" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Service ID" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Price" Binding="{Binding Price, UpdateSourceTrigger=PropertyChanged}" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

@@ -20,12 +20,12 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             
-            <TextBlock Grid.Column="0" Margin="5" Text="Customer View" VerticalAlignment="Center" FontWeight="Heavy" FontStyle="Italic" />
+            <TextBlock Grid.Column="0" Style="{StaticResource HeaderTextBlock}" Text="Customer View"  />
             <Button Grid.Column="1" Content="New Customer" Command="{Binding AddCustomerCommand}" />
             <Button Grid.Column="2" Content="Edit Customer" Command="{Binding EditCustomerCommand}" />
         </Grid>
 
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Customers}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" SelectedItem="{Binding SelectedCustomer}" Name="CustomerTable">
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Customers}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" SelectedItem="{Binding SelectedCustomer}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Customer ID" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Account Name" Binding="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}" />

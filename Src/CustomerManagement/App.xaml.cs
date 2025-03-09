@@ -35,7 +35,7 @@ namespace CustomerManagement
             services.AddTransient<CustomersViewModel>();
             services.AddTransient<ServicesViewModel>();
             services.AddTransient<ICustomerDataProvider, CustomerDataProvider>();
-            // services.AddTransient<IProductDataProvider, ProductDataProvider>();
+            services.AddTransient<IServiceDataProvider, ServiceDataProvider>();
         }
     }
 }

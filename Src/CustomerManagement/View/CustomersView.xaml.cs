@@ -9,19 +9,9 @@ namespace CustomerManagement.View
 {
     public partial class CustomersView : UserControl
     {
-        private readonly CustomersViewModel customersViewModel;
-
         public CustomersView()
         {
             InitializeComponent();
-            this.customersViewModel = new CustomersViewModel(new CustomerDataProvider());
-            this.DataContext = this.customersViewModel;
-            this.Loaded += this.CustomersView_Loaded;
-        }
-
-        public async void CustomersView_Loaded(object sender, RoutedEventArgs args)
-        {
-            await this.customersViewModel.LoadAsync();
         }
     }
 }

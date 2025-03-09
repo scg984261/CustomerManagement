@@ -35,8 +35,7 @@
                 <!-- Control the Main View between Customers and Products -->
                 <MenuItem Header="View" FontSize="12">
                     <MenuItem Header="Customers" Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding CustomersViewModel}" />
-                    <MenuItem Header="Products" Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ServicesViewModel}" />
-                    <MenuItem Header="Subscriptions" />
+                    <MenuItem Header="Services" Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ServicesViewModel}" />
                 </MenuItem>
             </Menu>
         </Border>

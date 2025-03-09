@@ -6,4 +6,10 @@
         <Setter Property="Padding" Value="0,10,0,0" />
         <Setter Property="Margin" Value="30,5,0,20" />
     </Style>
+    <Style TargetType="TextBlock" x:Key="HeaderTextBlock">
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="FontWeight" Value="Heavy" />
+        <Setter Property="FontStyle" Value="Italic" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
 </ResourceDictionary>
