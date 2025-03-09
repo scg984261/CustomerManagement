@@ -44,7 +44,7 @@ namespace CustomerManagement.ViewModel
             this.EditCustomerCommand = new DelegateCommand(this.EditCustomer, this.CanEdit);
         }
 
-        public async Task LoadAsync()
+        public override async Task LoadAsync()
         {
             if (this.Customers.Any())
             {

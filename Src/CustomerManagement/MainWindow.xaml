@@ -6,8 +6,17 @@
         xmlns:userControls="clr-namespace:CustomerManagement.View.UserControls"
         xmlns:local="clr-namespace:CustomerManagement"
         xmlns:view="clr-namespace:CustomerManagement.View"
+        xmlns:viewModel="clr-namespace:CustomerManagement.ViewModel"
         WindowStartupLocation="CenterScreen"
         Title="CMS" Height="900" Width="1500">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModel:CustomersViewModel}">
+            <view:CustomersView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:ProductsViewModel}">
+            <view:ProductsView />
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -15,9 +24,25 @@
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
 
-        <userControls:MenuBar />
+        <!-- Menu bar - use to control the view. -->
+        <Border Grid.Row="0" BorderBrush="Black" Background="Transparent" BorderThickness="0,0,0,2">
+            <Menu Background="LightBlue" Height="30">
+                <MenuItem Header="File" Height="30" FontSize="12">
+                    <MenuItem Name="MenuItemOpen" Header="Open" />
+                    <MenuItem Name="MenuItemExit" Header="Exit" Click="MenuItemExit_Click"/>
+                    <MenuItem Name="MenuItemLoadData" Header="Load Data" />
+                </MenuItem>
+                <!-- Control the Main View between Customers and Products -->
+                <MenuItem Header="View" FontSize="12">
+                    <MenuItem Header="Customers" Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding CustomersViewModel}" />
+                    <MenuItem Header="Products" Command="{Binding SelectViewModelCommand}" CommandParameter="{Binding ProductsViewModel}" />
+                    <MenuItem Header="Subscriptions" />
+                </MenuItem>
+            </Menu>
+        </Border>
 
-        <view:CustomersView Grid.Row="1"/>
+        <!-- Show either the Customers View Model or the Customers View Model. -->
+        <ContentControl Grid.Row="1" Grid.Column="0" Content="{Binding SelectedViewModel}" />
 
         <userControls:FooterBar Grid.Row="2" />
     </Grid>
