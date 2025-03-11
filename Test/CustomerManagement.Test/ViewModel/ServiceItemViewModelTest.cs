@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using CustomerManagement.ViewModel;
 using CDB.Model;
 
-
 namespace CustomerManagement.Test.ViewModel
 {
     public class ServiceItemViewModelTest
