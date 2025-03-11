@@ -38,7 +38,7 @@ namespace CustomerManagement.ViewModel
         {
             // Insert new Customer in CDB.
             log.Info("Inserting new Customer");
-            // this.AddCustomerOnClose = true;
+            this.AddCustomerOnClose = true;
         }
 
         public bool CanSaveCustomer(object? parameter)

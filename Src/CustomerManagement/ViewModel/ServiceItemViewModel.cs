@@ -61,6 +61,8 @@ namespace CustomerManagement.ViewModel
                 {
                     const string errorMessage = "Price cannot be blank!";
                     this.AddError(errorMessage);
+                    this.service.Price = 0m;
+                    this.NotifyPropertyChanged(nameof(PriceFormatted));
                     return;
                 }
                 else
