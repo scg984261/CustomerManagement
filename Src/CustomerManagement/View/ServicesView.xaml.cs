@@ -10,16 +10,15 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CustomerManagement.ViewModel;
 
-namespace CustomerManagement.View.Windows
+namespace CustomerManagement.View
 {
-    /// <summary>
-    /// Interaction logic for NewCustomer.xaml
-    /// </summary>
-    public partial class NewCustomer : Window
+    public partial class ServicesView : UserControl
     {
-        public NewCustomer()
+        public ServicesView()
         {
             InitializeComponent();
         }
