@@ -26,6 +26,11 @@ namespace CustomerManagement.ViewModel
 
         public override async Task LoadAsync()
         {
+            if (this.Services.Any())
+            {
+                return;
+            }
+
             var services = await this.serviceDataProvider.GetAllAsync();
 
             if (services != null)

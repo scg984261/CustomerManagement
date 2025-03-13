@@ -9,6 +9,7 @@ using CDB.Model;
 using CustomerManagement.Command;
 using CustomerManagement.Data;
 using CustomerManagement.View.Windows;
+using CustomerManagement.Navigation;
 using Microsoft.Win32;
 
 namespace CustomerManagement.ViewModel
@@ -16,6 +17,7 @@ namespace CustomerManagement.ViewModel
     public class CustomersViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(CustomersViewModel));
+        // private NavigationStore navigationStore;
         private readonly ICustomerDataProvider customerDataProvider;
         public ObservableCollection<CustomerItemViewModel> Customers { get; } = new ObservableCollection<CustomerItemViewModel>();
 
@@ -35,13 +37,16 @@ namespace CustomerManagement.ViewModel
         }
 
         public DelegateCommand AddCustomerCommand { get; }
-        public DelegateCommand EditCustomerCommand { get;  }
+        public DelegateCommand EditCustomerCommand { get; }
+        public NavigateToServicesCommand NavigateServicesCommand { get; }
 
-        public CustomersViewModel(ICustomerDataProvider customerDataProvider)
+        public CustomersViewModel(NavigationStore navigationStore, ICustomerDataProvider customerDataProvider)
         {
             this.customerDataProvider = customerDataProvider;
             this.AddCustomerCommand = new DelegateCommand(this.AddCustomer);
-            this.EditCustomerCommand = new DelegateCommand(this.EditCustomer, this.CanEdit);
+            this.EditCustomerCommand = new DelegateCommand(this.EditCustomer, this.IsCustomerSelected);
+            this.NavigateServicesCommand = new NavigateToServicesCommand(navigationStore);
+            // this.NavigateCommand = new DelegateCommand(this.NavigateToServices, this.IsCustomerSelected);
         }
 
         public override async Task LoadAsync()
@@ -66,7 +71,7 @@ namespace CustomerManagement.ViewModel
         {
             NewCustomerWindow window = new NewCustomerWindow();
             window.ShowDialog();
-            
+
             if (window.CustomerViewModel.AddCustomerOnClose)
             {
                 this.Customers.Add(window.CustomerViewModel);
@@ -78,7 +83,7 @@ namespace CustomerManagement.ViewModel
             }
         }
 
-        public bool CanEdit(object? parameter)
+        public bool IsCustomerSelected(object? parameter)
         {
             return this.SelectedCustomer != null;
         }
@@ -89,6 +94,11 @@ namespace CustomerManagement.ViewModel
             editCustomerWindow.ShowDialog();
 
             log.Info($"Customer with ID {this.SelectedCustomer.Id} successfully updated.");
+        }
+
+        public void NavigateToServices(object? parameter)
+        {
+            // this.navigationStore.SelectedViewModel = this.navigationStore.ServicesViewModel;
         }
     }
 }

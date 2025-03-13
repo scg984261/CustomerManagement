@@ -1,4 +1,5 @@
 ﻿using CustomerManagement.Data;
+using CustomerManagement.Navigation;
 using CustomerManagement.ViewModel;
 using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
@@ -32,6 +33,7 @@ namespace CustomerManagement
         {
             services.AddTransient<MainWindow>();
             services.AddTransient<MainViewModel>();
+            services.AddTransient<NavigationStore>();
             services.AddTransient<CustomersViewModel>();
             services.AddTransient<ServicesViewModel>();
             services.AddTransient<ICustomerDataProvider, CustomerDataProvider>();
