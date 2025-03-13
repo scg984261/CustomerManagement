@@ -30,11 +30,11 @@ namespace CustomerManagement.ViewModel
             }
         }
 
-        public MainViewModel(CustomersViewModel customersViewModel, ServicesViewModel servicesViewModel, NavigationStore navigationStore)
+        public MainViewModel(NavigationStore navigationStore, CustomersViewModel customersViewModel, ServicesViewModel servicesViewModel)
         {
+            this.navigationStore = navigationStore;
             this.CustomersViewModel = customersViewModel;
             this.ServicesViewModel = servicesViewModel;
-            this.navigationStore = navigationStore;
             this.navigationStore.SelectedViewModelChanged += this.NotifySelectedViewModelChanged;
             this.SelectViewModelCommand = new DelegateCommand(SelectViewModel);
         }

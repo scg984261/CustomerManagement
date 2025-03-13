@@ -38,15 +38,14 @@ namespace CustomerManagement.ViewModel
 
         public DelegateCommand AddCustomerCommand { get; }
         public DelegateCommand EditCustomerCommand { get; }
-        public NavigateToServicesCommand NavigateServicesCommand { get; }
+        public NavigateCustomerCommand NavigateCommand { get; }
 
         public CustomersViewModel(NavigationStore navigationStore, ICustomerDataProvider customerDataProvider)
         {
             this.customerDataProvider = customerDataProvider;
             this.AddCustomerCommand = new DelegateCommand(this.AddCustomer);
             this.EditCustomerCommand = new DelegateCommand(this.EditCustomer, this.IsCustomerSelected);
-            this.NavigateServicesCommand = new NavigateToServicesCommand(navigationStore);
-            // this.NavigateCommand = new DelegateCommand(this.NavigateToServices, this.IsCustomerSelected);
+            this.NavigateCommand = new NavigateCustomerCommand(navigationStore, this.IsCustomerSelected);
         }
 
         public override async Task LoadAsync()
