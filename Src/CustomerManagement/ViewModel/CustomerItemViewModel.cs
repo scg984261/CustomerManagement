@@ -68,6 +68,11 @@ namespace CustomerManagement.ViewModel
             }
             set
             {
+                if (value is null)
+                {
+                    value = string.Empty;
+                }
+
                 this.customer.CompanyName = value;
                 this.NotifyPropertyChanged();
 
