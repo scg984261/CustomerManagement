@@ -25,7 +25,7 @@ namespace CustomerManagement.Navigation
             }
         }
 
-        public event Action SelectedViewModelChanged;
+        public event Action? SelectedViewModelChanged;
 
         public NavigationStore()
         {

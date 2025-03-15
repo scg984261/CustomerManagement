@@ -8,19 +8,68 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="Gray">
         <Grid.RowDefinitions>
+            <!-- Title -->
             <RowDefinition Height="50" />
+                
+            <!-- Tabs -->
             <RowDefinition />
+                
+            <!-- Buttons along the botton -->
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        
-        
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="150" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <TextBlock Text="Customer Details" />
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding CompanyName}" />
-        <Button Grid.Column="2" Content="Back" Command="{Binding NavigateBackCommand}" CommandParameter="{Binding ParentCustomersViewModel}" />
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Customer Details" FontSize="24" VerticalAlignment="Center" Padding="10" />
+
+        <TabControl Grid.Row="1">
+            <TabItem Header="Customer">
+                <!-- Customer Details Grid -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="130" />
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0">Customer ID</Label>
+                    <Label Grid.Row="1" Grid.Column="0">Company Name</Label>
+                    <Label Grid.Row="2" Grid.Column="0">Business Contact</Label>
+                    <Label Grid.Row="3" Grid.Column="0">Email Address</Label>
+                    <Label Grid.Row="4" Grid.Column="0">Contact Number</Label>
+
+                    <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding Id}" />
+                    <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding BusinessContact,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding ContactNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Recurring Services">
+                
+            </TabItem>
+            <TabItem Header="Non-Recurring Services">
+                
+            </TabItem>
+        </TabControl>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Button Command="{Binding NavigateBackCommand}" CommandParameter="{Binding ParentCustomersViewModel}">
+                <Image Source="/Images/BackArrow.png" />
+            </Button>
+        </Grid>
     </Grid>
 </UserControl>

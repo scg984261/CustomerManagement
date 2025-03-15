@@ -18,4 +18,11 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="FontSize" Value="24" />
     </Style>
+
+    <Style TargetType="TextBlock"  x:Key="TabTextBlock">
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Padding" Value="12,7,7,7" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
 </ResourceDictionary>

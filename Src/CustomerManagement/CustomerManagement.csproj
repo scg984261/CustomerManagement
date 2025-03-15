@@ -22,4 +22,8 @@
     <ProjectReference Include="..\CDB\CDB.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="Images\BackArrow.png" />
+  </ItemGroup>
+
 </Project>
