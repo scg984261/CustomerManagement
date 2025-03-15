@@ -6,12 +6,21 @@
              xmlns:local="clr-namespace:CustomerManagement.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="Blue">
+    <Grid Background="Gray">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="150" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <TextBlock Text="Customer Details" />
         <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding CompanyName}" />
+        <Button Grid.Column="2" Content="Back" Command="{Binding NavigateBackCommand}" CommandParameter="{Binding ParentCustomersViewModel}" />
     </Grid>
 </UserControl>

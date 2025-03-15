@@ -29,7 +29,6 @@ namespace CustomerManagement.Navigation
 
         public NavigationStore()
         {
-            this.SelectedViewModel = new CustomersViewModel(this, new CustomerDataProvider());
         }
 
         public void NotifyCurrentViewModelChanged()

@@ -7,15 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-
 namespace CustomerManagement.Command
 {
-    public class NavigateCustomerCommand : CommandBase
+    public class NavigateDetailsCommand : CommandBase
     {
         private readonly NavigationStore navigationStore;
         private readonly Func<object?, bool>? canExecute;
 
-        public NavigateCustomerCommand(NavigationStore navigationStore, Func<object?, bool>? canExecute = null)
+        public NavigateDetailsCommand(NavigationStore navigationStore, Func<object?, bool>? canExecute = null)
         {
             this.navigationStore = navigationStore;
             this.canExecute = canExecute;
@@ -33,8 +32,12 @@ namespace CustomerManagement.Command
 
         public override async void Execute(object? parameter)
         {
-            ViewModelBase? viewModel = parameter as ViewModelBase;
-            this.navigationStore.SelectedViewModel = viewModel;
+            if (parameter is null) return;
+
+            CustomerItemViewModel customerItemViewModel = (CustomerItemViewModel) parameter;
+
+            CustomerDetailsViewModel customerDetailsViewModel = new CustomerDetailsViewModel(customerItemViewModel, navigationStore);
+            this.navigationStore.SelectedViewModel = customerDetailsViewModel;
 
             if (this.navigationStore.SelectedViewModel != null)
             {

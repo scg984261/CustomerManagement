@@ -23,6 +23,7 @@ namespace CustomerManagement
             NavigationStore navigationStore = new NavigationStore();
             CustomerDataProvider customerDataProvider = new CustomerDataProvider();
             CustomersViewModel customersViewModel = new CustomersViewModel(navigationStore, customerDataProvider);
+            CustomerDetailsViewModel.ParentCustomersViewModel = customersViewModel;
             navigationStore.SelectedViewModel = customersViewModel;
             ServiceDataProvider serviceDataProvider = new ServiceDataProvider();
             ServicesViewModel servicesViewModel = new ServicesViewModel(serviceDataProvider);

@@ -17,7 +17,7 @@ namespace CustomerManagement.ViewModel
     public class CustomersViewModel : ViewModelBase
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(CustomersViewModel));
-        // private NavigationStore navigationStore;
+        private NavigationStore navigationStore;
         private readonly ICustomerDataProvider customerDataProvider;
         public ObservableCollection<CustomerItemViewModel> Customers { get; } = new ObservableCollection<CustomerItemViewModel>();
 
@@ -38,14 +38,15 @@ namespace CustomerManagement.ViewModel
 
         public DelegateCommand AddCustomerCommand { get; }
         public DelegateCommand EditCustomerCommand { get; }
-        public NavigateCustomerCommand NavigateCommand { get; }
+        public NavigateDetailsCommand NavigateCommand { get; }
 
         public CustomersViewModel(NavigationStore navigationStore, ICustomerDataProvider customerDataProvider)
         {
+            this.navigationStore = navigationStore;
             this.customerDataProvider = customerDataProvider;
             this.AddCustomerCommand = new DelegateCommand(this.AddCustomer);
             this.EditCustomerCommand = new DelegateCommand(this.EditCustomer, this.IsCustomerSelected);
-            this.NavigateCommand = new NavigateCustomerCommand(navigationStore, this.IsCustomerSelected);
+            this.NavigateCommand = new NavigateDetailsCommand(this.navigationStore, this.IsCustomerSelected);
         }
 
         public override async Task LoadAsync()
@@ -93,11 +94,6 @@ namespace CustomerManagement.ViewModel
             editCustomerWindow.ShowDialog();
 
             log.Info($"Customer with ID {this.SelectedCustomer.Id} successfully updated.");
-        }
-
-        public void NavigateToServices(object? parameter)
-        {
-            // this.navigationStore.SelectedViewModel = this.navigationStore.ServicesViewModel;
         }
     }
 }
