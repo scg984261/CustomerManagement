@@ -14,7 +14,7 @@ namespace CustomerManagement
     {
         public App()
         {
-            
+
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -29,9 +29,8 @@ namespace CustomerManagement
             ServicesViewModel servicesViewModel = new ServicesViewModel(serviceDataProvider);
             MainViewModel mainViewModel = new MainViewModel(navigationStore, customersViewModel, servicesViewModel);
             MainWindow mainWindow = new MainWindow(mainViewModel);
-            
+
             mainWindow?.Show();
         }
     }
 }
-;

@@ -9,8 +9,8 @@ namespace CustomerManagement.Command
 {
     public class DelegateCommand : ICommand
     {
-        protected readonly Action<object?> execute;
-        protected readonly Func<object?, bool>? canExecute;
+        public readonly Action<object?> execute;
+        public readonly Func<object?, bool>? canExecute;
         public event EventHandler? CanExecuteChanged;
 
         public DelegateCommand(Action<object?> execute, Func<object?, bool>? canExecute = null)
