@@ -16,6 +16,9 @@
         <DataTemplate DataType="{x:Type viewModel:ServicesViewModel}">
             <view:ServicesView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:CustomerDetailsViewModel}">
+            <view:CustomerDetailsView />
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

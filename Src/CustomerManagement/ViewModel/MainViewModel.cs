@@ -1,9 +1,10 @@
-﻿using CustomerManagement.Command;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CustomerManagement.Command;
+using CustomerManagement.Navigation;
 
 namespace CustomerManagement.ViewModel
 {
@@ -11,41 +12,49 @@ namespace CustomerManagement.ViewModel
     {
         public ServicesViewModel ServicesViewModel { get; }
         public CustomersViewModel CustomersViewModel { get; }
+        private NavigationStore navigationStore { get; }
         public DelegateCommand SelectViewModelCommand { get; }
-        private ViewModelBase? selectedViewModel;
         
         public ViewModelBase? SelectedViewModel
         {
             get
             {
-                return this.selectedViewModel;
+                // Get the current, selected ViewModel
+                // from the navigation store.
+                return this.navigationStore.SelectedViewModel;
             }
             set
             {
-                this.selectedViewModel = value;
+                this.navigationStore.SelectedViewModel = value;
                 this.NotifyPropertyChanged();
             }
         }
 
-        public MainViewModel(CustomersViewModel customersViewModel, ServicesViewModel servicesViewModel)
+        public MainViewModel(NavigationStore navigationStore, CustomersViewModel customersViewModel, ServicesViewModel servicesViewModel)
         {
+            this.navigationStore = navigationStore;
             this.CustomersViewModel = customersViewModel;
             this.ServicesViewModel = servicesViewModel;
-            this.SelectedViewModel = customersViewModel;
+            this.navigationStore.SelectedViewModelChanged += this.NotifySelectedViewModelChanged;
             this.SelectViewModelCommand = new DelegateCommand(SelectViewModel);
+        }
+
+        public void NotifySelectedViewModelChanged()
+        {
+            this.NotifyPropertyChanged(nameof(this.SelectedViewModel));
         }
 
         public override async Task LoadAsync()
         {
-            if (SelectedViewModel != null)
+            if (navigationStore.SelectedViewModel != null)
             {
-                await this.SelectedViewModel.LoadAsync();
+                await this.navigationStore.SelectedViewModel.LoadAsync();
             }
         }
 
         public async void SelectViewModel(object? parameter)
         {
-            this.SelectedViewModel = parameter as ViewModelBase;
+            this.navigationStore.SelectedViewModel = parameter as ViewModelBase;
             await this.LoadAsync();
         }
     }
