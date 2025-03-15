@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using log4net;
-using CDB.Model;
-using System.Printing;
+﻿using CDB.Model;
 
 namespace CustomerManagement.ViewModel
 {
     public class ServiceItemViewModel : ValidationViewModelBase
     {
         private Service service;
-        private static readonly ILog log = LogManager.GetLogger(typeof(ServiceItemViewModel));
 
         public ServiceItemViewModel(Service service)
         {
@@ -41,6 +33,19 @@ namespace CustomerManagement.ViewModel
             set
             {
                 this.service.Name = value;
+            }
+        }
+
+        public decimal Price
+        {
+            get
+            {
+                return this.service.Price;
+            }
+
+            set
+            {
+                this.service.Price = value;
             }
         }
 

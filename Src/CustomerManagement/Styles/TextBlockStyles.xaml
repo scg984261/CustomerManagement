@@ -12,4 +12,11 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="FontSize" Value="12" />
     </Style>
+    
+    <!-- Used for Customer and Service Details Headers -->
+    <Style TargetType="TextBlock" x:Key="DetailsHeader">
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Padding" Value="5" />
+    </Style>
 </ResourceDictionary>

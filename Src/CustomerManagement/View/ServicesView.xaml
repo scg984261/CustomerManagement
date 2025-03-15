@@ -26,9 +26,10 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Services View" Style="{StaticResource HeaderTextBlock}" />
+            <Button Grid.Row="0" Grid.Column="1" Content="Service Details" Command="{Binding ServiceDetailsCommand}" />
         </Grid>
 
-        <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding Services}" AutoGenerateColumns="False" SelectionMode="Single">
+        <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding Services}" AutoGenerateColumns="False" SelectionMode="Single" SelectedItem="{Binding SelectedService}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Service ID" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />

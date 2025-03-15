@@ -1,8 +1,6 @@
 ﻿using CustomerManagement.Data;
 using CustomerManagement.Navigation;
 using CustomerManagement.ViewModel;
-using System.Configuration;
-using System.Data;
 using System.Windows;
 
 namespace CustomerManagement
@@ -26,7 +24,8 @@ namespace CustomerManagement
             CustomerDetailsViewModel.ParentCustomersViewModel = customersViewModel;
             navigationStore.SelectedViewModel = customersViewModel;
             ServiceDataProvider serviceDataProvider = new ServiceDataProvider();
-            ServicesViewModel servicesViewModel = new ServicesViewModel(serviceDataProvider);
+            ServicesViewModel servicesViewModel = new ServicesViewModel(navigationStore, serviceDataProvider);
+            ServiceDetailsViewModel.ParentServicesViewModel = servicesViewModel;
             MainViewModel mainViewModel = new MainViewModel(navigationStore, customersViewModel, servicesViewModel);
             MainWindow mainWindow = new MainWindow(mainViewModel);
 

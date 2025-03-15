@@ -18,7 +18,7 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Customer Details" FontSize="24" VerticalAlignment="Center" Padding="10" />
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Customer Details" Style="{StaticResource DetailsHeader}" />
 
         <TabControl Grid.Row="1">
             <TabItem Header="Customer">
