@@ -8,7 +8,6 @@ using log4net;
 using CDB.Model;
 using CustomerManagement.Command;
 using CustomerManagement.Data;
-using CustomerManagement.View.Windows;
 using CustomerManagement.Navigation;
 using Microsoft.Win32;
 
@@ -32,21 +31,17 @@ namespace CustomerManagement.ViewModel
             {
                 this.selectedCustomer = value;
                 this.NotifyPropertyChanged();
-                this.EditCustomerCommand.RaiseCanExecuteChanged();
+                this.NavigateDetailsCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public DelegateCommand AddCustomerCommand { get; }
-        public DelegateCommand EditCustomerCommand { get; }
-        public NavigateDetailsCommand NavigateCommand { get; }
+        public DelegateCommand NavigateDetailsCommand { get; }
 
         public CustomersViewModel(NavigationStore navigationStore, ICustomerDataProvider customerDataProvider)
         {
             this.navigationStore = navigationStore;
             this.customerDataProvider = customerDataProvider;
-            this.AddCustomerCommand = new DelegateCommand(this.AddCustomer);
-            this.EditCustomerCommand = new DelegateCommand(this.EditCustomer, this.IsCustomerSelected);
-            this.NavigateCommand = new NavigateDetailsCommand(this.navigationStore, this.IsCustomerSelected);
+            this.NavigateDetailsCommand = new DelegateCommand(this.NavigateToCustomerDetails, this.IsCustomerSelected);
         }
 
         public override async Task LoadAsync()
@@ -67,33 +62,20 @@ namespace CustomerManagement.ViewModel
             }
         }
 
-        public void AddCustomer(object? parameter)
-        {
-            NewCustomerWindow window = new NewCustomerWindow();
-            window.ShowDialog();
-
-            if (window.CustomerViewModel.AddCustomerOnClose)
-            {
-                this.Customers.Add(window.CustomerViewModel);
-                log.Info("New customer added.");
-            }
-            else
-            {
-                log.Info("Request to add new customer was cancelled.");
-            }
-        }
-
         public bool IsCustomerSelected(object? parameter)
         {
             return this.SelectedCustomer != null;
         }
 
-        public void EditCustomer(object? parameter)
+        public async void NavigateToCustomerDetails(object? parameter)
         {
-            EditCustomerWindow editCustomerWindow = new EditCustomerWindow(this.SelectedCustomer);
-            editCustomerWindow.ShowDialog();
+            if (this.selectedCustomer != null)
+            {
+                CustomerDetailsViewModel customerDetailsViewModel = new CustomerDetailsViewModel(this.selectedCustomer, this.navigationStore);
+                this.navigationStore.SelectedViewModel = customerDetailsViewModel;
 
-            log.Info($"Customer with ID {this.SelectedCustomer.Id} successfully updated.");
+                await this.navigationStore.SelectedViewModel.LoadAsync();
+            }
         }
     }
 }

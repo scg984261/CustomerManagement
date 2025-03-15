@@ -15,16 +15,12 @@
         <Grid Grid.Row="0" Background="LightBlue">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120" />
-                <ColumnDefinition Width="120" />
-                <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            
+
             <TextBlock Grid.Column="0" Style="{StaticResource HeaderTextBlock}" Text="Customer View"  />
-            <Button Grid.Column="1" Content="New Customer" Command="{Binding AddCustomerCommand}" />
-            <Button Grid.Column="2" Content="Edit Customer" Command="{Binding EditCustomerCommand}" />
-            <Button Grid.Column="3" Content="Customer Details" Command="{Binding NavigateCommand}" CommandParameter="{Binding SelectedCustomer}" />
+            <Button Grid.Column="1" Content="Customer Details" Command="{Binding NavigateDetailsCommand}" CommandParameter="{Binding SelectedCustomer}" />
         </Grid>
 
         <DataGrid Grid.Row="1" ItemsSource="{Binding Customers}" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" SelectedItem="{Binding SelectedCustomer}">

@@ -8,13 +8,26 @@ namespace CustomerManagement.ViewModel
         public static CustomersViewModel? ParentCustomersViewModel { get; set; }
         private CustomerItemViewModel customerItemViewModel;
         private NavigationStore navigationStore;
-        public NavigateCustomersViewCommand NavigateBackCommand { get; }
+        public DelegateCommand CancelCommand { get; }
+        public DelegateCommand SaveCommand { get; }
+
+        private readonly string? companyName;
+        private readonly string? businessContact;
+        private readonly string? contactNumber;
+        private readonly string? emailAddress;
 
         public CustomerDetailsViewModel(CustomerItemViewModel customerItemViewModel, NavigationStore navigationStore)
         {
+            // Save values as readonly in case user cancels.
+            this.companyName = customerItemViewModel.CompanyName;
+            this.businessContact = customerItemViewModel.BusinessContact;
+            this.contactNumber = customerItemViewModel.ContactNumber;
+            this.emailAddress = customerItemViewModel.EmailAddress;
+
             this.customerItemViewModel = customerItemViewModel;
             this.navigationStore = navigationStore;
-            this.NavigateBackCommand = new NavigateCustomersViewCommand(this.navigationStore, this.CanSaveCustomer);
+            this.CancelCommand = new DelegateCommand(this.Cancel);
+            this.SaveCommand = new DelegateCommand(this.SaveCustomer, this.CanSaveCustomer);
         }
 
         public int? Id
@@ -47,7 +60,7 @@ namespace CustomerManagement.ViewModel
                 }
 
                 this.NotifyPropertyChanged();
-                this.NavigateBackCommand.OnCanExecuteChanged();
+                this.SaveCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -72,7 +85,7 @@ namespace CustomerManagement.ViewModel
                 }
 
                 this.NotifyPropertyChanged();
-                this.NavigateBackCommand.OnCanExecuteChanged();
+                this.SaveCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -85,6 +98,18 @@ namespace CustomerManagement.ViewModel
             set
             {
                 this.customerItemViewModel.ContactNumber = value;
+
+                if (string.IsNullOrEmpty(this.customerItemViewModel.ContactNumber))
+                {
+                    const string errorMessage = "Contact number cannot be blank";
+                    this.AddError(errorMessage);
+                }
+                else
+                {
+                    this.ClearErrors();
+                }
+
+                this.SaveCommand.RaiseCanExecuteChanged();
                 this.NotifyPropertyChanged();
             }
         }
@@ -110,8 +135,35 @@ namespace CustomerManagement.ViewModel
                 }
 
                 this.NotifyPropertyChanged();
-                this.NavigateBackCommand.OnCanExecuteChanged();
+                this.SaveCommand.RaiseCanExecuteChanged();
             }
+        }
+
+        public void Cancel(object? parameter)
+        {
+            // Restore Customer values  to their originals.
+            this.customerItemViewModel.CompanyName = this.companyName;
+            this.customerItemViewModel.BusinessContact = this.businessContact;
+            this.customerItemViewModel.ContactNumber = this.contactNumber;
+            this.customerItemViewModel.EmailAddress = this.emailAddress;
+
+            this.NavigateBack();
+        }
+
+        public async void NavigateBack()
+        {
+            if (ParentCustomersViewModel != null)
+            {
+                this.navigationStore.SelectedViewModel = ParentCustomersViewModel;
+                await this.navigationStore.SelectedViewModel.LoadAsync();
+            }
+        }
+
+        public void SaveCustomer(object? parameter)
+        {
+            // Add a call here to update customer in SQL Server
+
+            this.NavigateBack();
         }
 
         public bool CanSaveCustomer(object? parameter)

@@ -66,10 +66,14 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-
-            <Button Command="{Binding NavigateBackCommand}" CommandParameter="{Binding ParentCustomersViewModel}">
+            
+            <!-- Cancel button -->
+            <Button Grid.Row="0" Grid.Column="0" Command="{Binding CancelCommand}">
                 <Image Source="/Images/BackArrow.png" />
             </Button>
+            
+            <!-- Save button -->
+            <Button Grid.Row="0" Grid.Column="1" Content="Save" Command="{Binding SaveCommand}" />
         </Grid>
     </Grid>
 </UserControl>

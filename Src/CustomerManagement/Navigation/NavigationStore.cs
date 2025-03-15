@@ -21,7 +21,12 @@ namespace CustomerManagement.Navigation
             set
             {
                 this.selectedViewModel = value;
-                this.NotifyCurrentViewModelChanged();
+                
+
+                if (this.selectedViewModel != null)
+                {
+                    this.NotifyCurrentViewModelChanged();
+                }
             }
         }
 

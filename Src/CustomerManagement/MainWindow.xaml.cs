@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows;
-using CustomerManagement.View.Windows;
 using CustomerManagement.ViewModel;
 using log4net;
 using log4net.Config;
