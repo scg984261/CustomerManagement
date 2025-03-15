@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using log4net;
 using CustomerManagement.Command;
 using CustomerManagement.Data;
-using CustomerManagement.View.Windows;
 using CDB.Model;
 
 namespace CustomerManagement.ViewModel
@@ -16,12 +15,10 @@ namespace CustomerManagement.ViewModel
     {
         public ObservableCollection<ServiceItemViewModel> Services { get; } = new ObservableCollection<ServiceItemViewModel>();
         private readonly IServiceDataProvider serviceDataProvider;
-        public DelegateCommand AddServiceCommand { get; }
 
         public ServicesViewModel(IServiceDataProvider serviceDataProvider)
         {
             this.serviceDataProvider = new ServiceDataProvider();
-            this.AddServiceCommand = new DelegateCommand(this.AddNewService);
         }
 
         public override async Task LoadAsync()
@@ -41,12 +38,6 @@ namespace CustomerManagement.ViewModel
                     this.Services.Add(serviceItemViewModel);
                 }
             }
-        }
-
-        public void AddNewService(object? parameter)
-        {
-            NewServiceWindow newServiceWindow = new NewServiceWindow();
-            newServiceWindow.ShowDialog();
         }
     }
 }

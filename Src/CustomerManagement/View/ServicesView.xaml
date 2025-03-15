@@ -26,7 +26,6 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Services View" Style="{StaticResource HeaderTextBlock}" />
-            <Button Grid.Row="0" Grid.Column="1" Content="New Service" Command="{Binding AddServiceCommand}" />
         </Grid>
 
         <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding Services}" AutoGenerateColumns="False" SelectionMode="Single">
