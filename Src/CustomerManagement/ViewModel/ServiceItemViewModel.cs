@@ -100,5 +100,21 @@ namespace CustomerManagement.ViewModel
                 return formattedString;
             }
         }
+
+        public DateTime CreatedDateTime
+        {
+            get
+            {
+                return this.service.CreatedDateTime;
+            }
+        }
+
+        public DateTime LastUpdateDateTime
+        {
+            get
+            {
+                return this.service.LastUpdateDateTime;
+            }
+        }
     }
 }

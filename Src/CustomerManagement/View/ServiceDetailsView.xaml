@@ -32,17 +32,24 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0">Service ID</Label>
             <Label Grid.Row="1" Grid.Column="0">Name</Label>
             <Label Grid.Row="2" Grid.Column="0">Price</Label>
+            <Label Grid.Row="3" Grid.Column="0">Price Formatted</Label>
+            <Label Grid.Row="4" Grid.Column="0">Created</Label>
+            <Label Grid.Row="5" Grid.Column="0">Last Update</Label>
 
             <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding Id}" />
             <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding PriceString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Grid.Row="3" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding PriceFormatted, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding CreatedDateTime, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="5" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding LastUpdateDateTime, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
         
         <!-- Buttons -->

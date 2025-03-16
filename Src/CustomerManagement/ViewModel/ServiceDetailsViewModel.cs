@@ -5,12 +5,14 @@ namespace CustomerManagement.ViewModel
 {
     public class ServiceDetailsViewModel : ValidationViewModelBase
     {
+        public static ServicesViewModel? ParentServicesViewModel;
+        private static readonly string dateTimeFormat = "yyyy-MMM-dd HH:mm:ss";
+
         private NavigationStore navigationStore;
         public DelegateCommand SaveCommand { get; }
         public DelegateCommand CancelCommand { get; }
         private ServiceItemViewModel serviceItemViewModel;
-        public static ServicesViewModel? ParentServicesViewModel;
-
+        
         private readonly string name;
         private readonly decimal price;
 
@@ -46,10 +48,77 @@ namespace CustomerManagement.ViewModel
             }
         }
 
+        private string priceString;
+
+        public string PriceString
+        {
+            get
+            {
+                return this.priceString;
+            }
+            set
+            {
+                this.priceString = value;
+
+                if (string.IsNullOrEmpty(this.priceString))
+                {
+                    const string errorMessage = "Price cannot be blank!";
+                    this.AddError(errorMessage);
+                    this.serviceItemViewModel.Price = 0m;
+                    this.NotifyPropertyChanged(nameof(PriceFormatted));
+                    return;
+                }
+                else
+                {
+                    this.ClearErrors();
+                }
+
+                decimal price;
+                if (Decimal.TryParse(value, out price))
+                {
+                    this.serviceItemViewModel.Price = price;
+                    this.ClearErrors();
+                }
+                else
+                {
+                    const string errorMessage = $"Value must be a valid decimal.";
+                    this.serviceItemViewModel.Price = 0m;
+                    this.AddError(errorMessage);
+                }
+
+                this.NotifyPropertyChanged(nameof(PriceFormatted));
+            }
+        }
+
+        public string PriceFormatted
+        {
+            get
+            {
+                return this.serviceItemViewModel.PriceFormatted;
+            }
+        }
+
+        public string CreatedDateTime
+        {
+            get
+            {
+                return this.serviceItemViewModel.CreatedDateTime.ToString(dateTimeFormat);
+            }
+        }
+
+        public string LastUpdateDateTime
+        {
+            get
+            {
+                return this.serviceItemViewModel.LastUpdateDateTime.ToString(dateTimeFormat);
+            }
+        }
+
         public ServiceDetailsViewModel(ServiceItemViewModel serviceItemViewModel, NavigationStore navigationStore)
         {
             this.name = serviceItemViewModel.Name;
             this.price = serviceItemViewModel.Price;
+            this.priceString = serviceItemViewModel.Price.ToString();
             
             this.serviceItemViewModel = serviceItemViewModel;
             this.navigationStore = navigationStore;
