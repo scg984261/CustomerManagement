@@ -25,7 +25,11 @@
         <DataTemplate DataType="{x:Type viewModel:NewCustomerViewModel}">
             <view:NewCustomerView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:NewServiceViewModel}">
+            <view:NewServiceView />
+        </DataTemplate>
     </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />

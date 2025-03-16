@@ -31,5 +31,6 @@ namespace CustomerManagement.Test.ViewModel
             // Assert.
             Assert.That(formattedPriceString, Is.EqualTo("£5842.30"));
         }
+
     }
 }
