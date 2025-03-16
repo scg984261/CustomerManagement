@@ -9,13 +9,11 @@ namespace CustomerManagement.ViewModel
         public ServiceItemViewModel(Service service)
         {
             this.service = service;
-            this.priceString = string.Empty;
         }
 
         public ServiceItemViewModel()
         {
             this.service = new Service();
-            this.priceString = string.Empty;
         }
 
         public int Id
@@ -52,21 +50,6 @@ namespace CustomerManagement.ViewModel
             set
             {
                 this.service.Price = value;
-            }
-        }
-
-        private string priceString;
-
-        public string PriceString
-        {
-            get
-            {
-                return this.priceString;
-            }
-
-            set
-            {
-                this.priceString = value;
             }
         }
 

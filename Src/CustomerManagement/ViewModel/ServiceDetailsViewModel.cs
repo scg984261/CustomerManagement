@@ -87,6 +87,7 @@ namespace CustomerManagement.ViewModel
                 }
 
                 this.NotifyPropertyChanged(nameof(PriceFormatted));
+                this.SaveCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -145,7 +146,12 @@ namespace CustomerManagement.ViewModel
 
         public bool CanSaveService(object? parameter)
         {
-            return false;
+            if (string.IsNullOrEmpty(this.Name)) return false;
+            if (string.IsNullOrEmpty(this.PriceString)) return false;
+
+            if (this.HasErrors) return false;
+
+            return true;
         }
 
         public void Cancel(object? parameter)

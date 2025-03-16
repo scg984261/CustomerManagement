@@ -123,11 +123,12 @@ namespace CustomerManagement.ViewModel
             }
         }
 
-        public void SaveService(object? parameter)
+        public async void SaveService(object? parameter)
         {
             if (ParentServicesViewModel != null)
             {
                 ParentServicesViewModel.Services.Add(this.serviceItemViewModel);
+                await this.navigationStore.SelectedViewModel.LoadAsync();
             }
 
             this.NavigateBack();
