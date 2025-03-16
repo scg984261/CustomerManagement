@@ -18,7 +18,7 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="Customer Details" FontSize="24" VerticalAlignment="Center" Padding="10" />
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Customer Details" Style="{StaticResource DetailsHeader}" />
 
         <TabControl Grid.Row="1">
             <TabItem Header="Customer">
@@ -36,6 +36,8 @@
                         <RowDefinition Height="50" />
                         <RowDefinition Height="50" />
                         <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
@@ -44,12 +46,16 @@
                     <Label Grid.Row="2" Grid.Column="0">Business Contact</Label>
                     <Label Grid.Row="3" Grid.Column="0">Email Address</Label>
                     <Label Grid.Row="4" Grid.Column="0">Contact Number</Label>
+                    <Label Grid.Row="5" Grid.Column="0">Created</Label>
+                    <Label Grid.Row="6" Grid.Column="0">Last Update</Label>
 
                     <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding Id}" />
                     <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding BusinessContact,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding ContactNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Grid.Row="5" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding CreatedDateTime}" />
+                    <TextBlock Grid.Row="6" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding LastUpdateDateTime}" />
                 </Grid>
             </TabItem>
             <TabItem Header="Recurring Services">

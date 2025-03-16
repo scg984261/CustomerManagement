@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using log4net;
+﻿using System.Collections.ObjectModel;
 using CustomerManagement.Command;
 using CustomerManagement.Data;
+using CustomerManagement.Navigation;
 using CDB.Model;
 
 namespace CustomerManagement.ViewModel
@@ -14,11 +9,31 @@ namespace CustomerManagement.ViewModel
     public class ServicesViewModel : ViewModelBase
     {
         public ObservableCollection<ServiceItemViewModel> Services { get; } = new ObservableCollection<ServiceItemViewModel>();
-        private readonly IServiceDataProvider serviceDataProvider;
+        private NavigationStore navigationStore;
 
-        public ServicesViewModel(IServiceDataProvider serviceDataProvider)
+        private ServiceItemViewModel selectedService;
+
+        public ServiceItemViewModel SelectedService
         {
+            get
+            {
+                return this.selectedService;
+            }
+            set
+            {
+                this.selectedService = value;
+                this.NotifyPropertyChanged();
+                this.ServiceDetailsCommand.RaiseCanExecuteChanged();
+            }
+        }
+        private readonly IServiceDataProvider serviceDataProvider;
+        public DelegateCommand ServiceDetailsCommand { get; }
+
+        public ServicesViewModel(NavigationStore navigationStore, IServiceDataProvider serviceDataProvider)
+        {
+            this.navigationStore = navigationStore;
             this.serviceDataProvider = new ServiceDataProvider();
+            this.ServiceDetailsCommand = new DelegateCommand(this.NavigateToDetails, this.IsServiceSelected);
         }
 
         public override async Task LoadAsync()
@@ -38,6 +53,20 @@ namespace CustomerManagement.ViewModel
                     this.Services.Add(serviceItemViewModel);
                 }
             }
+        }
+
+        public void NavigateToDetails(object? parameter)
+        {
+            if (this.SelectedService != null)
+            {
+                ServiceDetailsViewModel serviceDetailsViewModel = new ServiceDetailsViewModel(this.SelectedService, this.navigationStore);
+                this.navigationStore.SelectedViewModel = serviceDetailsViewModel;
+            }
+        }
+
+        public bool IsServiceSelected(object? parameter)
+        {
+            return this.SelectedService != null;
         }
     }
 }

@@ -6,6 +6,7 @@ namespace CustomerManagement.ViewModel
     public class CustomerDetailsViewModel : ValidationViewModelBase
     {
         public static CustomersViewModel? ParentCustomersViewModel { get; set; }
+        private static readonly string dateTimeFormat = "yyyy-MMM-dd HH:mm:ss";
         private CustomerItemViewModel customerItemViewModel;
         private NavigationStore navigationStore;
         public DelegateCommand CancelCommand { get; }
@@ -136,6 +137,22 @@ namespace CustomerManagement.ViewModel
 
                 this.NotifyPropertyChanged();
                 this.SaveCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public string CreatedDateTime
+        {
+            get
+            {
+                return this.customerItemViewModel.CreatedDateTime.ToString(dateTimeFormat);
+            }
+        }
+
+        public string LastUpdateDateTime
+        {
+            get
+            {
+                return this.customerItemViewModel.LastUpdateDateTime.ToString(dateTimeFormat);
             }
         }
 
