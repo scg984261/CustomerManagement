@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="CustomerManagement.View.NewCustomerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CustomerManagement.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="Gray">
+        <Grid.RowDefinitions>
+            <!-- Title -->
+            <RowDefinition Height="50" />
+            
+            <!-- Input Form -->
+            <RowDefinition />
+            
+            <!-- Bottom panel - buttons -->
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="New Customer" Style="{StaticResource DetailsHeader}" />
+        
+        <!-- Customer Details input form -->
+        <Grid Grid.Row="1"  Background="LightGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="130" />
+                <ColumnDefinition Width="250" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0">Company Name</Label>
+            <Label Grid.Row="1" Grid.Column="0">Business Contact</Label>
+            <Label Grid.Row="2" Grid.Column="0">Email Address</Label>
+            <Label Grid.Row="3" Grid.Column="0">Contact Number</Label>
+
+            <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding BusinessContact,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding ContactNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+        
+        <!-- Buttons Row -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <!-- Cancel button -->
+            <Button Grid.Row="0" Grid.Column="0" Command="{Binding NavigateBackCommand}">
+                <Image Source="/Images/BackArrow.png" />
+            </Button>
+
+            <!-- Save button -->
+            <Button Grid.Row="0" Grid.Column="1" Content="Save" Command="{Binding SaveCustomerCommand}" />
+        </Grid>
+    </Grid>
+</UserControl>
