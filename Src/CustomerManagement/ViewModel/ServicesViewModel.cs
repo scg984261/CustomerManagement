@@ -11,9 +11,9 @@ namespace CustomerManagement.ViewModel
         public ObservableCollection<ServiceItemViewModel> Services { get; } = new ObservableCollection<ServiceItemViewModel>();
         private NavigationStore navigationStore;
 
-        private ServiceItemViewModel selectedService;
+        private ServiceItemViewModel? selectedService;
 
-        public ServiceItemViewModel SelectedService
+        public ServiceItemViewModel? SelectedService
         {
             get
             {
@@ -28,12 +28,14 @@ namespace CustomerManagement.ViewModel
         }
         private readonly IServiceDataProvider serviceDataProvider;
         public DelegateCommand ServiceDetailsCommand { get; }
+        public DelegateCommand NavigateNewServiceCommand { get; }
 
         public ServicesViewModel(NavigationStore navigationStore, IServiceDataProvider serviceDataProvider)
         {
             this.navigationStore = navigationStore;
             this.serviceDataProvider = new ServiceDataProvider();
             this.ServiceDetailsCommand = new DelegateCommand(this.NavigateToDetails, this.IsServiceSelected);
+            this.NavigateNewServiceCommand = new DelegateCommand(this.NavigateToNewService);
         }
 
         public override async Task LoadAsync()
@@ -67,6 +69,11 @@ namespace CustomerManagement.ViewModel
         public bool IsServiceSelected(object? parameter)
         {
             return this.SelectedService != null;
+        }
+
+        public void NavigateToNewService(object? parameter)
+        {
+            this.navigationStore.SelectedViewModel = new NewServiceViewModel(this.navigationStore);
         }
     }
 }

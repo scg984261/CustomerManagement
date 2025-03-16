@@ -1,30 +1,28 @@
-﻿using CustomerManagement.Navigation;
-using CustomerManagement.Command;
+﻿using CustomerManagement.Command;
+using CustomerManagement.Navigation;
 
 namespace CustomerManagement.ViewModel
 {
-    public class ServiceDetailsViewModel : ValidationViewModelBase
+    public class NewServiceViewModel : ValidationViewModelBase
     {
-        public static ServicesViewModel? ParentServicesViewModel;
-        private static readonly string dateTimeFormat = "yyyy-MMM-dd HH:mm:ss";
-
         private NavigationStore navigationStore;
-        public DelegateCommand SaveCommand { get; }
-        public DelegateCommand CancelCommand { get; }
         private ServiceItemViewModel serviceItemViewModel;
-        
-        private readonly string name;
-        private readonly decimal price;
+        public static ServicesViewModel? ParentServicesViewModel { get; set; }
+        public DelegateCommand NavigateBackDelegateCommand { get; }
+        public DelegateCommand SaveServiceCommand { get; }
+        private string priceString;
 
-        public int Id
+        public NewServiceViewModel(NavigationStore navigationStore)
         {
-            get
-            {
-                return this.serviceItemViewModel.Id;
-            }
+            this.navigationStore = navigationStore;
+            this.serviceItemViewModel = new ServiceItemViewModel();
+            this.priceString = string.Empty;
+            this.NavigateBackDelegateCommand = new DelegateCommand(this.NavigateBack);
+            this.SaveServiceCommand = new DelegateCommand(this.SaveService, this.CanSaveService);
+
         }
 
-        public string Name
+        public string? Name
         {
             get
             {
@@ -33,6 +31,19 @@ namespace CustomerManagement.ViewModel
             set
             {
                 this.serviceItemViewModel.Name = value;
+
+                if (string.IsNullOrEmpty(this.Name))
+                {
+                    const string errorMessage = "Name of service cannot be blank";
+                    this.AddError(errorMessage);
+                }
+                else
+                {
+                    this.ClearErrors();
+                }
+
+                this.NotifyPropertyChanged();
+                this.SaveServiceCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -47,8 +58,6 @@ namespace CustomerManagement.ViewModel
                 this.serviceItemViewModel.Price = value;
             }
         }
-
-        private string priceString;
 
         public string PriceString
         {
@@ -66,6 +75,7 @@ namespace CustomerManagement.ViewModel
                     this.AddError(errorMessage);
                     this.serviceItemViewModel.Price = 0m;
                     this.NotifyPropertyChanged(nameof(PriceFormatted));
+                    this.SaveServiceCommand.RaiseCanExecuteChanged();
                     return;
                 }
                 else
@@ -87,51 +97,20 @@ namespace CustomerManagement.ViewModel
                 }
 
                 this.NotifyPropertyChanged(nameof(PriceFormatted));
-                this.SaveCommand.RaiseCanExecuteChanged();
+                this.SaveServiceCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public string PriceFormatted
+        public string  PriceFormatted
         {
             get
             {
-                return this.serviceItemViewModel.PriceFormatted;
+                return $"£{this.Price.ToString("0.00")}";
             }
         }
 
-        public string CreatedDateTime
+        public void NavigateBack(object? parameter)
         {
-            get
-            {
-                return this.serviceItemViewModel.CreatedDateTime.ToString(dateTimeFormat);
-            }
-        }
-
-        public string LastUpdateDateTime
-        {
-            get
-            {
-                return this.serviceItemViewModel.LastUpdateDateTime.ToString(dateTimeFormat);
-            }
-        }
-
-        public ServiceDetailsViewModel(ServiceItemViewModel serviceItemViewModel, NavigationStore navigationStore)
-        {
-            this.name = serviceItemViewModel.Name;
-            this.price = serviceItemViewModel.Price;
-            this.priceString = serviceItemViewModel.Price.ToString();
-            
-            this.serviceItemViewModel = serviceItemViewModel;
-            this.navigationStore = navigationStore;
-
-            this.SaveCommand = new DelegateCommand(this.SaveService, this.CanSaveService);
-            this.CancelCommand = new DelegateCommand(this.Cancel);
-        }
-
-        public void SaveService(object? parameter)
-        {
-            // Add a call to SQL Server via Entity Framework to save the service!
-
             this.NavigateBack();
         }
 
@@ -144,6 +123,16 @@ namespace CustomerManagement.ViewModel
             }
         }
 
+        public void SaveService(object? parameter)
+        {
+            if (ParentServicesViewModel != null)
+            {
+                ParentServicesViewModel.Services.Add(this.serviceItemViewModel);
+            }
+
+            this.NavigateBack();
+        }
+        
         public bool CanSaveService(object? parameter)
         {
             if (string.IsNullOrEmpty(this.Name)) return false;
@@ -152,14 +141,6 @@ namespace CustomerManagement.ViewModel
             if (this.HasErrors) return false;
 
             return true;
-        }
-
-        public void Cancel(object? parameter)
-        {
-            this.serviceItemViewModel.Name = this.name;
-            this.serviceItemViewModel.Price = this.price;
-
-            this.NavigateBack();
         }
     }
 }

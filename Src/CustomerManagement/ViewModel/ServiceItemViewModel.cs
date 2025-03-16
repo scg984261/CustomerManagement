@@ -2,14 +2,18 @@
 
 namespace CustomerManagement.ViewModel
 {
-    public class ServiceItemViewModel : ValidationViewModelBase
+    public class ServiceItemViewModel : ViewModelBase
     {
         private Service service;
 
         public ServiceItemViewModel(Service service)
         {
             this.service = service;
-            this.priceString = string.Empty;
+        }
+
+        public ServiceItemViewModel()
+        {
+            this.service = new Service();
         }
 
         public int Id
@@ -46,49 +50,6 @@ namespace CustomerManagement.ViewModel
             set
             {
                 this.service.Price = value;
-            }
-        }
-
-        private string priceString;
-
-        public string PriceString
-        {
-            get
-            {
-                return this.priceString;
-            }
-
-            set
-            {
-                this.priceString = value;
-
-                if (string.IsNullOrEmpty(this.priceString))
-                {
-                    const string errorMessage = "Price cannot be blank!";
-                    this.AddError(errorMessage);
-                    this.service.Price = 0m;
-                    this.NotifyPropertyChanged(nameof(PriceFormatted));
-                    return;
-                }
-                else
-                {
-                    this.ClearErrors();
-                }
-
-                decimal price;
-                if (Decimal.TryParse(value, out price))
-                {
-                    this.service.Price = price;
-                    this.ClearErrors();
-                }
-                else
-                {
-                    const string errorMessage = $"Value must be a valid decimal.";
-                    this.service.Price = 0m;
-                    this.AddError(errorMessage);
-                }
-
-                this.NotifyPropertyChanged(nameof(PriceFormatted));
             }
         }
 

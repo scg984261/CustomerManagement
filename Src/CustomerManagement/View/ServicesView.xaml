@@ -22,11 +22,13 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120" />
                 <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="120" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Services View" Style="{StaticResource HeaderTextBlock}" />
             <Button Grid.Row="0" Grid.Column="1" Content="Service Details" Command="{Binding ServiceDetailsCommand}" />
+            <Button Grid.Row="0" Grid.Column="2" Content="New Service" Command="{Binding NavigateNewServiceCommand}" />
         </Grid>
 
         <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding Services}" AutoGenerateColumns="False" SelectionMode="Single" SelectedItem="{Binding SelectedService}">
