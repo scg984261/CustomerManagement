@@ -39,18 +39,18 @@ namespace CustomerManagement.ViewModel
             this.NotifyPropertyChanged(nameof(this.SelectedViewModel));
         }
 
-        public override async Task LoadAsync()
+        public override void Load()
         {
             if (navigationStore.SelectedViewModel != null)
             {
-                await this.navigationStore.SelectedViewModel.LoadAsync();
+                this.navigationStore.SelectedViewModel.Load();
             }
         }
 
-        public async void SelectViewModel(object? parameter)
+        public void SelectViewModel(object? parameter)
         {
             this.navigationStore.SelectedViewModel = parameter as ViewModelBase;
-            await this.LoadAsync();
+            this.Load();
         }
     }
 }

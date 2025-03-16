@@ -12,9 +12,9 @@ namespace CustomerManagement.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public virtual Task LoadAsync()
+        public virtual void Load()
         {
-            return Task.CompletedTask;
+            return;
         }
     }
 }

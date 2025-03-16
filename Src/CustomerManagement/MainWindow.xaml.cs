@@ -1,10 +1,7 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Windows;
+﻿using System.Windows;
 using CustomerManagement.ViewModel;
 using log4net;
 using log4net.Config;
-using Microsoft.Win32;
 
 namespace CustomerManagement
 {
@@ -23,9 +20,9 @@ namespace CustomerManagement
             log.Info("Start of application. Main window successfully initialised.");
         }
 
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs args)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs args)
         {
-            await this.viewModel.LoadAsync();
+            this.viewModel.Load();
         }
     }
 }

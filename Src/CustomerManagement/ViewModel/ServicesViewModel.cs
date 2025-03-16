@@ -38,14 +38,14 @@ namespace CustomerManagement.ViewModel
             this.NavigateNewServiceCommand = new DelegateCommand(this.NavigateToNewService);
         }
 
-        public override async Task LoadAsync()
+        public override void Load()
         {
             if (this.Services.Any())
             {
                 return;
             }
 
-            var services = await this.serviceDataProvider.GetAllAsync();
+            var services = this.serviceDataProvider.GetAll();
 
             if (services != null)
             {

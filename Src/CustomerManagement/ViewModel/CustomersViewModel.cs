@@ -40,14 +40,14 @@ namespace CustomerManagement.ViewModel
             this.NavigateNewCustomerCommand = new DelegateCommand(this.NavigateToNewCustomer);
         }
 
-        public override async Task LoadAsync()
+        public override void Load()
         {
             if (this.Customers.Any())
             {
                 return;
             }
 
-            var customers = await this.customerDataProvider.GetAllAsync();
+            var customers = this.customerDataProvider.GetAll();
 
             if (customers != null)
             {
@@ -63,14 +63,14 @@ namespace CustomerManagement.ViewModel
             return this.SelectedCustomer != null;
         }
 
-        public async void NavigateToCustomerDetails(object? parameter)
+        public void NavigateToCustomerDetails(object? parameter)
         {
             if (this.selectedCustomer != null)
             {
                 CustomerDetailsViewModel customerDetailsViewModel = new CustomerDetailsViewModel(this.selectedCustomer, this.navigationStore);
                 this.navigationStore.SelectedViewModel = customerDetailsViewModel;
 
-                await this.navigationStore.SelectedViewModel.LoadAsync();
+                this.navigationStore.SelectedViewModel.Load();
             }
         }
 

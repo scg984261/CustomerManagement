@@ -135,12 +135,12 @@ namespace CustomerManagement.ViewModel
             this.NavigateBack();
         }
 
-        public async void NavigateBack()
+        public void NavigateBack()
         {
             if (ParentServicesViewModel != null)
             {
                 this.navigationStore.SelectedViewModel = ParentServicesViewModel;
-                await this.navigationStore.SelectedViewModel.LoadAsync();
+                this.navigationStore.SelectedViewModel.Load();
             }
         }
 
