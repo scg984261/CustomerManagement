@@ -16,6 +16,11 @@ namespace CustomerManagement.ViewModel
             this.customer = customer;
         }
 
+        public CustomerItemViewModel()
+        {
+            this.customer = new Customer();
+        }
+
         public int Id
         {
             get

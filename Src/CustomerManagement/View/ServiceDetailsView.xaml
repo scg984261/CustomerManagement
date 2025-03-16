@@ -45,8 +45,8 @@
             <Label Grid.Row="5" Grid.Column="0">Last Update</Label>
 
             <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding Id}" />
-            <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TabTextBox}" Text="{Binding PriceString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding PriceString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Grid.Row="3" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding PriceFormatted, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Grid.Row="4" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding CreatedDateTime, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Grid.Row="5" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding LastUpdateDateTime, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />

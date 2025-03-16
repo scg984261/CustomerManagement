@@ -30,12 +30,14 @@ namespace CustomerManagement.ViewModel
         }
 
         public DelegateCommand NavigateDetailsCommand { get; }
+        public DelegateCommand NavigateNewCustomerCommand { get; }
 
         public CustomersViewModel(NavigationStore navigationStore, ICustomerDataProvider customerDataProvider)
         {
             this.navigationStore = navigationStore;
             this.customerDataProvider = customerDataProvider;
             this.NavigateDetailsCommand = new DelegateCommand(this.NavigateToCustomerDetails, this.IsCustomerSelected);
+            this.NavigateNewCustomerCommand = new DelegateCommand(this.NavigateToNewCustomer);
         }
 
         public override async Task LoadAsync()
@@ -70,6 +72,11 @@ namespace CustomerManagement.ViewModel
 
                 await this.navigationStore.SelectedViewModel.LoadAsync();
             }
+        }
+
+        public void NavigateToNewCustomer(object? parameter)
+        {
+            this.navigationStore.SelectedViewModel = new NewCustomerViewModel(this.navigationStore);
         }
     }
 }
