@@ -6,7 +6,7 @@ namespace CustomerManagement.ViewModel
     public class ServiceDetailsViewModel : ValidationViewModelBase
     {
         public static ServicesViewModel? ParentServicesViewModel;
-        private static readonly string dateTimeFormat = "yyyy-MMM-dd HH:mm:ss";
+        private static readonly string dateTimeFormat = "dd-MMM-yyyy HH:mm:ss";
 
         private NavigationStore navigationStore;
         public DelegateCommand SaveCommand { get; }

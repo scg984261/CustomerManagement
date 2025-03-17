@@ -92,6 +92,11 @@ namespace CustomerManagement.ViewModel
             {
                 return this.customer.IsActive;
             }
+            set
+            {
+                this.customer.IsActive = value;
+                this.NotifyPropertyChanged();
+            }
         }
 
         public DateTime CreatedDateTime
@@ -107,6 +112,11 @@ namespace CustomerManagement.ViewModel
             get
             {
                 return this.customer.LastUpdateDateTime;
+            }
+            set
+            {
+                this.customer.LastUpdateDateTime = value;
+                this.NotifyPropertyChanged();
             }
         }
     }

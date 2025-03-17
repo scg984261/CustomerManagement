@@ -36,5 +36,37 @@ namespace CustomerManagement.Data
 
             return customers;
         }
+
+        public Customer InsertNewCustomer(string? companyName, string? businessContact, string? emailAddress, string? contactNumber)
+        {
+            try
+            {
+                Customer newlyInsertedCustomer = cdbDataWrapper.InsertNewCustomer(companyName, businessContact, emailAddress, contactNumber);
+                log.Info($"New Customer record successfully inserted into the database with ID {newlyInsertedCustomer.Id}.");
+                return newlyInsertedCustomer;
+            }
+            catch (Exception exception)
+            {
+                string errorMessage = $"Exception occurred attempting to insert customer into the database. Company name: {companyName}, Business contact: {businessContact} Email address: {emailAddress}, Contact number: {contactNumber}.";
+                log.Error(errorMessage);
+                log.Error(exception);
+                throw;
+            }
+        }
+
+        public Customer UpdateCustomer(int? id, string? companyName, string? businessContact, string? emailAddress, string? contactNumber, bool isActive)
+        {
+            try
+            {
+                Customer updatedCustomer = cdbDataWrapper.UpdateCustomer(id, companyName, businessContact, emailAddress, contactNumber, isActive);
+                return updatedCustomer;
+            }
+            catch (Exception exception)
+            {
+                string errorMessage = $"Exception of type {exception.GetType().FullName} occurred attempting to update customer with values: ID: {id}, Company name: {companyName}, Business contact: {businessContact} Email address: {emailAddress}, Contact number: {contactNumber}, Is Active: {isActive}.";
+                log.Error(errorMessage);
+                throw;
+            }
+        }
     }
 }

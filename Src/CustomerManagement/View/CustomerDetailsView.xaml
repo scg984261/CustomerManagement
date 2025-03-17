@@ -38,6 +38,7 @@
                         <RowDefinition Height="50" />
                         <RowDefinition Height="50" />
                         <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
@@ -46,16 +47,18 @@
                     <Label Grid.Row="2" Grid.Column="0">Business Contact</Label>
                     <Label Grid.Row="3" Grid.Column="0">Email Address</Label>
                     <Label Grid.Row="4" Grid.Column="0">Contact Number</Label>
-                    <Label Grid.Row="5" Grid.Column="0">Created</Label>
-                    <Label Grid.Row="6" Grid.Column="0">Last Update</Label>
+                    <Label Grid.Row="5" Grid.Column="0">Active</Label>
+                    <Label Grid.Row="6" Grid.Column="0">Created</Label>
+                    <Label Grid.Row="7" Grid.Column="0">Last Update</Label>
 
                     <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding Id}" />
                     <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding BusinessContact,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding ContactNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock Grid.Row="5" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding CreatedDateTime}" />
-                    <TextBlock Grid.Row="6" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding LastUpdateDateTime}" />
+                    <CheckBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IsActive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Grid.Row="6" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding CreatedDateTime}" />
+                    <TextBlock Grid.Row="7" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding LastUpdateDateTimeFormatted}" />
                 </Grid>
             </TabItem>
             <TabItem Header="Recurring Services">

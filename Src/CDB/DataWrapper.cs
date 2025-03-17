@@ -70,15 +70,15 @@ namespace CDB
         /// <param name="emailAddress"></param>
         /// <param name="contactNumber"></param>
         /// <returns></returns>
-        public Customer InsertNewCustomer(string companyName, string businessContact, string emailAddress, string contactNumber)
+        public Customer InsertNewCustomer(string? companyName, string? businessContact, string? emailAddress, string? contactNumber)
         {
             FormattableString sql = $"InsertCustomer {companyName}, {businessContact}, {emailAddress}, {contactNumber}";
 
-            Customer customerInsertResult = new Customer();
-
             try
             {
-                customerInsertResult = context.RunSql<Customer>(sql).AsEnumerable().First();
+                Customer customerInsertResult = context.RunSql<Customer>(sql).AsEnumerable().First();
+                log.Info($"Customer with ID {customerInsertResult.Id} successfully inserted.");
+                return customerInsertResult;
             } catch (Exception exception) {
                 string errorMessage = $"Exception of type: {exception.GetType().FullName} occurred attempting to insert new customer record into CDB database.\r\n";
                 errorMessage += $"Exception message: {exception.Message}.";
@@ -86,8 +86,28 @@ namespace CDB
                 log.Error(exception);
                 throw;
             }
+        }
 
-            return customerInsertResult;
+        public Customer UpdateCustomer(int? id, string? companyName, string? businessContact, string? emailAddress, string? contactNumber, bool isActive)
+        {
+            FormattableString sql = $"UpdateCustomer {id}, {companyName}, {businessContact}, {emailAddress}, {contactNumber}, {isActive}";
+            FormattableString sql2 = $"dbo.SelectCustomerById {id}";
+
+            try
+            {
+                Customer customerUpdateResult = context.RunSql<Customer>(sql).AsEnumerable().First();
+                context.Customers.Attach(customerUpdateResult);
+                var entry = context.Entry(customerUpdateResult);
+                entry.State = EntityState.Modified;
+
+                Customer selectCustomerResult = context.RunSql<Customer>(sql2).AsEnumerable().First();
+                return customerUpdateResult;
+            }
+            catch(Exception exception)
+            {
+                log.Error(exception);
+                throw;
+            }
         }
     }
 }
