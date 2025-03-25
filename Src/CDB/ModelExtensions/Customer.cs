@@ -38,6 +38,7 @@
             this.BusinessContact = businessContact;
             this.EmailAddress = emailAddress;
             this.ContactNumber = contactNumber;
+            this.IsActive = true;
         }
 
         public bool Equals(Customer? customer)

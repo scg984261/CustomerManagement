@@ -57,8 +57,8 @@ namespace CDB
             }
             catch (Exception exception)
             {
-                log.Error($"Exception of type {exception.GetType().FullName} occurred attempting to select customers from database.\r\nException message: {exception.Message}.");
-                return new List<Customer>();
+                log.Error(exception);
+                throw;
             }
         }
 
@@ -72,22 +72,37 @@ namespace CDB
         /// <returns></returns>
         public Customer InsertNewCustomer(Customer customer)
         {
-            context.Customers.Add(customer);
-            int dbSaveResult = context.SaveChanges();
-
-            Customer newlyInsertedCustomer = this.context.Customers.OrderByDescending(cust => cust.Id).First();
-
-            return newlyInsertedCustomer;
+            try
+            {
+                context.Customers.Add(customer);
+                int dbSaveResult = context.SaveChanges();
+                Customer newlyInsertedCustomer = this.context.Customers.OrderByDescending(cust => cust.Id).First();
+                log.Debug($"Status code {dbSaveResult} returned attempting to insert customer. New customer ID is {newlyInsertedCustomer.Id}");
+                return newlyInsertedCustomer;
+            }
+            catch (Exception exception)
+            {
+                log.Error(exception);
+                throw;
+            }
         }
 
         public Customer UpdateCustomer(int? id)
         {
             Customer customerToUpdate = this.context.Customers.Where(customer => customer.Id == id).First();
 
-            int dbUpdateResult = context.SaveChanges();
-            this.context.Entry(customerToUpdate).Reload();
-
-            return customerToUpdate;
+            try
+            {
+                int dbUpdateResult = context.SaveChanges();
+                this.context.Entry(customerToUpdate).Reload();
+                log.Debug($"Status code {dbUpdateResult} returned. Attempting to update customer with ID {id}.");
+                return customerToUpdate;
+            }
+            catch (Exception exception)
+            {
+                log.Error(exception);
+                throw;
+            }
         }
     }
 }
