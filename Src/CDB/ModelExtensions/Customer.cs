@@ -28,6 +28,18 @@
             this.Subscriptions = new List<Subscription>();
         }
 
+        public Customer(string? companyName, string? businessContact, string? emailAddress, string? contactNumber)
+        {
+            if (companyName != null)
+            {
+                this.CompanyName = companyName;
+            }
+            
+            this.BusinessContact = businessContact;
+            this.EmailAddress = emailAddress;
+            this.ContactNumber = contactNumber;
+        }
+
         public bool Equals(Customer? customer)
         {
             if (this.Id != customer?.Id)

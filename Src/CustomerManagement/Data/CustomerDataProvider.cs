@@ -37,33 +37,33 @@ namespace CustomerManagement.Data
             return customers;
         }
 
-        public Customer InsertNewCustomer(string? companyName, string? businessContact, string? emailAddress, string? contactNumber)
+        public Customer InsertNewCustomer(Customer customer)
         {
             try
             {
-                Customer newlyInsertedCustomer = cdbDataWrapper.InsertNewCustomer(companyName, businessContact, emailAddress, contactNumber);
+                Customer newlyInsertedCustomer = cdbDataWrapper.InsertNewCustomer(customer);
                 log.Info($"New Customer record successfully inserted into the database with ID {newlyInsertedCustomer.Id}.");
                 return newlyInsertedCustomer;
             }
             catch (Exception exception)
             {
-                string errorMessage = $"Exception occurred attempting to insert customer into the database. Company name: {companyName}, Business contact: {businessContact} Email address: {emailAddress}, Contact number: {contactNumber}.";
+                string errorMessage = $"Exception occurred attempting to insert customer into the database. Company name: {customer.CompanyName}, Business contact: {customer.BusinessContact} Email address: {customer.EmailAddress}, Contact number: {customer.ContactNumber}.";
                 log.Error(errorMessage);
                 log.Error(exception);
                 throw;
             }
         }
 
-        public Customer UpdateCustomer(int? id, string? companyName, string? businessContact, string? emailAddress, string? contactNumber, bool isActive)
+        public Customer? UpdateCustomer(int? id)
         {
             try
             {
-                Customer updatedCustomer = cdbDataWrapper.UpdateCustomer(id, companyName, businessContact, emailAddress, contactNumber, isActive);
+                Customer? updatedCustomer = cdbDataWrapper.UpdateCustomer(id);
                 return updatedCustomer;
             }
             catch (Exception exception)
             {
-                string errorMessage = $"Exception of type {exception.GetType().FullName} occurred attempting to update customer with values: ID: {id}, Company name: {companyName}, Business contact: {businessContact} Email address: {emailAddress}, Contact number: {contactNumber}, Is Active: {isActive}.";
+                string errorMessage = $"Exception of type {exception.GetType().FullName} occurred attempting to update customer with values: ID: {id}.";
                 log.Error(errorMessage);
                 throw;
             }

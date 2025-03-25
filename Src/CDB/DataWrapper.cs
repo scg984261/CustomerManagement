@@ -51,7 +51,7 @@ namespace CDB
         {
             try
             {
-                List<Customer> customerList = context.RunSql<Customer>("SelectAllCustomers").ToList();
+                List<Customer> customerList = context.Customers.ToList();
                 log.Info($"Customers successfully queried from CDB database. {customerList.Count} results returned.");
                 return customerList;
             }
@@ -70,44 +70,24 @@ namespace CDB
         /// <param name="emailAddress"></param>
         /// <param name="contactNumber"></param>
         /// <returns></returns>
-        public Customer InsertNewCustomer(string? companyName, string? businessContact, string? emailAddress, string? contactNumber)
+        public Customer InsertNewCustomer(Customer customer)
         {
-            FormattableString sql = $"InsertCustomer {companyName}, {businessContact}, {emailAddress}, {contactNumber}";
+            context.Customers.Add(customer);
+            int dbSaveResult = context.SaveChanges();
 
-            try
-            {
-                Customer customerInsertResult = context.RunSql<Customer>(sql).AsEnumerable().First();
-                log.Info($"Customer with ID {customerInsertResult.Id} successfully inserted.");
-                return customerInsertResult;
-            } catch (Exception exception) {
-                string errorMessage = $"Exception of type: {exception.GetType().FullName} occurred attempting to insert new customer record into CDB database.\r\n";
-                errorMessage += $"Exception message: {exception.Message}.";
-                log.Error(errorMessage);
-                log.Error(exception);
-                throw;
-            }
+            Customer newlyInsertedCustomer = this.context.Customers.OrderByDescending(cust => cust.Id).First();
+
+            return newlyInsertedCustomer;
         }
 
-        public Customer UpdateCustomer(int? id, string? companyName, string? businessContact, string? emailAddress, string? contactNumber, bool isActive)
+        public Customer UpdateCustomer(int? id)
         {
-            FormattableString sql = $"UpdateCustomer {id}, {companyName}, {businessContact}, {emailAddress}, {contactNumber}, {isActive}";
-            FormattableString sql2 = $"dbo.SelectCustomerById {id}";
+            Customer customerToUpdate = this.context.Customers.Where(customer => customer.Id == id).First();
 
-            try
-            {
-                Customer customerUpdateResult = context.RunSql<Customer>(sql).AsEnumerable().First();
-                context.Customers.Attach(customerUpdateResult);
-                var entry = context.Entry(customerUpdateResult);
-                entry.State = EntityState.Modified;
+            int dbUpdateResult = context.SaveChanges();
+            this.context.Entry(customerToUpdate).Reload();
 
-                Customer selectCustomerResult = context.RunSql<Customer>(sql2).AsEnumerable().First();
-                return customerUpdateResult;
-            }
-            catch(Exception exception)
-            {
-                log.Error(exception);
-                throw;
-            }
+            return customerToUpdate;
         }
     }
 }

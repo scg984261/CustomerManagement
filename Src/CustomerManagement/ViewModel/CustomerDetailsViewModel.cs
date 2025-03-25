@@ -215,7 +215,7 @@ namespace CustomerManagement.ViewModel
         { 
             try
             {
-                Customer newlyInsertedCustomer = customerDataProvider.UpdateCustomer(this.Id, this.CompanyName, this.BusinessContact, this.EmailAddress, this.ContactNumber, this.IsActive);
+                Customer newlyInsertedCustomer = customerDataProvider.UpdateCustomer(this.Id);
                 MessageBox.Show("Customer record successfully updated.", "Customer Updated", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.LastUpdateDateTime = newlyInsertedCustomer.LastUpdateDateTime;
                 this.NavigateBack();

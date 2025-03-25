@@ -150,7 +150,8 @@ namespace CustomerManagement.ViewModel
         {
             try
             {
-                Customer customer = customerDataProvider.InsertNewCustomer(this.companyName, this.businessContact, this.emailAddress, this.contactNumber);
+                Customer customer = new Customer(this.companyName, this.businessContact, this.emailAddress, this.contactNumber);
+                customer = customerDataProvider.InsertNewCustomer(customer);
                 CustomerItemViewModel customerItemViewModel = new CustomerItemViewModel(customer);
 
                 if (ParentCustomersViewModel != null)
