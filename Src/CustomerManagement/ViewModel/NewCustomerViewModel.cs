@@ -1,4 +1,5 @@
-﻿using CustomerManagement.Navigation;
+﻿using System.Windows;
+using CustomerManagement.Navigation;
 using CustomerManagement.Command;
 using CustomerManagement.Data;
 using CDB.Model;
@@ -151,7 +152,7 @@ namespace CustomerManagement.ViewModel
             try
             {
                 Customer customer = new Customer(this.companyName, this.businessContact, this.emailAddress, this.contactNumber);
-                customer = customerDataProvider.InsertNewCustomer(customer);
+                customerDataProvider.InsertNewCustomer(customer);
                 CustomerItemViewModel customerItemViewModel = new CustomerItemViewModel(customer);
 
                 if (ParentCustomersViewModel != null)
@@ -163,7 +164,10 @@ namespace CustomerManagement.ViewModel
             }
             catch(Exception exception)
             {
-                log.Error($"Exception of type {exception.GetType().FullName} caught attempting to insert customer into the database. Customer was not inserted. Exception message {exception.Message}.");
+                log.Error(exception);
+                string errorMessage = $"Exception {exception.GetType().FullName} occurred attempting to insert new customer into the database.\r\n";
+                errorMessage += "Customer was not inserted. Please see the logs for more information.";
+                MessageBox.Show(errorMessage, "Error Inserting Customer", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             this.NavigateBack();

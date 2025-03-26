@@ -4,7 +4,8 @@ namespace CDB
 {
     public interface IDataWrapper
     {
-        Customer InsertNewCustomer(Customer customer);
+        void InsertNewCustomer(Customer customer);
+        int UpdateCustomer(int id);
         List<Customer> SelectAllCustomers();
     }
 }

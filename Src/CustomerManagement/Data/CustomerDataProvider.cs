@@ -20,30 +20,26 @@ namespace CustomerManagement.Data
 
         public List<Customer> GetAll()
         {
-            List<Customer> customers = new List<Customer>();
-
             try
             {
+                List<Customer> customers = new List<Customer>();
                 customers = cdbDataWrapper.SelectAllCustomers();
                 log.Info($"Customer records successfully retrieved from database. {customers.Count} customers returned.");
-                
+                return customers;
             }
             catch(Exception exception)
             {
-                log.Error("Error occurred attempting to retrieve customers from the database.");
                 log.Error(exception);
+                throw;
             }
-
-            return customers;
         }
 
-        public Customer InsertNewCustomer(Customer customer)
+        public void InsertNewCustomer(Customer customer)
         {
             try
             {
-                Customer newlyInsertedCustomer = cdbDataWrapper.InsertNewCustomer(customer);
-                log.Info($"New Customer record successfully inserted into the database with ID {newlyInsertedCustomer.Id}.");
-                return newlyInsertedCustomer;
+                cdbDataWrapper.InsertNewCustomer(customer);
+                log.Info($"New Customer record successfully inserted into the database with ID {customer.Id}.");
             }
             catch (Exception exception)
             {
@@ -54,17 +50,18 @@ namespace CustomerManagement.Data
             }
         }
 
-        public Customer? UpdateCustomer(int? id)
+        public void UpdateCustomer(int id)
         {
             try
             {
-                Customer? updatedCustomer = cdbDataWrapper.UpdateCustomer(id);
-                return updatedCustomer;
+                int updateResult = cdbDataWrapper.UpdateCustomer(id);
+                log.Info($"Customer with ID {id} updated. Result code was {updateResult}.");
             }
             catch (Exception exception)
             {
                 string errorMessage = $"Exception of type {exception.GetType().FullName} occurred attempting to update customer with values: ID: {id}.";
                 log.Error(errorMessage);
+                log.Error(exception);
                 throw;
             }
         }

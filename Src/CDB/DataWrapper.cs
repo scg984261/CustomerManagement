@@ -70,7 +70,7 @@ namespace CDB
         /// <param name="emailAddress"></param>
         /// <param name="contactNumber"></param>
         /// <returns></returns>
-        public Customer InsertNewCustomer(Customer customer)
+        public void InsertNewCustomer(Customer customer)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace CDB
                 int dbSaveResult = context.SaveChanges();
                 Customer newlyInsertedCustomer = this.context.Customers.OrderByDescending(cust => cust.Id).First();
                 log.Debug($"Status code {dbSaveResult} returned attempting to insert customer. New customer ID is {newlyInsertedCustomer.Id}");
-                return newlyInsertedCustomer;
+                
             }
             catch (Exception exception)
             {
@@ -87,7 +87,7 @@ namespace CDB
             }
         }
 
-        public Customer UpdateCustomer(int? id)
+        public int UpdateCustomer(int id)
         {
             Customer customerToUpdate = this.context.Customers.Where(customer => customer.Id == id).First();
 
@@ -96,7 +96,7 @@ namespace CDB
                 int dbUpdateResult = context.SaveChanges();
                 this.context.Entry(customerToUpdate).Reload();
                 log.Debug($"Status code {dbUpdateResult} returned. Attempting to update customer with ID {id}.");
-                return customerToUpdate;
+                return dbUpdateResult;
             }
             catch (Exception exception)
             {

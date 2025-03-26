@@ -117,7 +117,7 @@ namespace CustomerManagement.DataLoader
             try
             {
                 Customer customer = new Customer(companyName, businessContact, emailAddress, contactNumber);
-                customer = dataWrapper.InsertNewCustomer(customer);
+                dataWrapper.InsertNewCustomer(customer);
                 log.Debug($"New customer with ID {customer.Id} inserted into the database.");
                 return customer;
             }

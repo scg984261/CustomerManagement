@@ -30,7 +30,10 @@ namespace CustomerManagement.ViewModel
             }
             set
             {
-                this.serviceItemViewModel.Name = value;
+                if (value != null)
+                {
+                    this.serviceItemViewModel.Name = value;
+                }
 
                 if (string.IsNullOrEmpty(this.Name))
                 {

@@ -2,7 +2,6 @@
 using CustomerManagement.Command;
 using CustomerManagement.Navigation;
 using CustomerManagement.Data;
-using CDB.Model;
 using log4net;
 
 namespace CustomerManagement.ViewModel
@@ -39,7 +38,7 @@ namespace CustomerManagement.ViewModel
             this.SaveCommand = new DelegateCommand(this.SaveCustomer, this.CanSaveCustomer);
         }
 
-        public int? Id
+        public int Id
         {
             get
             {
@@ -215,9 +214,8 @@ namespace CustomerManagement.ViewModel
         { 
             try
             {
-                Customer newlyInsertedCustomer = customerDataProvider.UpdateCustomer(this.Id);
-                MessageBox.Show("Customer record successfully updated.", "Customer Updated", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.LastUpdateDateTime = newlyInsertedCustomer.LastUpdateDateTime;
+                customerDataProvider.UpdateCustomer(this.Id);
+                MessageBox.Show($"Customer record with ID {this.Id} updated.", "Customer Updated", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.NavigateBack();
             }
             catch (Exception exception)
