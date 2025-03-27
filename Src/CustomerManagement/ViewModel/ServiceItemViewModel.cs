@@ -62,6 +62,18 @@ namespace CustomerManagement.ViewModel
             }
         }
 
+        public bool IsRecurring
+        {
+            get
+            {
+                return this.service.IsRecurring;
+            }
+            set
+            {
+                this.service.IsRecurring = value;
+            }
+        }
+
         public DateTime CreatedDateTime
         {
             get

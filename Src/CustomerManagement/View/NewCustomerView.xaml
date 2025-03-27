@@ -36,6 +36,7 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
@@ -43,11 +44,15 @@
             <Label Grid.Row="1" Grid.Column="0">Business Contact</Label>
             <Label Grid.Row="2" Grid.Column="0">Email Address</Label>
             <Label Grid.Row="3" Grid.Column="0">Contact Number</Label>
+            <Label Grid.Row="4" Grid.Column="0">Active</Label>
 
             <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding BusinessContact,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding ContactNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Viewbox Grid.Row="4" Grid.Column="1">
+                <CheckBox IsChecked="{Binding IsActive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Viewbox>
         </Grid>
         
         <!-- Buttons Row -->

@@ -1,21 +1,58 @@
-﻿using CDB.Model;
+﻿using CDB;
+using CDB.Model;
+using log4net;
 
 namespace CustomerManagement.Data
 {
     public interface IServiceDataProvider
     {
-        IEnumerable<Service> GetAll();
+        List<Service> GetAll();
     }
 
     public class ServiceDataProvider : IServiceDataProvider
     {
-        public IEnumerable<Service> GetAll()
+        private static readonly DataWrapper cdbDataWrapper = new DataWrapper();
+        private static readonly ILog log = LogManager.GetLogger(typeof(ServiceDataProvider));
+
+        public List<Service> GetAll()
         {
-            List<Service> services = new List<Service>();
-            services.Add(new Service(1, "Service 1", 10.0m));
-            services.Add(new Service(2, "Service 2", 15.2m));
-            services.Add(new Service(3, "Service 3", 25.7m));
-            return services;
+            try
+            {
+                List<Service> services = cdbDataWrapper.SelectAllServices();
+                log.Debug($"Services successfully obtained from CDB Data Context. {services.Count} records returned.");
+                return services;
+            }
+            catch (Exception exception)
+            {
+                log.Error(exception);
+                throw;
+            }
+        }
+
+        public void InsertNewService(Service service)
+        {
+            try
+            {
+                cdbDataWrapper.InsertNewService(service);
+            }
+            catch (Exception exception)
+            {
+                log.Error(exception);
+                throw;
+            }
+        }
+
+        public void UpdateService(int serviceId)
+        {
+            try
+            {
+                cdbDataWrapper.UpdateService(serviceId);
+            }
+            catch (Exception exception)
+            {
+                log.Error(exception);
+                throw;
+            }
         }
     }
 }

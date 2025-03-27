@@ -11,6 +11,8 @@
                 <ResourceDictionary Source="Styles\TabItem.xaml" />
                 <ResourceDictionary Source="Styles\TabControl.xaml" />
                 <ResourceDictionary Source="Styles\Label.xaml" />
+                <ResourceDictionary Source="Styles\Checkbox.xaml" />
+                <ResourceDictionary Source="Styles\Viewbox.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

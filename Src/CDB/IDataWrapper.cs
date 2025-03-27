@@ -7,5 +7,8 @@ namespace CDB
         void InsertNewCustomer(Customer customer);
         int UpdateCustomer(int id);
         List<Customer> SelectAllCustomers();
+        List<Service> SelectAllServices();
+        void InsertNewService(Service service);
+        void UpdateService(int serviceId);
     }
 }

@@ -50,16 +50,16 @@ namespace CustomerManagement.Data
             }
         }
 
-        public void UpdateCustomer(int id)
+        public void UpdateCustomer(int customerId)
         {
             try
             {
-                int updateResult = cdbDataWrapper.UpdateCustomer(id);
-                log.Info($"Customer with ID {id} updated. Result code was {updateResult}.");
+                int updateResult = cdbDataWrapper.UpdateCustomer(customerId);
+                log.Info($"Customer with ID {customerId} updated. Result code was {updateResult}.");
             }
             catch (Exception exception)
             {
-                string errorMessage = $"Exception of type {exception.GetType().FullName} occurred attempting to update customer with values: ID: {id}.";
+                string errorMessage = $"Exception of type {exception.GetType().FullName} occurred attempting to update customer with values: ID: {customerId}.";
                 log.Error(errorMessage);
                 log.Error(exception);
                 throw;

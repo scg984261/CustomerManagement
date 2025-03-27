@@ -56,7 +56,9 @@
                     <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding BusinessContact,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding ContactNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0" IsChecked="{Binding IsActive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <Viewbox Grid.Row="5" Grid.Column="1">
+                        <CheckBox IsChecked="{Binding IsActive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Viewbox>
                     <TextBlock Grid.Row="6" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding CreatedDateTime}" />
                     <TextBlock Grid.Row="7" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding LastUpdateDateTimeFormatted}" />
                 </Grid>

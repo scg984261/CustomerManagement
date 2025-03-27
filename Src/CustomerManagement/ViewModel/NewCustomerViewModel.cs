@@ -169,8 +169,10 @@ namespace CustomerManagement.ViewModel
                 errorMessage += "Customer was not inserted. Please see the logs for more information.";
                 MessageBox.Show(errorMessage, "Error Inserting Customer", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-            this.NavigateBack();
+            finally
+            {
+                this.NavigateBack();
+            }
         }
 
         public bool CanSaveCustomer(object? parameter)
