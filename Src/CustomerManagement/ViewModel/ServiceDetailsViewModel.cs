@@ -39,6 +39,24 @@ namespace CustomerManagement.ViewModel
             set
             {
                 this.serviceItemViewModel.Name = value;
+
+                if (value != null)
+                {
+                    this.serviceItemViewModel.Name = value;
+                }
+
+                if (string.IsNullOrEmpty(this.Name))
+                {
+                    const string errorMessage = "Name of service cannot be blank";
+                    this.AddError(errorMessage);
+                }
+                else
+                {
+                    this.ClearErrors();
+                }
+
+                this.NotifyPropertyChanged();
+                this.SaveCommand.RaiseCanExecuteChanged();
             }
         }
 

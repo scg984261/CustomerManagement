@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:CustomerManagement.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="LightGray">
+    <Grid Background="Gray">
         <Grid.RowDefinitions>
             <!-- Title -->
             <RowDefinition Height="50" />
@@ -20,7 +20,7 @@
 
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Service Details" Style="{StaticResource DetailsHeader}" />
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Background="LightGray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="130" />
                 <ColumnDefinition Width="250" />

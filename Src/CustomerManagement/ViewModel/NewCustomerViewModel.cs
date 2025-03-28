@@ -151,7 +151,7 @@ namespace CustomerManagement.ViewModel
         {
             try
             {
-                Customer customer = new Customer(this.companyName, this.businessContact, this.emailAddress, this.contactNumber);
+                Customer customer = new Customer(this.CompanyName, this.BusinessContact, this.EmailAddress, this.ContactNumber);
                 customerDataProvider.InsertNewCustomer(customer);
                 CustomerItemViewModel customerItemViewModel = new CustomerItemViewModel(customer);
 
