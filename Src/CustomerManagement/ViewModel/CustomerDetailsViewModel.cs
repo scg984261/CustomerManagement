@@ -11,7 +11,7 @@ namespace CustomerManagement.ViewModel
     {
         public static CustomersViewModel? ParentCustomersViewModel { get; set; }
         private static readonly string dateTimeFormat = "dd-MMM-yyyy HH:mm:ss";
-        private static readonly CustomerDataProvider customerDataProvider = new CustomerDataProvider();
+        private readonly ICustomerDataProvider customerDataProvider;
         private static readonly ILog log = LogManager.GetLogger(typeof(CustomersViewModel));
         private CustomerItemViewModel customerItemViewModel;
         private NavigationStore navigationStore;
@@ -30,8 +30,10 @@ namespace CustomerManagement.ViewModel
         private readonly string? initialEmailAddress;
         private readonly bool initialIsActive;
 
-        public CustomerDetailsViewModel(CustomerItemViewModel customerItemViewModel, NavigationStore navigationStore)
+        public CustomerDetailsViewModel(CustomerItemViewModel customerItemViewModel, NavigationStore navigationStore, ICustomerDataProvider customerDataProvider)
         {
+            this.customerDataProvider = customerDataProvider;
+
             // Save values as readonly in case user cancels.
             this.initialCompanyName = customerItemViewModel.CompanyName;
             this.initialBusinessContact = customerItemViewModel.BusinessContact;
@@ -45,7 +47,7 @@ namespace CustomerManagement.ViewModel
             this.RecurringServices = new List<ServiceItemViewModel>();
             this.NonRecurringServices = new List<ServiceItemViewModel>();
 
-            customerDataProvider.LoadSubscriptions(this.Id);
+            this.customerDataProvider.LoadSubscriptions(this.Id);
             this.subscriptions = this.customerItemViewModel.Subscriptions;
             this.PopulateServices();
 

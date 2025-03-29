@@ -69,7 +69,7 @@ namespace CustomerManagement.ViewModel
         {
             if (this.selectedCustomer != null)
             {
-                CustomerDetailsViewModel customerDetailsViewModel = new CustomerDetailsViewModel(this.selectedCustomer, this.navigationStore);
+                CustomerDetailsViewModel customerDetailsViewModel = new CustomerDetailsViewModel(this.selectedCustomer, this.navigationStore, this.customerDataProvider);
                 this.navigationStore.SelectedViewModel = customerDetailsViewModel;
 
                 this.navigationStore.SelectedViewModel.Load();
