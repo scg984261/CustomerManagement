@@ -101,7 +101,7 @@ namespace CustomerManagement.ViewModel
                 }
                 else
                 {
-                    const string errorMessage = $"Value must be a valid decimal.";
+                    const string errorMessage = "Value must be a valid decimal.";
                     this.serviceItemViewModel.Price = 0m;
                     this.AddError(errorMessage);
                 }

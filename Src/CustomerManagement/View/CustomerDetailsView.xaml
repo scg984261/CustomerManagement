@@ -64,10 +64,22 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Recurring Services">
-
+                <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding RecurringServices}" AutoGenerateColumns="False" SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Service ID" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Price" Binding="{Binding PriceFormatted, UpdateSourceTrigger=PropertyChanged}" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
             <TabItem Header="Non-Recurring Services">
-
+                <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding NonRecurringServices}" AutoGenerateColumns="False" SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Service ID" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Price" Binding="{Binding PriceFormatted, UpdateSourceTrigger=PropertyChanged}" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
         </TabControl>
 

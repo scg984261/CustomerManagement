@@ -2,6 +2,7 @@
 using CustomerManagement.Command;
 using CustomerManagement.Navigation;
 using CustomerManagement.Data;
+using CDB.Model;
 using log4net;
 
 namespace CustomerManagement.ViewModel
@@ -16,6 +17,12 @@ namespace CustomerManagement.ViewModel
         private NavigationStore navigationStore;
         public DelegateCommand CancelCommand { get; }
         public DelegateCommand SaveCommand { get; }
+
+        private List<Subscription> subscriptions;
+        private List<ServiceItemViewModel> subscribedServices;
+
+        public List<ServiceItemViewModel> RecurringServices { get; set; }
+        public List<ServiceItemViewModel> NonRecurringServices { get; set; }
 
         private readonly string? initialCompanyName;
         private readonly string? initialBusinessContact;
@@ -33,6 +40,15 @@ namespace CustomerManagement.ViewModel
             this.initialIsActive = customerItemViewModel.IsActive;
 
             this.customerItemViewModel = customerItemViewModel;
+
+            this.subscribedServices = new List<ServiceItemViewModel>();
+            this.RecurringServices = new List<ServiceItemViewModel>();
+            this.NonRecurringServices = new List<ServiceItemViewModel>();
+
+            customerDataProvider.LoadSubscriptions(this.Id);
+            this.subscriptions = this.customerItemViewModel.Subscriptions;
+            this.PopulateServices();
+
             this.navigationStore = navigationStore;
             this.CancelCommand = new DelegateCommand(this.Cancel);
             this.SaveCommand = new DelegateCommand(this.SaveCustomer, this.CanSaveCustomer);
@@ -187,6 +203,19 @@ namespace CustomerManagement.ViewModel
             {
                 return this.LastUpdateDateTime.ToString(dateTimeFormat);
             }
+        }
+
+        private void PopulateServices()
+        {
+            foreach (Subscription subscription in this.subscriptions)
+            {
+                Service service = subscription.Service;
+                ServiceItemViewModel serviceItemViewModel = new ServiceItemViewModel(service);
+                this.subscribedServices.Add(serviceItemViewModel);
+            }
+
+            this.RecurringServices = this.subscribedServices.Where(service => service.IsRecurring).ToList();
+            this.NonRecurringServices = this.subscribedServices.Where(service => !service.IsRecurring).ToList(); ;
         }
 
         public void Cancel(object? parameter)

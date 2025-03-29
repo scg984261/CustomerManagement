@@ -65,5 +65,18 @@ namespace CustomerManagement.Data
                 throw;
             }
         }
+
+        public void LoadSubscriptions(int customerId)
+        {
+            try
+            {
+                cdbDataWrapper.LoadSubscriptions(customerId);
+            }
+            catch (Exception exception)
+            {
+                log.Error(exception);
+                throw;
+            }
+        }
     }
 }

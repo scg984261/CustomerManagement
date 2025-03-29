@@ -99,6 +99,19 @@ namespace CustomerManagement.ViewModel
             }
         }
 
+        public List<Subscription> Subscriptions
+        {
+            get
+            {
+                return this.customer.Subscriptions.ToList();
+            }
+            set
+            {
+                this.customer.Subscriptions = value;
+                this.NotifyPropertyChanged();
+            }
+        }
+
         public DateTime CreatedDateTime
         {
             get
