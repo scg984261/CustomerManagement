@@ -1,6 +1,4 @@
-﻿using NUnit;
-using NUnit.Framework;
-using Moq;
+﻿using Moq;
 using CDB.Model;
 using CustomerManagement.ViewModel;
 using CustomerManagement.Navigation;
@@ -10,8 +8,6 @@ namespace CustomerManagement.Test.ViewModel
 {
     public class CustomerDetailsViewModelTest
     {
-        // private static readonly string testDateTimeFormat = "dd-MMM-yyyy HH:mm:ss";
-
         [Test]
         public void TestConstructor()
         {
@@ -36,13 +32,6 @@ namespace CustomerManagement.Test.ViewModel
 
             // Create the Mock ICustomerDataProvider.
             Mock<ICustomerDataProvider> mockCustomerDataProvider = new Mock<ICustomerDataProvider>();
-            /*
-            mockCustomerDataProvider.Setup(dataProvider => dataProvider.LoadSubscriptions(52)).Callback((int id) =>
-            {
-
-            });
-            */
-
             ICustomerDataProvider testMockCustomerDataProvider = mockCustomerDataProvider.Object;
 
             // Act.
@@ -58,7 +47,5 @@ namespace CustomerManagement.Test.ViewModel
             Assert.That(testCustomerDetailsViewModel.LastUpdateDateTimeFormatted, Is.EqualTo("25-Mar-2025 09:31:58"));
             Assert.That(testCustomerDetailsViewModel.LastUpdateDateTime, Is.EqualTo(new DateTime(2025, 03, 25, 09, 31, 58)));
         }
-
-
     }
 }
