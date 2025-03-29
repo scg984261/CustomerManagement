@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CDB.Model
+﻿namespace CDB.Model
 {
     public partial class Service
     {
-        public Service(int id, string name, decimal price)
+        public Service(string? name, decimal price, bool isRecurring)
         {
-            this.Id = id;
-            this.Name = name;
+            if (name != null)
+            {
+                this.Name = name;
+            }
             this.Price = price;
-            this.LastUpdateDateTime = DateTime.Now;
-            this.CreatedDateTime = DateTime.Now;
+            this.IsRecurring = isRecurring;
+            this.LastUpdateDateTime = new DateTime();
+            this.CreatedDateTime = new DateTime();
         }
 
         public Service()
@@ -22,6 +19,7 @@ namespace CDB.Model
             this.Id = 0;
             this.Name = string.Empty;
             this.Price = 0.0m;
+            this.IsRecurring = false;
             this.LastUpdateDateTime = DateTime.Now;
             this.CreatedDateTime = DateTime.Now;
         }

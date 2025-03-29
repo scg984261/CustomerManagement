@@ -447,7 +447,8 @@ namespace CustomerManagement.Test.DataLoader
                 LastUpdateDateTime = lastUpdateDateTime
             };
 
-            mockDatabaseWrapper.Setup(dataWrapper => dataWrapper.InsertNewCustomer(companyName, businessContact, emailAddress, contactNumber)).Returns(newCustomer);
+            // InserNewCustomer now no longer returns the customer.
+            // mockDatabaseWrapper.Setup(dataWrapper => dataWrapper.InsertNewCustomer(new Customer(companyName, businessContact, emailAddress, contactNumber))).Returns(newCustomer);
 
             IDataWrapper testDataWrapper = mockDatabaseWrapper.Object;
 
@@ -478,7 +479,7 @@ namespace CustomerManagement.Test.DataLoader
 
             DataException dataException = new DataException("Test Data Exception");
 
-            mockDatabaseWrapper.Setup(dataWrapper => dataWrapper.InsertNewCustomer(companyName, businessContact, emailAddress, contactNumber)).Throws(dataException);
+            mockDatabaseWrapper.Setup(dataWrapper => dataWrapper.InsertNewCustomer(new Customer(companyName, businessContact, emailAddress, contactNumber))).Throws(dataException);
 
             IDataWrapper testDataWrapper = mockDatabaseWrapper.Object;
 

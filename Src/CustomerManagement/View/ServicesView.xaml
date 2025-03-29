@@ -36,6 +36,7 @@
                 <DataGridTextColumn Header="Service ID" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Price" Binding="{Binding PriceFormatted, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn Header="Recurring" Binding="{Binding IsRecurring, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

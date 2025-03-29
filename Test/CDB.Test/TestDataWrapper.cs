@@ -110,7 +110,8 @@ namespace CDB.Test
             };
 
             // Act.
-            Customer testNewlyInsertedCustomer = testWrapper.InsertNewCustomer(companyName, businessContact, emailAddress, contactNumber);
+            Customer testNewlyInsertedCustomer = new Customer(companyName, businessContact, emailAddress, contactNumber);
+            testWrapper.InsertNewCustomer(testNewlyInsertedCustomer);
 
             Assert.That(testCustomer.Equals(testNewlyInsertedCustomer));
         }
@@ -136,7 +137,7 @@ namespace CDB.Test
                 context = mockDbContextObject
             };
 
-            Assert.That(() => testWrapper.InsertNewCustomer(companyName, businessContact, emailAddress, contactNumber), Throws.Exception.TypeOf<DataException>());
+            Assert.That(() => testWrapper.InsertNewCustomer(new Customer(companyName, businessContact, emailAddress, contactNumber)), Throws.Exception.TypeOf<DataException>());
         }
     }
 }

@@ -1,9 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Controls;
-using CDB.Model;
-using CustomerManagement.Data;
-using CustomerManagement.ViewModel;
+﻿using System.Windows.Controls;
 
 namespace CustomerManagement.View
 {

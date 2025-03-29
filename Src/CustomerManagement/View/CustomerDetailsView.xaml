@@ -38,6 +38,7 @@
                         <RowDefinition Height="50" />
                         <RowDefinition Height="50" />
                         <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
@@ -46,23 +47,39 @@
                     <Label Grid.Row="2" Grid.Column="0">Business Contact</Label>
                     <Label Grid.Row="3" Grid.Column="0">Email Address</Label>
                     <Label Grid.Row="4" Grid.Column="0">Contact Number</Label>
-                    <Label Grid.Row="5" Grid.Column="0">Created</Label>
-                    <Label Grid.Row="6" Grid.Column="0">Last Update</Label>
+                    <Label Grid.Row="5" Grid.Column="0">Active</Label>
+                    <Label Grid.Row="6" Grid.Column="0">Created</Label>
+                    <Label Grid.Row="7" Grid.Column="0">Last Update</Label>
 
                     <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding Id}" />
                     <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding BusinessContact,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding ContactNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock Grid.Row="5" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding CreatedDateTime}" />
-                    <TextBlock Grid.Row="6" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding LastUpdateDateTime}" />
+                    <Viewbox Grid.Row="5" Grid.Column="1">
+                        <CheckBox IsChecked="{Binding IsActive, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Viewbox>
+                    <TextBlock Grid.Row="6" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding CreatedDateTime}" />
+                    <TextBlock Grid.Row="7" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding LastUpdateDateTimeFormatted}" />
                 </Grid>
             </TabItem>
             <TabItem Header="Recurring Services">
-
+                <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding RecurringServices}" AutoGenerateColumns="False" SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Service ID" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Price" Binding="{Binding PriceFormatted, UpdateSourceTrigger=PropertyChanged}" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
             <TabItem Header="Non-Recurring Services">
-
+                <DataGrid Grid.Row="1" IsReadOnly="True" ItemsSource="{Binding NonRecurringServices}" AutoGenerateColumns="False" SelectionMode="Single">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Service ID" Binding="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Price" Binding="{Binding PriceFormatted, UpdateSourceTrigger=PropertyChanged}" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </TabItem>
         </TabControl>
 

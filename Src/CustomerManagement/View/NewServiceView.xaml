@@ -32,16 +32,21 @@
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
                 <RowDefinition />
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Grid.Column="0">Name</Label>
             <Label Grid.Row="1" Grid.Column="0">Price</Label>
             <Label Grid.Row="2" Grid.Column="0">Price</Label>
+            <Label Grid.Row="3" Grid.Column="0">Recurring</Label>
 
             <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormTextBox}" Text="{Binding PriceString,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Grid.Row="2" Grid.Column="1" Style="{StaticResource TabTextBlock}" Text="{Binding PriceFormatted,Mode=OneWay}" />
+            <Viewbox Grid.Row="3" Grid.Column="1">
+                <CheckBox IsChecked="{Binding IsRecurring, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Viewbox>
         </Grid>
 
         <Grid Grid.Row="2">

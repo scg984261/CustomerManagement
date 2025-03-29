@@ -1,38 +1,47 @@
-﻿using CustomerManagement.Navigation;
+﻿using System.Windows;
+using CustomerManagement.Navigation;
 using CustomerManagement.Command;
+using CustomerManagement.Data;
+using CDB.Model;
+using log4net;
 
 namespace CustomerManagement.ViewModel
 {
     public class NewCustomerViewModel : ValidationViewModelBase
     {
         public static CustomersViewModel? ParentCustomersViewModel { get; set; }
-        private CustomerItemViewModel customerItemViewModel;
+        private static readonly CustomerDataProvider customerDataProvider = new CustomerDataProvider();
+        private static readonly ILog log = LogManager.GetLogger(typeof(NewCustomerViewModel));
         private NavigationStore navigationStore;
 
         public DelegateCommand NavigateBackCommand { get; }
         public DelegateCommand SaveCustomerCommand { get; }
+
+        private string? companyName;
+        private string? businessContact;
+        private string? emailAddress;
+        private string? contactNumber;
 
         public NewCustomerViewModel(NavigationStore navigationStore)
         {
             this.navigationStore = navigationStore;
             this.NavigateBackCommand = new DelegateCommand(this.NavigateBack);
             this.SaveCustomerCommand = new DelegateCommand(this.SaveCustomer, this.CanSaveCustomer);
-            this.customerItemViewModel = new CustomerItemViewModel();
         }
 
         public string? CompanyName
         {
             get
             {
-                return this.customerItemViewModel.CompanyName;
+                return this.companyName;
             }
 
             set
             {
-                this.customerItemViewModel.CompanyName = value;
+                this.companyName = value;
                 this.NotifyPropertyChanged();
 
-                if (string.IsNullOrWhiteSpace(this.customerItemViewModel.CompanyName))
+                if (string.IsNullOrWhiteSpace(this.companyName))
                 {
                     const string errorMessage = "Company name cannot be blank.";
                     this.AddError(errorMessage);
@@ -50,15 +59,15 @@ namespace CustomerManagement.ViewModel
         {
             get
             {
-                return this.customerItemViewModel.BusinessContact;
+                return this.businessContact;
             }
 
             set
             {
-                this.customerItemViewModel.BusinessContact = value;
+                this.businessContact = value;
                 this.NotifyPropertyChanged();
 
-                if (string.IsNullOrWhiteSpace(this.customerItemViewModel.BusinessContact))
+                if (string.IsNullOrWhiteSpace(this.businessContact))
                 {
                     const string errorMessage = "Business contact cannot be blank.";
                     this.AddError(errorMessage);
@@ -76,15 +85,15 @@ namespace CustomerManagement.ViewModel
         {
             get
             {
-                return this.customerItemViewModel.ContactNumber;
+                return this.contactNumber;
             }
 
             set
             {
-                this.customerItemViewModel.ContactNumber = value;
+                this.contactNumber = value;
                 this.NotifyPropertyChanged();
 
-                if (string.IsNullOrWhiteSpace(this.customerItemViewModel.ContactNumber))
+                if (string.IsNullOrWhiteSpace(this.contactNumber))
                 {
                     const string errorMessage = "Contact Number cannot be blank.";
                     this.AddError(errorMessage);
@@ -102,15 +111,15 @@ namespace CustomerManagement.ViewModel
         {
             get
             {
-                return this.customerItemViewModel.EmailAddress;
+                return this.emailAddress;
             }
 
             set
             {
-                this.customerItemViewModel.EmailAddress = value;
+                this.emailAddress = value;
                 this.NotifyPropertyChanged();
 
-                if (string.IsNullOrWhiteSpace(this.customerItemViewModel.EmailAddress))
+                if (string.IsNullOrWhiteSpace(this.emailAddress))
                 {
                     const string errorMessage = "Email Address cannot be blank.";
                     this.AddError(errorMessage);
@@ -140,13 +149,30 @@ namespace CustomerManagement.ViewModel
 
         public void SaveCustomer(object? parameter)
         {
-            // Add call to CDB here via Entity Framework!
-            if (ParentCustomersViewModel != null)
+            try
             {
-                ParentCustomersViewModel.Customers.Add(this.customerItemViewModel);
+                Customer customer = new Customer(this.CompanyName, this.BusinessContact, this.EmailAddress, this.ContactNumber);
+                customerDataProvider.InsertNewCustomer(customer);
+                CustomerItemViewModel customerItemViewModel = new CustomerItemViewModel(customer);
+
+                if (ParentCustomersViewModel != null)
+                {
+                    ParentCustomersViewModel.Customers.Add(customerItemViewModel);
+                }
+
+                log.Info($"Customer with ID {customerItemViewModel.Id} successfully added.");
             }
-            
-            this.NavigateBack();
+            catch(Exception exception)
+            {
+                log.Error(exception);
+                string errorMessage = $"Exception {exception.GetType().FullName} occurred attempting to insert new customer into the database.\r\n";
+                errorMessage += "Customer was not inserted. Please see the logs for more information.";
+                MessageBox.Show(errorMessage, "Error Inserting Customer", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                this.NavigateBack();
+            }
         }
 
         public bool CanSaveCustomer(object? parameter)

@@ -55,6 +55,8 @@ namespace CustomerManagement.ViewModel
                 {
                     this.Customers.Add(new CustomerItemViewModel(customer));
                 }
+
+                log.Debug($"Customers successfully loaded. {customers.Count} returned.");
             }
         }
 

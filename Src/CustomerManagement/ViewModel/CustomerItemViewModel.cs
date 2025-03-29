@@ -92,6 +92,24 @@ namespace CustomerManagement.ViewModel
             {
                 return this.customer.IsActive;
             }
+            set
+            {
+                this.customer.IsActive = value;
+                this.NotifyPropertyChanged();
+            }
+        }
+
+        public List<Subscription> Subscriptions
+        {
+            get
+            {
+                return this.customer.Subscriptions.ToList();
+            }
+            set
+            {
+                this.customer.Subscriptions = value;
+                this.NotifyPropertyChanged();
+            }
         }
 
         public DateTime CreatedDateTime
@@ -107,6 +125,11 @@ namespace CustomerManagement.ViewModel
             get
             {
                 return this.customer.LastUpdateDateTime;
+            }
+            set
+            {
+                this.customer.LastUpdateDateTime = value;
+                this.NotifyPropertyChanged();
             }
         }
     }

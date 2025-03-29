@@ -8,6 +8,8 @@ public partial class Service
 
     public decimal Price { get; set; }
 
+    public bool IsRecurring { get; set; }
+
     public DateTime CreatedDateTime { get; set; }
 
     public DateTime LastUpdateDateTime { get; set; }

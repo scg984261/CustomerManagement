@@ -1,13 +1,20 @@
-﻿using CustomerManagement.Command;
+﻿using CDB.Model;
+using CustomerManagement.Command;
+using CustomerManagement.Data;
 using CustomerManagement.Navigation;
+using log4net;
+using System.Windows;
 
 namespace CustomerManagement.ViewModel
 {
     public class NewServiceViewModel : ValidationViewModelBase
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(NewServiceViewModel));
+
         private NavigationStore navigationStore;
         private ServiceItemViewModel serviceItemViewModel;
         public static ServicesViewModel? ParentServicesViewModel { get; set; }
+        private static readonly ServiceDataProvider serviceDataProvider = new ServiceDataProvider();
         public DelegateCommand NavigateBackDelegateCommand { get; }
         public DelegateCommand SaveServiceCommand { get; }
         private string priceString;
@@ -30,7 +37,10 @@ namespace CustomerManagement.ViewModel
             }
             set
             {
-                this.serviceItemViewModel.Name = value;
+                if (value != null)
+                {
+                    this.serviceItemViewModel.Name = value;
+                }
 
                 if (string.IsNullOrEmpty(this.Name))
                 {
@@ -91,7 +101,7 @@ namespace CustomerManagement.ViewModel
                 }
                 else
                 {
-                    const string errorMessage = $"Value must be a valid decimal.";
+                    const string errorMessage = "Value must be a valid decimal.";
                     this.serviceItemViewModel.Price = 0m;
                     this.AddError(errorMessage);
                 }
@@ -109,6 +119,20 @@ namespace CustomerManagement.ViewModel
             }
         }
 
+        public bool IsRecurring
+        { 
+            get
+            {
+                return this.serviceItemViewModel.IsRecurring;
+            }
+            set
+            {
+                this.serviceItemViewModel.IsRecurring = value;
+                this.NotifyPropertyChanged();
+            }
+        }
+
+
         public void NavigateBack(object? parameter)
         {
             this.NavigateBack();
@@ -125,12 +149,31 @@ namespace CustomerManagement.ViewModel
 
         public void SaveService(object? parameter)
         {
-            if (ParentServicesViewModel != null)
+            try
             {
-                ParentServicesViewModel.Services.Add(this.serviceItemViewModel);
-            }
+                Service service = new Service(this.Name, this.Price, this.IsRecurring);
+                serviceDataProvider.InsertNewService(service);
+                ServiceItemViewModel serviceItemViewModel = new ServiceItemViewModel(service);
 
-            this.NavigateBack();
+                if (ParentServicesViewModel != null)
+                {
+                    ParentServicesViewModel.Services.Add(serviceItemViewModel);
+                }
+                
+                log.Debug($"New Service with ID {serviceItemViewModel.Id} successfully added.");
+                MessageBox.Show($"New Service inserted into the database with ID {serviceItemViewModel.Id}.", "New Service Added", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception exception)
+            {
+                log.Error(exception);
+                string errorMessage = $"Exception {exception.GetType().FullName} occurred attempting to insert new service record into the database.\r\n";
+                errorMessage += "Service was not inserted. Please see the logs for more information.";
+                MessageBox.Show(errorMessage, "Error Inserting Service", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                this.NavigateBack();
+            }
         }
         
         public bool CanSaveService(object? parameter)

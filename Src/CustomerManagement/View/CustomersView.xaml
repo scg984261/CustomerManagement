@@ -32,6 +32,7 @@
                 <DataGridTextColumn Header="Business Contact" Binding="{Binding BusinessContact, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Email" Binding="{Binding EmailAddress, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Phone" Binding="{Binding ContactNumber, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridCheckBoxColumn Header="Active" Binding="{Binding IsActive, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
