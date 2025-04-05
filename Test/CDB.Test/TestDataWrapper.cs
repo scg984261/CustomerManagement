@@ -17,59 +17,12 @@ namespace CDB.Test
         [Test]
         public void TestSelectAllCustomers_ShouldReturnListOfCustomers()
         {
-            Mock<CdbContext> mockDbContext = new Mock<CdbContext>();
+            DataWrapper testWrapper = new DataWrapper();
 
-            Customer testCustomer = new Customer()
-            {
-                Id = 4,
-                CompanyName = "Nunc Est LLC",
-                BusinessContact = "Cruz Pugh",
-                EmailAddress = "sed.nec@aol.edu",
-                ContactNumber = "(028) 7723 3562",
-                IsActive = true,
-                CreatedDateTime = new DateTime(),
-                LastUpdateDateTime = new DateTime()
-            };
+            List<Customer> customers = testWrapper.SelectAllCustomers();
 
-            List<Customer> customers = new List<Customer>()
-            {
-                testCustomer
-            };
-
-            IQueryable<Customer> customerQueryable = customers.AsQueryable();
-
-            mockDbContext.Setup(context => context.RunSql<Customer>("SelectAllCustomers")).Returns(customerQueryable);
-            CdbContext mockDbContextObject = mockDbContext.Object;
-
-            DataWrapper testWrapper = new DataWrapper
-            {
-                context = mockDbContextObject
-            };
-
-            List<Customer> testCustomers = testWrapper.SelectAllCustomers();
-
-            Assert.That(testCustomers[0].Equals(customerQueryable.First()));
-        }
-
-        [Test]
-        public void TestSelectAllCustomers_ShouldCatchException()
-        {
-            Mock<CdbContext> mockDbContext = new Mock<CdbContext>();
-
-            DataException dataException = new DataException("Test data exception created in test.");
-
-            mockDbContext.Setup(context => context.RunSql<Customer>("SelectAllCustomers")).Throws(dataException);
-
-            CdbContext mockDbContextObject = mockDbContext.Object;
-
-            DataWrapper testWrapper = new DataWrapper
-            {
-                context = mockDbContextObject
-            };
-
-            List<Customer> testCustomers = testWrapper.SelectAllCustomers();
-
-            Assert.That(testCustomers.Count, Is.EqualTo(0));
+            Assert.That(customers, Is.Not.Null);
+            Assert.That(customers.Count, Is.GreaterThan(0));
         }
 
         [Test]
@@ -114,9 +67,184 @@ namespace CDB.Test
 
             DataWrapper testWrapper = new DataWrapper();
 
-            int numberOfCustomers = testWrapper.context.Customers.Count();
+            DbUpdateException expectedException = Assert.Throws<DbUpdateException>(() => testWrapper.InsertNewCustomer(testCustomer));
+            const string expectedExceptionMessage = "An error occurred while saving the entity changes. See the inner exception for details.";
+            Assert.That(expectedException.Message, Is.EqualTo(expectedExceptionMessage));
+        }
 
-            Assert.That(() => testWrapper.InsertNewCustomer(testCustomer), Throws.Exception.TypeOf<DbUpdateException>());
+        [Test]
+        public void TestUpdateCustomer_ShouldUpdateCustomer()
+        {
+            // Arrange.
+            DataWrapper testWrapper = new DataWrapper();
+
+            Customer customerToUpdate = testWrapper.SelectAllCustomers().First(customer => customer.Id == 1);
+
+            DateTime lastUpdateDateTime = customerToUpdate.LastUpdateDateTime;
+
+            customerToUpdate.BusinessContact = "Test new value";
+
+            // Act.
+            int updateResult = testWrapper.UpdateCustomer(1);
+
+            // Assert.
+            // 1 Row should have been updated, therefore Entity Framework should return 1.
+            Assert.That(updateResult, Is.EqualTo(1));
+
+            // New value for last update date time should now be greater that what it was before.
+            Assert.That(customerToUpdate.LastUpdateDateTime, Is.GreaterThan(lastUpdateDateTime));
+        }
+
+        [Test]
+        public void TestUpdateCustomer_ShouldThrowException()
+        {
+            DataWrapper testWrapper = new DataWrapper();
+
+            Customer customerToUpdate = testWrapper.SelectAllCustomers().First(customer => customer.Id == 1);
+
+            customerToUpdate.CompanyName = null;
+
+            // Act.
+            // Assert that an exception is thrown.
+            DbUpdateException expectedException = Assert.Throws<DbUpdateException>(() => testWrapper.UpdateCustomer(1));
+            const string expectedExceptionMessage = "An error occurred while saving the entity changes. See the inner exception for details.";
+            Assert.That(expectedException.Message, Is.EqualTo(expectedExceptionMessage));
+        }
+
+        [Test]
+        public void TestLoadSubscriptions_ShouldLoadSubscriptions()
+        {
+            // Arrange.
+            DataWrapper testWrapper = new DataWrapper();
+
+            Customer testCustomer = testWrapper.SelectAllCustomers().First(customer => customer.Id == 1);
+
+            // Act.
+            testWrapper.LoadSubscriptions(testCustomer.Id);
+
+            // Assert.
+            const int expectedNumberOfServices = 4;
+            Assert.That(testCustomer.Subscriptions.Count, Is.EqualTo(expectedNumberOfServices));
+
+            foreach (Subscription sub in testCustomer.Subscriptions)
+            {
+                Assert.That(sub.Service, Is.Not.Null);
+            }
+        }
+
+        [Test]
+        public void TestLoadSubscriptions_ShouldThrowException()
+        {
+            // Arrange.
+            DataWrapper testWrapper = new DataWrapper();
+            const int invalidCustomerId = -1;
+
+            // Act.
+            InvalidOperationException expectedException = Assert.Throws<InvalidOperationException>(() => testWrapper.LoadSubscriptions(invalidCustomerId));
+
+            const string expectedExceptionMessage = "Sequence contains no elements";
+            Assert.That(expectedException.Message, Is.EqualTo(expectedExceptionMessage));
+        }
+
+        [Test]
+        public void TestSelectAllServices_ShouldSelectAllServices()
+        {
+            DataWrapper testWrapper = new DataWrapper();
+
+            List<Service> services = testWrapper.SelectAllServices();
+
+            Assert.That(services, Is.Not.Null);
+            Assert.That(services.Count, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void TestInsertNewService_ShouldInsertNewService()
+        {
+            // Arrange.
+            DataWrapper testWrapper = new DataWrapper();
+
+            int numberOfServices = testWrapper.context.Services.Count();
+            const string name = "Test new Service";
+            const decimal price = 18425.91m;
+            const bool isRecurring = true;
+
+            Service testService = new Service(name, price, isRecurring);
+
+            // Act.
+            int result = testWrapper.InsertNewService(testService);
+
+            // Assert.
+            const int expectedResult = 1;
+            Assert.That(result, Is.EqualTo(expectedResult));
+            Assert.That(testService.Id, Is.Not.EqualTo(0));
+            Assert.That(testWrapper.context.Services.Count(), Is.EqualTo(numberOfServices + 1));
+        }
+
+        [Test]
+        public void TestInsertNewService_ShouldThrowException()
+        {
+            // Arrange.
+            DataWrapper testWrapper = new DataWrapper();
+
+            const string name = "Another test new service";
+            const decimal price = 100.00m;
+            const bool isRecurring = false;
+
+            Service testService = new Service(name, price, isRecurring);
+            // Insert now should fail as IDENTITY_INSERT is OFF and does not allow explicit declaration of Primary Keys.
+            testService.Id = 123;
+
+            // Act.
+            DbUpdateException expectedException = Assert.Throws<DbUpdateException>(() => testWrapper.InsertNewService(testService));
+
+            // Assert.
+            const string expectedExceptionMessage = "An error occurred while saving the entity changes. See the inner exception for details.";
+            Assert.That(expectedException.Message, Is.EqualTo(expectedExceptionMessage));
+        }
+
+        [Test]
+        public void TestUpdateService_ShouldUpdateService()
+        {
+            DataWrapper testWrapper = new DataWrapper();
+
+            Service serviceToUpdate = testWrapper.SelectAllServices().Where(service => service.Id == 1).First();
+            serviceToUpdate.Price = 1.99m;
+            DateTime lastUpdateDateTime = serviceToUpdate.LastUpdateDateTime;
+
+            int updateServiceResult = testWrapper.UpdateService(1);
+
+            Assert.That(updateServiceResult, Is.EqualTo(1));
+            Assert.That(serviceToUpdate.LastUpdateDateTime, Is.GreaterThan(lastUpdateDateTime));
+        }
+
+        [Test]
+        public void TestUpdateService_ShouldThrowException()
+        {
+            DataWrapper testWrapper = new DataWrapper();
+
+            Service serviceToUpdate = testWrapper.SelectAllServices().First(service => service.Id == 1);
+
+            serviceToUpdate.Name = null;
+
+            // Act.
+            DbUpdateException expectedException = Assert.Throws<DbUpdateException>(() => testWrapper.UpdateService(1));
+
+            // Assert.
+            const string expectedExceptionMessage = "An error occurred while saving the entity changes. See the inner exception for details.";
+            Assert.That(expectedException.Message, Is.EqualTo(expectedExceptionMessage));
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            DataWrapper testWrapper = new DataWrapper();
+            Customer customerToReset = testWrapper.context.Customers.Where(cust => cust.Id == 1).First();
+            customerToReset.BusinessContact = "Test business contact";
+            testWrapper.UpdateCustomer(1);
+
+            Service serviceToReset = testWrapper.SelectAllServices().Where(service => service.Id == 1).First();
+            serviceToReset.Price = 0.99m;
+            testWrapper.UpdateService(1);
         }
     }
 }
