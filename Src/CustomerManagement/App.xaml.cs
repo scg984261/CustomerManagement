@@ -19,7 +19,7 @@ namespace CustomerManagement
         {
             base.OnStartup(e);
             NavigationStore navigationStore = new NavigationStore();
-            CustomerDataProvider customerDataProvider = new CustomerDataProvider();
+            ICustomerDataProvider customerDataProvider = new CustomerDataProvider();
             CustomersViewModel customersViewModel = new CustomersViewModel(navigationStore, customerDataProvider);
             CustomerDetailsViewModel.ParentCustomersViewModel = customersViewModel;
             NewCustomerViewModel.ParentCustomersViewModel = customersViewModel;

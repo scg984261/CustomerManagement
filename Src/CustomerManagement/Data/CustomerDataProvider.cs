@@ -7,6 +7,9 @@ namespace CustomerManagement.Data
     public interface ICustomerDataProvider
     {
         List<Customer> GetAll();
+        void InsertNewCustomer(Customer customer);
+        void UpdateCustomer(int customerId);
+        void LoadSubscriptions(int customerId);
     }
 
     public class CustomerDataProvider : ICustomerDataProvider

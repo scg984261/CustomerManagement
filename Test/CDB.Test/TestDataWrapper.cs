@@ -1,4 +1,5 @@
-﻿using CDB.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using CDB.Model;
 using Moq;
 using System.Data;
 
@@ -74,70 +75,48 @@ namespace CDB.Test
         [Test]
         public void TestInsertNewCustomer_ShouldInsertNewCustomer()
         {
+            // Arrange
             string companyName = "Faucibus Company";
             string businessContact = "Wallace Padilla";
             string emailAddress = "diam.dictum@google.co.uk";
             string contactNumber = "(0111) 257 5655";
 
-            Customer testCustomer = new Customer
-            {
-                Id = 582,
-                CompanyName = companyName,
-                BusinessContact = businessContact,
-                EmailAddress = emailAddress,
-                ContactNumber = contactNumber,
-                IsActive = true,
-                CreatedDateTime = new DateTime(2025, 02, 05, 22, 04, 57),
-                LastUpdateDateTime = new DateTime(2025, 02, 05, 22, 04, 57),
-            };
+            Customer testCustomer = new Customer(companyName, businessContact, emailAddress, contactNumber);
 
-            List<Customer> customerResultSet = new List<Customer>
-            {
-                testCustomer
-            };
+            DataWrapper testWrapper = new DataWrapper();
 
-            IQueryable<Customer> queryableResults = customerResultSet.AsQueryable();
-
-            Mock<CdbContext> mockDbContext = new Mock<CdbContext>();
-
-            mockDbContext.Setup(context => context.RunSql<Customer>(It.IsAny<FormattableString>())).Returns(queryableResults);
-
-            CdbContext mockDbContextObject = mockDbContext.Object;
-
-            DataWrapper testWrapper = new DataWrapper
-            {
-                context = mockDbContextObject
-            };
+            int numberOfCustomers = testWrapper.context.Customers.Count();
 
             // Act.
-            Customer testNewlyInsertedCustomer = new Customer(companyName, businessContact, emailAddress, contactNumber);
-            testWrapper.InsertNewCustomer(testNewlyInsertedCustomer);
+            testWrapper.InsertNewCustomer(testCustomer);
+            Customer newlyInsertedCustomer = testWrapper.context.Customers.OrderByDescending(cust => cust.Id).First();
 
-            Assert.That(testCustomer.Equals(testNewlyInsertedCustomer));
+            int newNumberOfCustomers = testWrapper.context.Customers.Count();
+
+            // Assert
+            Assert.That(newNumberOfCustomers, Is.EqualTo(numberOfCustomers + 1));
+            Assert.That(testCustomer.Id, Is.Not.EqualTo(0));
+            Assert.That(testCustomer.Equals(newlyInsertedCustomer));
         }
 
         [Test]
         public void TestInsertNewCustomer_ShouldThrowException()
         {
-            string companyName = "Faucibus Company";
+            string? companyName = null;
             string businessContact = "Wallace Padilla";
             string emailAddress = "diam.dictum@google.co.uk";
             string contactNumber = "(0111) 257 5655";
 
-            Mock<CdbContext> mockDbContext = new Mock<CdbContext>();
+            Customer testCustomer = new Customer(companyName, businessContact, emailAddress, contactNumber);
 
-            DataException dataException = new DataException("Test exception occurred attempting to insert new customer record!");
+            // Test customer should throw an exception when inserted into the database,
+            // As it should violate NOT NULL constraint.
 
-            mockDbContext.Setup(context => context.RunSql<Customer>(It.IsAny<FormattableString>())).Throws(dataException);
+            DataWrapper testWrapper = new DataWrapper();
 
-            CdbContext mockDbContextObject = mockDbContext.Object;
+            int numberOfCustomers = testWrapper.context.Customers.Count();
 
-            DataWrapper testWrapper = new DataWrapper
-            {
-                context = mockDbContextObject
-            };
-
-            Assert.That(() => testWrapper.InsertNewCustomer(new Customer(companyName, businessContact, emailAddress, contactNumber)), Throws.Exception.TypeOf<DataException>());
+            Assert.That(() => testWrapper.InsertNewCustomer(testCustomer), Throws.Exception.TypeOf<DbUpdateException>());
         }
     }
 }
