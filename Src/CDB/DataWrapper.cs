@@ -70,13 +70,14 @@ namespace CDB
         /// <param name="emailAddress"></param>
         /// <param name="contactNumber"></param>
         /// <returns></returns>
-        public void InsertNewCustomer(Customer customer)
+        public int InsertNewCustomer(Customer customer)
         {
             try
             {
                 context.Customers.Add(customer);
                 int dbSaveResult = context.SaveChanges();
-                log.Debug($"Status code {dbSaveResult} returned attempting to insert customer. New customer ID is {customer.Id}");   
+                log.Debug($"Status code {dbSaveResult} returned attempting to insert customer. New customer ID is {customer.Id}");
+                return dbSaveResult;
             }
             catch (Exception exception)
             {
@@ -105,16 +106,23 @@ namespace CDB
 
         public void LoadSubscriptions(int customerId)
         {
-            // Grab the customer object.
-            Customer customer = this.context.Customers.Where(customer => customer.Id == customerId).First();
-
-            // Load the subscriptions.
-            this.context.Entry(customer).Collection(customer => customer.Subscriptions).Load();
-            
-            // For each of the subscriptions loaded, load the service from the data context..
-            foreach (Subscription sub in customer.Subscriptions)
+            try
             {
-                this.context.Entry(sub).Reference(sub => sub.Service).Load();
+                Customer customer = this.context.Customers.First(customer => customer.Id == customerId);
+
+                // Load the subscriptions.
+                this.context.Entry(customer).Collection(customer => customer.Subscriptions).Load();
+
+                // For each of the subscriptions loaded, load the service from the data context.
+                foreach (Subscription sub in customer.Subscriptions)
+                {
+                    this.context.Entry(sub).Reference(sub => sub.Service).Load();
+                }
+            }
+            catch (Exception exception)
+            {
+                log.Error(exception);
+                throw;
             }
         }
 
@@ -127,7 +135,7 @@ namespace CDB
             try
             {
                 List<Service> services = this.context.Services.ToList();
-                log.Debug($"Services successfully obtained from Data Context.  {services.Count} services returned.");
+                log.Debug($"Services successfully obtained from Data Context. {services.Count} services returned.");
                 return services;
             }
             catch (Exception exception)
@@ -137,13 +145,14 @@ namespace CDB
             }
         }
 
-        public void InsertNewService(Service service)
+        public int InsertNewService(Service service)
         {
             try
             {
                 this.context.Services.Add(service);
                 int dbSaveResult = this.context.SaveChanges();
                 log.Debug($"New service record saved in CDB Database. Status code returned was {dbSaveResult}. New Service ID is {service.Id}.");
+                return dbSaveResult;
             }
             catch (Exception exception)
             {
@@ -152,7 +161,7 @@ namespace CDB
             }
         }
 
-        public void UpdateService(int serviceId)
+        public int UpdateService(int serviceId)
         {
             try
             {
@@ -160,6 +169,7 @@ namespace CDB
                 int saveResult = this.context.SaveChanges();
                 this.context.Entry(serviceToUpdate).Reload();
                 log.Debug($"Status code {saveResult} returned from CDB database updating service with ID {serviceId}.");
+                return saveResult;
             }
             catch (Exception exception)
             {
