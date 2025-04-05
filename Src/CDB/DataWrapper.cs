@@ -108,13 +108,12 @@ namespace CDB
         {
             try
             {
-                // Grab the customer object.
-                Customer customer = this.context.Customers.Where(customer => customer.Id == customerId).First();
+                Customer customer = this.context.Customers.First(customer => customer.Id == customerId);
 
                 // Load the subscriptions.
                 this.context.Entry(customer).Collection(customer => customer.Subscriptions).Load();
 
-                // For each of the subscriptions loaded, load the service from the data context..
+                // For each of the subscriptions loaded, load the service from the data context.
                 foreach (Subscription sub in customer.Subscriptions)
                 {
                     this.context.Entry(sub).Reference(sub => sub.Service).Load();
