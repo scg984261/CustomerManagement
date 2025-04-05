@@ -86,15 +86,15 @@ namespace CDB
             }
         }
 
-        public int UpdateCustomer(int id)
+        public int UpdateCustomer(int customerId)
         {
-            Customer customerToUpdate = this.context.Customers.Where(customer => customer.Id == id).First();
+            Customer customerToUpdate = this.context.Customers.Where(customer => customer.Id == customerId).First();
 
             try
             {
                 int dbUpdateResult = context.SaveChanges();
                 this.context.Entry(customerToUpdate).Reload();
-                log.Debug($"Status code {dbUpdateResult} returned. Attempting to update customer with ID {id}.");
+                log.Debug($"Status code {dbUpdateResult} returned. Attempting to update customer with ID {customerId}.");
                 return dbUpdateResult;
             }
             catch (Exception exception)

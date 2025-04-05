@@ -14,11 +14,17 @@ namespace CustomerManagement.Data
 
     public class CustomerDataProvider : ICustomerDataProvider
     {
-        private static readonly DataWrapper cdbDataWrapper = new DataWrapper();
+        private readonly IDataWrapper cdbDataWrapper;
         private static readonly ILog log = LogManager.GetLogger(typeof(CustomerDataProvider));
 
         public CustomerDataProvider()
         {
+            this.cdbDataWrapper = new DataWrapper();
+        }
+
+        public CustomerDataProvider(IDataWrapper dataWrapper)
+        {
+            this.cdbDataWrapper = dataWrapper;
         }
 
         public List<Customer> GetAll()
@@ -41,7 +47,7 @@ namespace CustomerManagement.Data
         {
             try
             {
-                cdbDataWrapper.InsertNewCustomer(customer);
+                int result = cdbDataWrapper.InsertNewCustomer(customer);
                 log.Info($"New Customer record successfully inserted into the database with ID {customer.Id}.");
             }
             catch (Exception exception)
