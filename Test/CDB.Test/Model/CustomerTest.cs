@@ -2,7 +2,7 @@
 
 namespace CDB.Test.Model
 {
-    public class TestCustomer
+    public class CustomerTest
     {
         [Test]
         public void TestDefaultNoArgsConstructor()

@@ -2,7 +2,7 @@
 
 namespace CDB.Test.Model
 {
-    public class TestSubscription
+    public class SubscriptionTest
     {
         [Test]
         public void TestSubscriptionConstructor()

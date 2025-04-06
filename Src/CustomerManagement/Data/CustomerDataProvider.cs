@@ -7,8 +7,8 @@ namespace CustomerManagement.Data
     public interface ICustomerDataProvider
     {
         List<Customer> GetAll();
-        void InsertNewCustomer(Customer customer);
-        void UpdateCustomer(int customerId);
+        int InsertNewCustomer(Customer customer);
+        int UpdateCustomer(int customerId);
         void LoadSubscriptions(int customerId);
     }
 
@@ -43,12 +43,13 @@ namespace CustomerManagement.Data
             }
         }
 
-        public void InsertNewCustomer(Customer customer)
+        public int InsertNewCustomer(Customer customer)
         {
             try
             {
                 int result = cdbDataWrapper.InsertNewCustomer(customer);
                 log.Info($"New Customer record successfully inserted into the database with ID {customer.Id}.");
+                return result;
             }
             catch (Exception exception)
             {
@@ -59,12 +60,13 @@ namespace CustomerManagement.Data
             }
         }
 
-        public void UpdateCustomer(int customerId)
+        public int UpdateCustomer(int customerId)
         {
             try
             {
                 int updateResult = cdbDataWrapper.UpdateCustomer(customerId);
                 log.Info($"Customer with ID {customerId} updated. Result code was {updateResult}.");
+                return updateResult;
             }
             catch (Exception exception)
             {
