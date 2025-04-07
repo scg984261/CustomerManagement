@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Windows;
+using System.Collections.ObjectModel;
 using CustomerManagement.Command;
 using CustomerManagement.Data;
 using CustomerManagement.Navigation;
@@ -40,20 +41,29 @@ namespace CustomerManagement.ViewModel
 
         public override void Load()
         {
-            if (this.Services.Any())
+            try
             {
-                return;
-            }
-
-            var services = this.serviceDataProvider.GetAll();
-
-            if (services != null)
-            {
-                foreach (Service service in services)
+                if (this.Services.Any())
                 {
-                    ServiceItemViewModel serviceItemViewModel = new ServiceItemViewModel(service);
-                    this.Services.Add(serviceItemViewModel);
+                    return;
                 }
+           
+                var services = this.serviceDataProvider.GetAll();
+
+                if (services != null)
+                {
+                    foreach (Service service in services)
+                    {
+                        ServiceItemViewModel serviceItemViewModel = new ServiceItemViewModel(service);
+                        this.Services.Add(serviceItemViewModel);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                string errorMessage = $"{exception.GetType().FullName} ({exception.HResult}) - {exception.Message}";
+                MessageBox.Show($"{errorMessage}", "Error Updating Customer", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
             }
         }
 
