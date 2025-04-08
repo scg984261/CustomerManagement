@@ -9,26 +9,28 @@ namespace CustomerManagement.ViewModel
 {
     public class CustomerDetailsViewModel : ValidationViewModelBase
     {
-        public static CustomersViewModel? ParentCustomersViewModel { get; set; }
-        private static readonly string dateTimeFormat = "dd-MMM-yyyy HH:mm:ss";
         private readonly ICustomerDataProvider customerDataProvider;
-        private static readonly ILog log = LogManager.GetLogger(typeof(CustomersViewModel));
         private CustomerItemViewModel customerItemViewModel;
         private NavigationStore navigationStore;
-        public DelegateCommand CancelCommand { get; }
-        public DelegateCommand SaveCommand { get; }
-
         private List<Subscription> subscriptions;
-        private List<ServiceItemViewModel> subscribedServices;
-
-        public List<ServiceItemViewModel> RecurringServices { get; set; }
-        public List<ServiceItemViewModel> NonRecurringServices { get; set; }
+        private List<ServiceItemViewModel> subscribedServices;   
 
         private readonly string? initialCompanyName;
         private readonly string? initialBusinessContact;
         private readonly string? initialContactNumber;
         private readonly string? initialEmailAddress;
         private readonly bool initialIsActive;
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(CustomersViewModel));
+        private static readonly string dateTimeFormat = "dd-MMM-yyyy HH:mm:ss";
+
+        public List<ServiceItemViewModel> RecurringServices { get; set; }
+        public List<ServiceItemViewModel> NonRecurringServices { get; set; }
+
+        public DelegateCommand CancelCommand { get; }
+        public DelegateCommand SaveCommand { get; }
+
+        public static CustomersViewModel? ParentCustomersViewModel { get; set; }
 
         public CustomerDetailsViewModel(CustomerItemViewModel customerItemViewModel, NavigationStore navigationStore, ICustomerDataProvider customerDataProvider)
         {
