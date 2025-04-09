@@ -1,7 +1,7 @@
-﻿using System.Windows;
-using CustomerManagement.Command;
+﻿using CustomerManagement.Command;
 using CustomerManagement.Navigation;
 using CustomerManagement.Data;
+using CustomerManagement.Windows;
 using CDB.Model;
 using log4net;
 
@@ -12,8 +12,9 @@ namespace CustomerManagement.ViewModel
         private readonly ICustomerDataProvider customerDataProvider;
         private CustomerItemViewModel customerItemViewModel;
         private NavigationStore navigationStore;
+        private IMessageBoxHelper messageBoxHelper;
         private List<Subscription> subscriptions;
-        private List<ServiceItemViewModel> subscribedServices;   
+        private List<ServiceItemViewModel> subscribedServices;
 
         private readonly string? initialCompanyName;
         private readonly string? initialBusinessContact;
@@ -32,8 +33,9 @@ namespace CustomerManagement.ViewModel
 
         public static CustomersViewModel? ParentCustomersViewModel { get; set; }
 
-        public CustomerDetailsViewModel(CustomerItemViewModel customerItemViewModel, NavigationStore navigationStore, ICustomerDataProvider customerDataProvider)
+        public CustomerDetailsViewModel(CustomerItemViewModel customerItemViewModel, NavigationStore navigationStore, ICustomerDataProvider customerDataProvider, IMessageBoxHelper messageBoxHelper)
         {
+            this.messageBoxHelper = messageBoxHelper;
             this.customerDataProvider = customerDataProvider;
 
             // Save values as readonly in case user cancels.
@@ -248,13 +250,13 @@ namespace CustomerManagement.ViewModel
             try
             {
                 customerDataProvider.UpdateCustomer(this.Id);
-                MessageBox.Show($"Customer record with ID {this.Id} updated.", "Customer Updated", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.messageBoxHelper.ShowInfoDialog($"Customer record with ID {this.Id} updated.", "Customer Updated");
                 this.NavigateBack();
             }
             catch (Exception exception)
             {
                 log.Error($"Exception {exception.GetType().FullName} occurred attempting to update customer with ID {this.Id}. Customer values will be reset to their originals.");
-                MessageBox.Show($"Error occurred attempting to update customer.\r\nCustomer was not updated.\r\nPlease see the log file for more information.", "Error Updating Customer", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.messageBoxHelper.ShowErrorDialog($"Error occurred attempting to update customer.\r\nCustomer was not updated.\r\nPlease see the log file for more information.", "Error Updating Customer");
                 this.Cancel(parameter);
             }
         }

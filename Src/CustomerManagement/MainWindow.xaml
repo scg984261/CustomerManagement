@@ -8,7 +8,7 @@
         xmlns:view="clr-namespace:CustomerManagement.View"
         xmlns:viewModel="clr-namespace:CustomerManagement.ViewModel"
         WindowStartupLocation="CenterScreen"
-        Title="CMS" Height="900" Width="1500">
+        Title="CMS" Height="650" Width="900">
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewModel:CustomersViewModel}">
             <view:CustomersView />

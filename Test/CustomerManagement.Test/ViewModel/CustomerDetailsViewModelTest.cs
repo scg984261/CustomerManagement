@@ -3,6 +3,7 @@ using CDB.Model;
 using CustomerManagement.ViewModel;
 using CustomerManagement.Navigation;
 using CustomerManagement.Data;
+using CustomerManagement.Windows;
 
 namespace CustomerManagement.Test.ViewModel
 {
@@ -13,6 +14,8 @@ namespace CustomerManagement.Test.ViewModel
         private NavigationStore navigationStore;
         private Mock<ICustomerDataProvider> mockCustomerDataProvider;
         private ICustomerDataProvider testCustomerDataProvider;
+        private Mock<IMessageBoxHelper> mockMessageBoxHelper;
+        private IMessageBoxHelper mockMessageBoxHelperObject;
         private CustomerDetailsViewModel testCustomerDetailsViewModel;
 
         [SetUp]
@@ -39,10 +42,16 @@ namespace CustomerManagement.Test.ViewModel
 
             // Create the Mock ICustomerDataProvider.
             this.mockCustomerDataProvider = new Mock<ICustomerDataProvider>();
-
             this.testCustomerDataProvider = mockCustomerDataProvider.Object;
 
-            this.testCustomerDetailsViewModel = new CustomerDetailsViewModel(this.customerItemViewModel, this.navigationStore, this.testCustomerDataProvider);
+            // Mock the message box helper to prevent dialog boxes appearing during unit tests.
+            this.mockMessageBoxHelper = new Mock<IMessageBoxHelper>();
+            this.mockMessageBoxHelperObject = this.mockMessageBoxHelper.Object;
+
+            this.testCustomerDetailsViewModel = new CustomerDetailsViewModel(this.customerItemViewModel, this.navigationStore, this.testCustomerDataProvider, this.mockMessageBoxHelperObject);
+
+            // Set the Parent view model to allow backwards navigation.
+            CustomerDetailsViewModel.ParentCustomersViewModel = new CustomersViewModel(this.navigationStore, this.testCustomerDataProvider);
         }
 
         [Test]
@@ -52,7 +61,7 @@ namespace CustomerManagement.Test.ViewModel
             ICustomerDataProvider testMockCustomerDataProvider = mockCustomerDataProvider.Object;
 
             // Act.
-            CustomerDetailsViewModel testCustomerDetailsViewModel = new CustomerDetailsViewModel(customerItemViewModel, navigationStore, testMockCustomerDataProvider);
+            CustomerDetailsViewModel testCustomerDetailsViewModel = new CustomerDetailsViewModel(customerItemViewModel, navigationStore, testMockCustomerDataProvider, this.mockMessageBoxHelperObject);
 
             // Assert.
             Assert.That(testCustomerDetailsViewModel.CompanyName, Is.EqualTo("Test company name"));
@@ -76,6 +85,7 @@ namespace CustomerManagement.Test.ViewModel
             Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
             Assert.That(errors.ToList()[0], Is.EqualTo("Company name cannot be blank"));
+            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
         }
 
         [Test]
@@ -92,6 +102,7 @@ namespace CustomerManagement.Test.ViewModel
             Assert.That(testCustomerDetailsViewModel.CompanyName, Is.EqualTo("Test string"));
             Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(0));
+            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.True);
         }
 
         [Test]
@@ -105,6 +116,7 @@ namespace CustomerManagement.Test.ViewModel
             Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
             Assert.That(errors.ToList()[0], Is.EqualTo("Business contact cannot be blank"));
+            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
         }
 
         [Test]
@@ -120,6 +132,7 @@ namespace CustomerManagement.Test.ViewModel
             Assert.That(testCustomerDetailsViewModel.BusinessContact, Is.EqualTo("Another test business contact."));
             Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(0));
+            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.True);
         }
 
         [Test]
@@ -131,6 +144,7 @@ namespace CustomerManagement.Test.ViewModel
             Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
             Assert.That(errors.ToList()[0], Is.EqualTo("Contact number cannot be blank"));
+            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
         }
 
         [Test]
@@ -143,6 +157,7 @@ namespace CustomerManagement.Test.ViewModel
             Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(0));
             Assert.That(this.testCustomerDetailsViewModel.ContactNumber, Is.EqualTo("Changed test contact number"));
+            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.True);
         }
 
         [Test]
@@ -155,6 +170,7 @@ namespace CustomerManagement.Test.ViewModel
             Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
             Assert.That(errors.ToList()[0], Is.EqualTo("Email address cannot be blank"));
+            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
         }
 
         [Test]
@@ -167,6 +183,7 @@ namespace CustomerManagement.Test.ViewModel
             Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(0));
             Assert.That(this.testCustomerDetailsViewModel.EmailAddress, Is.EqualTo("Changed email address"));
+            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.True);
         }
 
         [Test]
@@ -287,10 +304,72 @@ namespace CustomerManagement.Test.ViewModel
                 },
             };
 
-            CustomerDetailsViewModel testCustomerDetailsViewModel = new CustomerDetailsViewModel(new CustomerItemViewModel(testCustomer), this.navigationStore, this.testCustomerDataProvider);
+            CustomerDetailsViewModel testCustomerDetailsViewModel = new CustomerDetailsViewModel(new CustomerItemViewModel(testCustomer), this.navigationStore, this.testCustomerDataProvider, this.mockMessageBoxHelperObject);
 
             Assert.That(testCustomerDetailsViewModel.RecurringServices.Count, Is.EqualTo(3));
             Assert.That(testCustomerDetailsViewModel.NonRecurringServices.Count, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void TestCancel()
+        {
+            // Set the values of the fields.
+            this.testCustomerDetailsViewModel.CompanyName = "Different company name";
+            this.testCustomerDetailsViewModel.BusinessContact = "Different business contact";
+            this.testCustomerDetailsViewModel.EmailAddress = "Different Email address";
+            this.testCustomerDetailsViewModel.ContactNumber = "New contact number";
+
+            this.testCustomerDetailsViewModel.Cancel(new object());
+
+            // Check that the fields have been reverted to their original values.
+            Assert.That(this.testCustomerDetailsViewModel.CompanyName, Is.EqualTo("Test company name"));
+            Assert.That(this.testCustomerDetailsViewModel.BusinessContact, Is.EqualTo("Test business contact"));
+            Assert.That(this.testCustomerDetailsViewModel.EmailAddress, Is.EqualTo("test.email@hotmail.com"));
+            Assert.That(this.testCustomerDetailsViewModel.ContactNumber, Is.EqualTo("01425987635"));
+
+            // Check that navigation has succeeded.
+            Assert.That(this.navigationStore.SelectedViewModel is CustomersViewModel);
+        }
+
+        [Test]
+        public void TestSaveCustomer_ShouldSucceed()
+        {
+            this.mockCustomerDataProvider.Setup(dataProvider => dataProvider.UpdateCustomer(52)).Returns(1);
+
+            // Act.
+            this.testCustomerDetailsViewModel.CompanyName = "Another different company name";
+            this.testCustomerDetailsViewModel.SaveCustomer(new object());
+
+            // Assert that the change has propagated to the customerItemViewModel.
+            Assert.That(this.customerItemViewModel.CompanyName, Is.EqualTo("Another different company name"));
+
+            // Assert that navigation has succeeded.
+            Assert.That(this.navigationStore.SelectedViewModel is CustomersViewModel);
+        }
+
+        [Test]
+        public void TestSaveCustomer_ShouldCatchExceptionAndCancel()
+        {
+            // Arrange.
+            this.mockCustomerDataProvider.Setup(dataProvider => dataProvider.UpdateCustomer(52)).Throws(new Exception("Test exception attempting to update customer details."));
+
+            // Act.
+            // Edit the customer fields.
+            this.testCustomerDetailsViewModel.CompanyName = "Another Different company name";
+            this.testCustomerDetailsViewModel.BusinessContact = "Another Different business contact";
+            this.testCustomerDetailsViewModel.EmailAddress = "Another Different Email address";
+            this.testCustomerDetailsViewModel.ContactNumber = "Another New contact number";
+            this.testCustomerDetailsViewModel.SaveCustomer(new object());
+
+            // Assert.
+            // Check that the fields have been reset.
+            Assert.That(this.testCustomerDetailsViewModel.CompanyName, Is.EqualTo("Test company name"));
+            Assert.That(this.testCustomerDetailsViewModel.BusinessContact, Is.EqualTo("Test business contact"));
+            Assert.That(this.testCustomerDetailsViewModel.EmailAddress, Is.EqualTo("test.email@hotmail.com"));
+            Assert.That(this.testCustomerDetailsViewModel.ContactNumber, Is.EqualTo("01425987635"));
+            
+            // Assert that navigation has succeeded.
+            Assert.That(this.navigationStore.SelectedViewModel is CustomersViewModel);
         }
     }
 }

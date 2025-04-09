@@ -4,6 +4,7 @@ using CDB.Model;
 using CustomerManagement.Command;
 using CustomerManagement.Data;
 using CustomerManagement.Navigation;
+using CustomerManagement.Windows;
 
 namespace CustomerManagement.ViewModel
 {
@@ -69,7 +70,7 @@ namespace CustomerManagement.ViewModel
         {
             if (this.selectedCustomer != null)
             {
-                CustomerDetailsViewModel customerDetailsViewModel = new CustomerDetailsViewModel(this.selectedCustomer, this.navigationStore, this.customerDataProvider);
+                CustomerDetailsViewModel customerDetailsViewModel = new CustomerDetailsViewModel(this.selectedCustomer, this.navigationStore, this.customerDataProvider, new MessageBoxHelper());
                 this.navigationStore.SelectedViewModel = customerDetailsViewModel;
 
                 this.navigationStore.SelectedViewModel.Load();
