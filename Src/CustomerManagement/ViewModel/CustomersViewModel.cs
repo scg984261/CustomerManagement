@@ -9,13 +9,25 @@ using CustomerManagement.Windows;
 namespace CustomerManagement.ViewModel
 {
     public class CustomersViewModel : ViewModelBase
-    {
+    {   
         private static readonly ILog log = LogManager.GetLogger(typeof(CustomersViewModel));
-        private NavigationStore navigationStore;
         private readonly ICustomerDataProvider customerDataProvider;
+        private NavigationStore navigationStore;
+        private CustomerItemViewModel? selectedCustomer;
+
         public ObservableCollection<CustomerItemViewModel> Customers { get; } = new ObservableCollection<CustomerItemViewModel>();
 
-        private CustomerItemViewModel? selectedCustomer;
+        public DelegateCommand NavigateDetailsCommand { get; }
+        public DelegateCommand NavigateNewCustomerCommand { get; }
+
+        public CustomersViewModel(NavigationStore navigationStore, ICustomerDataProvider customerDataProvider)
+        {
+            this.navigationStore = navigationStore;
+            this.customerDataProvider = customerDataProvider;
+            this.NavigateDetailsCommand = new DelegateCommand(this.NavigateToCustomerDetails, this.IsCustomerSelected);
+            this.NavigateNewCustomerCommand = new DelegateCommand(this.NavigateToNewCustomer);
+        }
+
         public CustomerItemViewModel? SelectedCustomer
         {
             get
@@ -28,17 +40,6 @@ namespace CustomerManagement.ViewModel
                 this.NotifyPropertyChanged();
                 this.NavigateDetailsCommand.RaiseCanExecuteChanged();
             }
-        }
-
-        public DelegateCommand NavigateDetailsCommand { get; }
-        public DelegateCommand NavigateNewCustomerCommand { get; }
-
-        public CustomersViewModel(NavigationStore navigationStore, ICustomerDataProvider customerDataProvider)
-        {
-            this.navigationStore = navigationStore;
-            this.customerDataProvider = customerDataProvider;
-            this.NavigateDetailsCommand = new DelegateCommand(this.NavigateToCustomerDetails, this.IsCustomerSelected);
-            this.NavigateNewCustomerCommand = new DelegateCommand(this.NavigateToNewCustomer);
         }
 
         public override void Load()

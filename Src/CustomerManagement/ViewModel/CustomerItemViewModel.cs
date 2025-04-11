@@ -6,11 +6,6 @@ namespace CustomerManagement.ViewModel
     {
         private Customer customer;
 
-       /// <summary>
-       /// Whether the CustomersViewModel should add a new customer when this Window closes.
-       /// </summary>
-        public bool AddCustomerOnClose { get; set; }
-
         public CustomerItemViewModel(Customer customer)
         {
             this.customer = customer;
@@ -55,6 +50,11 @@ namespace CustomerManagement.ViewModel
             }
             set
             {
+                if (value is null)
+                {
+                    value = string.Empty;
+                }
+
                 this.customer.BusinessContact = value;
                 this.NotifyPropertyChanged();
             }
@@ -68,6 +68,11 @@ namespace CustomerManagement.ViewModel
             }
             set
             {
+                if (value is null)
+                {
+                    value = string.Empty;
+                }
+
                 this.customer.EmailAddress = value;
                 this.NotifyPropertyChanged();
             }
@@ -81,6 +86,11 @@ namespace CustomerManagement.ViewModel
             }
             set
             {
+                if (value is null)
+                {
+                    value = string.Empty;
+                }
+
                 this.customer.ContactNumber = value;
                 this.NotifyPropertyChanged();
             }
