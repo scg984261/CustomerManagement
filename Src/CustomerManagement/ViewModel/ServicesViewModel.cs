@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using CustomerManagement.Command;
 using CustomerManagement.Data;
 using CustomerManagement.Navigation;
+using CustomerManagement.Windows;
 using CDB.Model;
 
 namespace CustomerManagement.ViewModel
@@ -13,6 +14,7 @@ namespace CustomerManagement.ViewModel
         private NavigationStore navigationStore;
 
         private ServiceItemViewModel? selectedService;
+        private readonly IMessageBoxHelper messageBoxHelper;
 
         public ServiceItemViewModel? SelectedService
         {
@@ -31,10 +33,11 @@ namespace CustomerManagement.ViewModel
         public DelegateCommand ServiceDetailsCommand { get; }
         public DelegateCommand NavigateNewServiceCommand { get; }
 
-        public ServicesViewModel(NavigationStore navigationStore, IServiceDataProvider serviceDataProvider)
+        public ServicesViewModel(NavigationStore navigationStore, IServiceDataProvider serviceDataProvider, IMessageBoxHelper messageBoxHelper)
         {
             this.navigationStore = navigationStore;
-            this.serviceDataProvider = new ServiceDataProvider();
+            this.serviceDataProvider = serviceDataProvider;
+            this.messageBoxHelper = messageBoxHelper;
             this.ServiceDetailsCommand = new DelegateCommand(this.NavigateToDetails, this.IsServiceSelected);
             this.NavigateNewServiceCommand = new DelegateCommand(this.NavigateToNewService);
         }
@@ -62,7 +65,7 @@ namespace CustomerManagement.ViewModel
             catch (Exception exception)
             {
                 string errorMessage = $"{exception.GetType().FullName} ({exception.HResult}) - {exception.Message}";
-                MessageBox.Show($"{errorMessage}", "Error Updating Customer", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.messageBoxHelper.ShowErrorDialog(errorMessage, "Error Loading Services");
                 throw;
             }
         }
@@ -71,7 +74,7 @@ namespace CustomerManagement.ViewModel
         {
             if (this.SelectedService != null)
             {
-                ServiceDetailsViewModel serviceDetailsViewModel = new ServiceDetailsViewModel(this.SelectedService, this.navigationStore);
+                ServiceDetailsViewModel serviceDetailsViewModel = new ServiceDetailsViewModel(this.SelectedService, this.serviceDataProvider, this.navigationStore);
                 this.navigationStore.SelectedViewModel = serviceDetailsViewModel;
             }
         }
@@ -83,7 +86,7 @@ namespace CustomerManagement.ViewModel
 
         public void NavigateToNewService(object? parameter)
         {
-            this.navigationStore.SelectedViewModel = new NewServiceViewModel(this.navigationStore);
+            this.navigationStore.SelectedViewModel = new NewServiceViewModel(this.navigationStore, this.serviceDataProvider, new MessageBoxHelper());
         }
     }
 }

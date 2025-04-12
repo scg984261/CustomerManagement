@@ -2,31 +2,36 @@
 using CustomerManagement.Command;
 using CustomerManagement.Data;
 using CustomerManagement.Navigation;
+using CustomerManagement.Windows;
 using log4net;
-using System.Windows;
 
 namespace CustomerManagement.ViewModel
 {
     public class NewServiceViewModel : ValidationViewModelBase
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(NewServiceViewModel));
-
         private NavigationStore navigationStore;
+        private readonly IServiceDataProvider serviceDataProvider;
+        private IMessageBoxHelper messageBoxHelper;
         private ServiceItemViewModel serviceItemViewModel;
-        public static ServicesViewModel? ParentServicesViewModel { get; set; }
-        private static readonly ServiceDataProvider serviceDataProvider = new ServiceDataProvider();
-        public DelegateCommand NavigateBackDelegateCommand { get; }
-        public DelegateCommand SaveServiceCommand { get; }
         private string priceString;
 
-        public NewServiceViewModel(NavigationStore navigationStore)
+        private static readonly ILog log = LogManager.GetLogger(typeof(NewServiceViewModel));
+
+        public DelegateCommand NavigateBackDelegateCommand { get; }
+        public DelegateCommand SaveServiceCommand { get; }
+
+        public static ServicesViewModel? ParentServicesViewModel { get; set; }
+
+        public NewServiceViewModel(NavigationStore navigationStore, IServiceDataProvider serviceDataProvider, IMessageBoxHelper messageBoxHelper)
         {
             this.navigationStore = navigationStore;
+            this.serviceDataProvider = serviceDataProvider;
+            this.messageBoxHelper = messageBoxHelper;
+
             this.serviceItemViewModel = new ServiceItemViewModel();
             this.priceString = string.Empty;
             this.NavigateBackDelegateCommand = new DelegateCommand(this.NavigateBack);
             this.SaveServiceCommand = new DelegateCommand(this.SaveService, this.CanSaveService);
-
         }
 
         public string? Name
@@ -161,14 +166,14 @@ namespace CustomerManagement.ViewModel
                 }
                 
                 log.Debug($"New Service with ID {serviceItemViewModel.Id} successfully added.");
-                MessageBox.Show($"New Service inserted into the database with ID {serviceItemViewModel.Id}.", "New Service Added", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.messageBoxHelper.ShowInfoDialog($"New Service inserted into the database with ID {serviceItemViewModel.Id}.", "New Service Added");
             }
             catch (Exception exception)
             {
                 log.Error(exception);
                 string errorMessage = $"Exception {exception.GetType().FullName} occurred attempting to insert new service record into the database.\r\n";
                 errorMessage += "Service was not inserted. Please see the logs for more information.";
-                MessageBox.Show(errorMessage, "Error Inserting Service", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.messageBoxHelper.ShowErrorDialog(errorMessage, "Error Inserting Service");
             }
             finally
             {

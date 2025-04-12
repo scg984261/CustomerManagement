@@ -11,7 +11,7 @@ namespace CustomerManagement.ViewModel
         private static readonly ILog log = LogManager.GetLogger(typeof(ServiceDetailsViewModel));
         public static ServicesViewModel? ParentServicesViewModel;
         private static readonly string dateTimeFormat = "dd-MMM-yyyy HH:mm:ss";
-        private static readonly ServiceDataProvider serviceDataProvider = new ServiceDataProvider();
+        private readonly IServiceDataProvider serviceDataProvider;
         private NavigationStore navigationStore;
         public DelegateCommand SaveCommand { get; }
         public DelegateCommand CancelCommand { get; }
@@ -152,13 +152,15 @@ namespace CustomerManagement.ViewModel
             }
         }
 
-        public ServiceDetailsViewModel(ServiceItemViewModel serviceItemViewModel, NavigationStore navigationStore)
+        public ServiceDetailsViewModel(ServiceItemViewModel serviceItemViewModel, IServiceDataProvider serviceDataProvider, NavigationStore navigationStore)
         {
             this.name = serviceItemViewModel.Name;
             this.price = serviceItemViewModel.Price;
             this.priceString = serviceItemViewModel.Price.ToString();
             this.isRecurring = serviceItemViewModel.IsRecurring;
-            
+
+            this.serviceDataProvider = serviceDataProvider;
+
             this.serviceItemViewModel = serviceItemViewModel;
             this.navigationStore = navigationStore;
 
