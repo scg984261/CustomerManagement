@@ -6,7 +6,7 @@ using Moq;
 
 namespace CustomerManagement.Test.ViewModel
 {
-    public class TestCustomersViewModel
+    public class CustomersViewModelTest
     {
         private CustomersViewModel testCustomersViewModel;
         private Mock<ICustomerDataProvider> mockCustomerDataProvider;

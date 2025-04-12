@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 using CDB.Model;
-using Moq;
-using System.Data;
 
 namespace CDB.Test
 {

@@ -4,27 +4,33 @@ using CustomerManagement.Command;
 using CustomerManagement.Data;
 using CDB.Model;
 using log4net;
+using CustomerManagement.Windows;
 
 namespace CustomerManagement.ViewModel
 {
     public class NewCustomerViewModel : ValidationViewModelBase
     {
         public static CustomersViewModel? ParentCustomersViewModel { get; set; }
-        private static readonly CustomerDataProvider customerDataProvider = new CustomerDataProvider();
-        private static readonly ILog log = LogManager.GetLogger(typeof(NewCustomerViewModel));
-        private NavigationStore navigationStore;
 
         public DelegateCommand NavigateBackCommand { get; }
         public DelegateCommand SaveCustomerCommand { get; }
+
+        private readonly ICustomerDataProvider customerDataProvider;
+        private static readonly ILog log = LogManager.GetLogger(typeof(NewCustomerViewModel));
+
+        private NavigationStore navigationStore;
+        private IMessageBoxHelper messageBoxHelper;
 
         private string? companyName;
         private string? businessContact;
         private string? emailAddress;
         private string? contactNumber;
 
-        public NewCustomerViewModel(NavigationStore navigationStore)
+        public NewCustomerViewModel(NavigationStore navigationStore, ICustomerDataProvider customerDataProvider, IMessageBoxHelper messageBoxHelper)
         {
             this.navigationStore = navigationStore;
+            this.customerDataProvider = customerDataProvider;
+            this.messageBoxHelper = messageBoxHelper;
             this.NavigateBackCommand = new DelegateCommand(this.NavigateBack);
             this.SaveCustomerCommand = new DelegateCommand(this.SaveCustomer, this.CanSaveCustomer);
         }
@@ -135,11 +141,6 @@ namespace CustomerManagement.ViewModel
 
         public void NavigateBack(object? parameter)
         {
-            this.NavigateBack();
-        }
-
-        public void NavigateBack()
-        {
             if (ParentCustomersViewModel != null)
             {
                 this.navigationStore.SelectedViewModel = ParentCustomersViewModel;
@@ -152,7 +153,7 @@ namespace CustomerManagement.ViewModel
             try
             {
                 Customer customer = new Customer(this.CompanyName, this.BusinessContact, this.EmailAddress, this.ContactNumber);
-                customerDataProvider.InsertNewCustomer(customer);
+                int result = customerDataProvider.InsertNewCustomer(customer);
                 CustomerItemViewModel customerItemViewModel = new CustomerItemViewModel(customer);
 
                 if (ParentCustomersViewModel != null)
@@ -162,30 +163,30 @@ namespace CustomerManagement.ViewModel
 
                 log.Info($"Customer with ID {customerItemViewModel.Id} successfully added.");
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 log.Error(exception);
                 string errorMessage = $"Exception {exception.GetType().FullName} occurred attempting to insert new customer into the database.\r\n";
                 errorMessage += "Customer was not inserted. Please see the logs for more information.";
-                MessageBox.Show(errorMessage, "Error Inserting Customer", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.messageBoxHelper.ShowErrorDialog(errorMessage, "Error Inserting Customer");
             }
             finally
             {
-                this.NavigateBack();
+                this.NavigateBack(new object());
             }
         }
 
         public bool CanSaveCustomer(object? parameter)
         {
-            if (string.IsNullOrEmpty(this.CompanyName)) return false;
-            if (string.IsNullOrEmpty(this.BusinessContact)) return false;
-            if (string.IsNullOrEmpty(this.ContactNumber)) return false;
-            if (string.IsNullOrEmpty(this.EmailAddress)) return false;
-
             if (this.HasErrors)
             {
                 return false;
             }
+
+            if (string.IsNullOrEmpty(this.CompanyName)) return false;
+            if (string.IsNullOrEmpty(this.BusinessContact)) return false;
+            if (string.IsNullOrEmpty(this.ContactNumber)) return false;
+            if (string.IsNullOrEmpty(this.EmailAddress)) return false;
 
             return true;
         }

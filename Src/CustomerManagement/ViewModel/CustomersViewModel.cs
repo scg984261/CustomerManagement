@@ -80,7 +80,7 @@ namespace CustomerManagement.ViewModel
 
         public void NavigateToNewCustomer(object? parameter)
         {
-            this.navigationStore.SelectedViewModel = new NewCustomerViewModel(this.navigationStore);
+            this.navigationStore.SelectedViewModel = new NewCustomerViewModel(this.navigationStore, this.customerDataProvider, new MessageBoxHelper());
         }
     }
 }

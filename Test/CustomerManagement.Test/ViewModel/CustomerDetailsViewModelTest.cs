@@ -371,5 +371,27 @@ namespace CustomerManagement.Test.ViewModel
             // Assert that navigation has succeeded.
             Assert.That(this.navigationStore.SelectedViewModel is CustomersViewModel);
         }
+
+        [Test]
+        public void TestCanSaveCustomer_ShouldReturnFalse()
+        {
+            this.testCustomerDetailsViewModel.CompanyName = "Test company name";
+            this.testCustomerDetailsViewModel.BusinessContact = "Test business contact";
+            this.testCustomerDetailsViewModel.ContactNumber = "Test contact number";
+            this.testCustomerDetailsViewModel.EmailAddress = "";
+
+            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
+        }
+
+        [Test]
+        public void TestCanSaveCustomer_ShouldReturnTrue()
+        {
+            this.testCustomerDetailsViewModel.CompanyName = "Test company name";
+            this.testCustomerDetailsViewModel.BusinessContact = "Test business contact";
+            this.testCustomerDetailsViewModel.ContactNumber = "Test contact number";
+            this.testCustomerDetailsViewModel.EmailAddress = "Test email address";
+
+            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.True);
+        }
     }
 }

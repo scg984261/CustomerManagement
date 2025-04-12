@@ -249,7 +249,7 @@ namespace CustomerManagement.ViewModel
         { 
             try
             {
-                customerDataProvider.UpdateCustomer(this.Id);
+                int result = customerDataProvider.UpdateCustomer(this.Id);
                 this.messageBoxHelper.ShowInfoDialog($"Customer record with ID {this.Id} updated.", "Customer Updated");
                 this.NavigateBack();
             }
