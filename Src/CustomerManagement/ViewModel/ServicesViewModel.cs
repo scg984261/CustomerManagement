@@ -74,7 +74,7 @@ namespace CustomerManagement.ViewModel
         {
             if (this.SelectedService != null)
             {
-                ServiceDetailsViewModel serviceDetailsViewModel = new ServiceDetailsViewModel(this.SelectedService, this.serviceDataProvider, this.navigationStore);
+                ServiceDetailsViewModel serviceDetailsViewModel = new ServiceDetailsViewModel(this.SelectedService, this.serviceDataProvider, this.navigationStore, new MessageBoxHelper());
                 this.navigationStore.SelectedViewModel = serviceDetailsViewModel;
             }
         }

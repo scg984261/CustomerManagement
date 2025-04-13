@@ -109,10 +109,12 @@ namespace CustomerManagement.Test.ViewModel
         }
 
         [Test]
-        [TestCase("0.99", 0.99)]
-        [TestCase("500", 500.00)]
-        [TestCase(".1", 0.10)]
-        public void TestPriceString_ShouldClearErrors(string testPriceString, decimal expectedPrice)
+        [TestCase("0.99", 0.99, "£0.99")]
+        [TestCase("500", 500.00, "£500.00")]
+        [TestCase(".1", 0.10, "£0.10")]
+        [TestCase("225.423", 225.423, "£225.42")]
+        [TestCase("3894.5276", 3894.5276, "£3894.53")]
+        public void TestPriceString_ShouldClearErrors(string testPriceString, decimal expectedPrice, string expectedPriceFormatted)
         {
             // Act.
             this.testNewServiceViewModel.PriceString = testPriceString;
@@ -121,6 +123,7 @@ namespace CustomerManagement.Test.ViewModel
             // Assert.
             Assert.That(errors.Count, Is.EqualTo(0));
             Assert.That(this.testNewServiceViewModel.Price, Is.EqualTo(expectedPrice));
+            Assert.That(this.testNewServiceViewModel.PriceFormatted, Is.EqualTo(expectedPriceFormatted));
         }
 
         [Test]
