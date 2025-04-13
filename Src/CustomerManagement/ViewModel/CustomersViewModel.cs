@@ -44,21 +44,28 @@ namespace CustomerManagement.ViewModel
 
         public override void Load()
         {
-            if (this.Customers.Any())
+            try
             {
-                return;
-            }
-
-            var customers = this.customerDataProvider.GetAll();
-
-            if (customers != null)
-            {
-                foreach (Customer customer in customers)
+                if (this.Customers.Any())
                 {
-                    this.Customers.Add(new CustomerItemViewModel(customer));
+                    return;
                 }
 
-                log.Debug($"Customers successfully loaded. {customers.Count} returned.");
+                var customers = this.customerDataProvider.GetAll();
+
+                if (customers != null)
+                {
+                    foreach (Customer customer in customers)
+                    {
+                        this.Customers.Add(new CustomerItemViewModel(customer));
+                    }
+
+                    log.Debug($"Customers successfully loaded. {customers.Count} returned.");
+                }
+            }
+            catch (Exception exception)
+            {
+
             }
         }
 

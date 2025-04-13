@@ -101,7 +101,8 @@ namespace CustomerManagement.DataLoader
                 string businessContact = columns[this.businessContactColumn];
                 string emailAddress = columns[this.emailAddressColumn];
                 string contactNumber = columns[this.contactNumberColumn];
-                return this.InsertCustomer(companyName, businessContact, emailAddress, contactNumber);
+                // return this.InsertCustomer(companyName, businessContact, emailAddress, contactNumber);
+                return new Customer();
             }
             catch (Exception exception)
             {
@@ -112,14 +113,14 @@ namespace CustomerManagement.DataLoader
             }
         }
 
-        public virtual Customer InsertCustomer(string companyName, string businessContact, string emailAddress, string contactNumber)
+        public virtual int InsertCustomer(string companyName, string businessContact, string emailAddress, string contactNumber)
         {
             try
             {
                 Customer customer = new Customer(companyName, businessContact, emailAddress, contactNumber);
-                dataWrapper.InsertNewCustomer(customer);
-                log.Debug($"New customer with ID {customer.Id} inserted into the database.");
-                return customer;
+                int insertCustomerResult = dataWrapper.InsertNewCustomer(customer);
+                log.Debug($"New customer with ID {customer.Id} inserted into the database. Code returned was {insertCustomerResult}.");
+                return insertCustomerResult;
             }
             catch (Exception exception)
             {
