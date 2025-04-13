@@ -110,7 +110,6 @@ namespace CustomerManagement.Test.ViewModel
             {
                 new Subscription
                 {
-                    Id = 1,
                     CustomerId = this.testCustomer.Id,
                     Customer = this.testCustomer,
                     ServiceId = 2,
@@ -124,7 +123,6 @@ namespace CustomerManagement.Test.ViewModel
                 },
                 new Subscription
                 {
-                    Id = 2,
                     CustomerId = this.testCustomer.Id,
                     Customer = this.testCustomer,
                     ServiceId = 3,
@@ -138,7 +136,6 @@ namespace CustomerManagement.Test.ViewModel
                 },
                 new Subscription
                 {
-                    Id = 3,
                     CustomerId = this.testCustomer.Id,
                     Customer = this.testCustomer,
                     ServiceId = 4,
@@ -152,7 +149,6 @@ namespace CustomerManagement.Test.ViewModel
                 },
                 new Subscription
                 {
-                    Id = 4,
                     CustomerId = this.testCustomer.Id,
                     Customer = this.testCustomer,
                     ServiceId = 5,

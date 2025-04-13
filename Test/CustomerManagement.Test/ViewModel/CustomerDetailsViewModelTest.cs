@@ -219,7 +219,6 @@ namespace CustomerManagement.Test.ViewModel
             {
                 new Subscription
                 {
-                    Id = 101,
                     CustomerId = 52,
                     ServiceId = 1,
                     CreatedDateTime = new DateTime(),
@@ -236,7 +235,6 @@ namespace CustomerManagement.Test.ViewModel
                 },
                 new Subscription
                 {
-                    Id = 102,
                     CustomerId = 52,
                     ServiceId = 2,
                     CreatedDateTime = new DateTime(),
@@ -253,7 +251,6 @@ namespace CustomerManagement.Test.ViewModel
                 },
                 new Subscription
                 {
-                    Id = 103,
                     CustomerId = 52,
                     ServiceId = 3,
                     CreatedDateTime = new DateTime(),
@@ -270,7 +267,6 @@ namespace CustomerManagement.Test.ViewModel
                 },
                 new Subscription
                 {
-                    Id = 104,
                     CustomerId = 52,
                     ServiceId = 4,
                     CreatedDateTime = new DateTime(),
@@ -287,7 +283,6 @@ namespace CustomerManagement.Test.ViewModel
                 },
                 new Subscription
                 {
-                    Id = 105,
                     CustomerId = 52,
                     ServiceId = 8,
                     CreatedDateTime = new DateTime(),
