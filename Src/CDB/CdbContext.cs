@@ -67,7 +67,7 @@ public partial class CdbContext : DbContext
 
         modelBuilder.Entity<Subscription>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("SubscriptionIdPrimaryKey");
+            entity.HasKey(e => new { e.CustomerId, e.ServiceId }).HasName("SubscriptionPrimaryKey");
 
             entity.ToTable("Subscription");
 
