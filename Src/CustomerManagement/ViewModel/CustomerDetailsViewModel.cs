@@ -232,7 +232,6 @@ namespace CustomerManagement.ViewModel
             this.customerItemViewModel.ContactNumber = this.initialContactNumber;
             this.customerItemViewModel.EmailAddress = this.initialEmailAddress;
             this.customerItemViewModel.IsActive = this.initialIsActive;
-
             this.NavigateBack();
         }
 
@@ -255,8 +254,9 @@ namespace CustomerManagement.ViewModel
             }
             catch (Exception exception)
             {
-                log.Error($"Exception {exception.GetType().FullName} occurred attempting to update customer with ID {this.Id}. Customer values will be reset to their originals.");
-                this.messageBoxHelper.ShowErrorDialog($"Error occurred attempting to update customer.\r\nCustomer was not updated.\r\nPlease see the log file for more information.", "Error Updating Customer");
+                string errorMessage = $"Exception {exception.GetType().FullName} occurred attempting to update customer with ID {this.Id}. Customer values will be reset to their originals.";
+                log.Error(exception);
+                this.messageBoxHelper.ShowErrorDialog(exception, "Error Updating Customer");
                 this.Cancel(parameter);
             }
         }

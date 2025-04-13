@@ -137,13 +137,7 @@ namespace CustomerManagement.ViewModel
             }
         }
 
-
         public void NavigateBack(object? parameter)
-        {
-            this.NavigateBack();
-        }
-
-        public void NavigateBack()
         {
             if (ParentServicesViewModel != null)
             {
@@ -157,7 +151,7 @@ namespace CustomerManagement.ViewModel
             try
             {
                 Service service = new Service(this.Name, this.Price, this.IsRecurring);
-                serviceDataProvider.InsertNewService(service);
+                int insertServiceResult = serviceDataProvider.InsertNewService(service);
                 ServiceItemViewModel serviceItemViewModel = new ServiceItemViewModel(service);
 
                 if (ParentServicesViewModel != null)
@@ -170,23 +164,27 @@ namespace CustomerManagement.ViewModel
             }
             catch (Exception exception)
             {
-                log.Error(exception);
                 string errorMessage = $"Exception {exception.GetType().FullName} occurred attempting to insert new service record into the database.\r\n";
                 errorMessage += "Service was not inserted. Please see the logs for more information.";
-                this.messageBoxHelper.ShowErrorDialog(errorMessage, "Error Inserting Service");
+                log.Error(errorMessage);
+                log.Error(exception);
+                this.messageBoxHelper.ShowErrorDialog(exception, "Error Inserting Service");
             }
             finally
             {
-                this.NavigateBack();
+                this.NavigateBack(new object());
             }
         }
         
         public bool CanSaveService(object? parameter)
         {
+            if (this.HasErrors)
+            {
+                return false;
+            }
+
             if (string.IsNullOrEmpty(this.Name)) return false;
             if (string.IsNullOrEmpty(this.PriceString)) return false;
-
-            if (this.HasErrors) return false;
 
             return true;
         }
