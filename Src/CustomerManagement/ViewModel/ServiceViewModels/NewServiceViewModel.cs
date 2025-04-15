@@ -1,11 +1,11 @@
-﻿using CDB.Model;
-using CustomerManagement.Command;
+﻿using CustomerManagement.Command;
 using CustomerManagement.Data;
 using CustomerManagement.Navigation;
 using CustomerManagement.Windows;
+using CDB.Model;
 using log4net;
 
-namespace CustomerManagement.ViewModel
+namespace CustomerManagement.ViewModel.ServiceViewModels
 {
     public class NewServiceViewModel : ValidationViewModelBase
     {
@@ -99,7 +99,7 @@ namespace CustomerManagement.ViewModel
                 }
 
                 decimal price;
-                if (Decimal.TryParse(value, out price))
+                if (decimal.TryParse(value, out price))
                 {
                     this.serviceItemViewModel.Price = price;
                     this.ClearErrors();

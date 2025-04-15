@@ -6,7 +6,7 @@ using CustomerManagement.Data;
 using CustomerManagement.Navigation;
 using CustomerManagement.Windows;
 
-namespace CustomerManagement.ViewModel
+namespace CustomerManagement.ViewModel.CustomerViewModels
 {
     public class CustomersViewModel : ViewModelBase
     {   
@@ -48,6 +48,7 @@ namespace CustomerManagement.ViewModel
             {
                 if (this.Customers.Any())
                 {
+                    // this.Customers.Clear();
                     return;
                 }
 

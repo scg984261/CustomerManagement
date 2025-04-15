@@ -6,7 +6,7 @@ using CDB.Model;
 using log4net;
 using CustomerManagement.Windows;
 
-namespace CustomerManagement.ViewModel
+namespace CustomerManagement.ViewModel.CustomerViewModels
 {
     public class NewCustomerViewModel : ValidationViewModelBase
     {

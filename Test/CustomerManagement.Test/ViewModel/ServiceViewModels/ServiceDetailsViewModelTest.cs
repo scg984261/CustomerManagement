@@ -1,12 +1,12 @@
 ﻿using CDB.Model;
 using CustomerManagement.Data;
 using CustomerManagement.Navigation;
-using CustomerManagement.ViewModel;
+using CustomerManagement.ViewModel.ServiceViewModels;
 using CustomerManagement.Windows;
 using Moq;
 using System.Data;
 
-namespace CustomerManagement.Test.ViewModel
+namespace CustomerManagement.Test.ViewModel.ServiceViewModels
 {
     public class ServiceDetailsViewModelTest
     {

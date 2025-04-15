@@ -1,7 +1,7 @@
-﻿using CustomerManagement.ViewModel;
-using CDB.Model;
+﻿using CDB.Model;
+using CustomerManagement.ViewModel.ServiceViewModels;
 
-namespace CustomerManagement.Test.ViewModel
+namespace CustomerManagement.Test.ViewModel.ServiceViewModels
 {
     public class ServiceItemViewModelTest
     {
@@ -57,6 +57,7 @@ namespace CustomerManagement.Test.ViewModel
             this.testServiceItemViewModel.Id = 18425;
 
             Assert.That(this.testServiceItemViewModel.Id, Is.EqualTo(18425));
+            Assert.That(this.testService.Id, Is.EqualTo(18425));
         }
 
         [Test]
@@ -65,6 +66,7 @@ namespace CustomerManagement.Test.ViewModel
             this.testServiceItemViewModel.Name = "Test new service name";
 
             Assert.That(this.testServiceItemViewModel.Name, Is.EqualTo("Test new service name"));
+            Assert.That(this.testService.Name, Is.EqualTo("Test new service name"));
         }
 
         [Test]
@@ -73,6 +75,7 @@ namespace CustomerManagement.Test.ViewModel
             this.testServiceItemViewModel.Price = 15025.55m;
 
             Assert.That(this.testServiceItemViewModel.Price, Is.EqualTo(15025.55m));
+            Assert.That(this.testService.Price, Is.EqualTo(15025.55m));
         }
 
         [Test]
@@ -96,6 +99,7 @@ namespace CustomerManagement.Test.ViewModel
             this.testServiceItemViewModel.IsRecurring = true;
 
             Assert.That(this.testServiceItemViewModel.IsRecurring, Is.True);
+            Assert.That(this.testService.IsRecurring, Is.True);
         }
 
         [Test]
@@ -104,6 +108,7 @@ namespace CustomerManagement.Test.ViewModel
             this.testServiceItemViewModel.IsRecurring = false;
 
             Assert.That(this.testServiceItemViewModel.IsRecurring, Is.False);
+            Assert.That(this.testService.IsRecurring, Is.False);
         }
 
         [Test]

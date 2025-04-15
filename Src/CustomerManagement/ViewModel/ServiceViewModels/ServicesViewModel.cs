@@ -1,12 +1,11 @@
-﻿using System.Windows;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CustomerManagement.Command;
 using CustomerManagement.Data;
 using CustomerManagement.Navigation;
 using CustomerManagement.Windows;
 using CDB.Model;
 
-namespace CustomerManagement.ViewModel
+namespace CustomerManagement.ViewModel.ServiceViewModels
 {
     public class ServicesViewModel : ViewModelBase
     {

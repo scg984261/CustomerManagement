@@ -1,7 +1,7 @@
-﻿using CustomerManagement.ViewModel;
-using CDB.Model;
+﻿using CDB.Model;
+using CustomerManagement.ViewModel.CustomerViewModels;
 
-namespace CustomerManagement.Test.ViewModel
+namespace CustomerManagement.Test.ViewModel.CustomerViewModels
 {
     public class CustomerItemViewModelTest
     {
@@ -65,6 +65,7 @@ namespace CustomerManagement.Test.ViewModel
         {
             this.testCustomerItemViewModel.CompanyName = companyName;
             Assert.That(this.testCustomerItemViewModel.CompanyName, Is.EqualTo(expectedCompanyName));
+            Assert.That(this.testCustomer.CompanyName, Is.EqualTo(expectedCompanyName));
         }
 
         [Test]
@@ -74,6 +75,7 @@ namespace CustomerManagement.Test.ViewModel
         {
             this.testCustomerItemViewModel.BusinessContact = businessContact;
             Assert.That(this.testCustomerItemViewModel.BusinessContact, Is.EqualTo(expectedBusinessContact));
+            Assert.That(this.testCustomer.BusinessContact, Is.EqualTo(expectedBusinessContact));
         }
 
         [Test]
@@ -83,6 +85,7 @@ namespace CustomerManagement.Test.ViewModel
         {
             this.testCustomerItemViewModel.EmailAddress = emailAddress;
             Assert.That(this.testCustomerItemViewModel.EmailAddress, Is.EqualTo(expectedEmailAddress));
+            Assert.That(this.testCustomer.EmailAddress, Is.EqualTo(expectedEmailAddress));
         }
 
         [Test]
@@ -92,6 +95,7 @@ namespace CustomerManagement.Test.ViewModel
         {
             this.testCustomerItemViewModel.ContactNumber = contactNumber;
             Assert.That(this.testCustomerItemViewModel.ContactNumber, Is.EqualTo(expectedContactNumber));
+            Assert.That(this.testCustomer.ContactNumber, Is.EqualTo(expectedContactNumber));
         }
 
         [Test]
@@ -99,6 +103,7 @@ namespace CustomerManagement.Test.ViewModel
         {
             this.testCustomerItemViewModel.IsActive = true;
             Assert.That(this.testCustomerItemViewModel.IsActive, Is.True);
+            Assert.That(this.testCustomer.IsActive, Is.True);
         }
 
         [Test]

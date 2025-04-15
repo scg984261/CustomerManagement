@@ -1,6 +1,6 @@
 ﻿using CDB.Model;
 
-namespace CustomerManagement.ViewModel
+namespace CustomerManagement.ViewModel.CustomerViewModels
 {
     public class CustomerItemViewModel : ViewModelBase
     {

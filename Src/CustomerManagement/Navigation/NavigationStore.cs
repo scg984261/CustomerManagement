@@ -31,7 +31,8 @@ namespace CustomerManagement.Navigation
 
         public void NotifyCurrentViewModelChanged()
         {
-            this.SelectedViewModelChanged?.Invoke();
+            // Notify that the front-end that the selected viewmodel has changed.
+             this.SelectedViewModelChanged?.Invoke();
         }
     }
 }

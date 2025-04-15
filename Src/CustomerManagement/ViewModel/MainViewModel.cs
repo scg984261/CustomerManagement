@@ -1,5 +1,7 @@
 ﻿using CustomerManagement.Command;
 using CustomerManagement.Navigation;
+using CustomerManagement.ViewModel.CustomerViewModels;
+using CustomerManagement.ViewModel.ServiceViewModels;
 
 namespace CustomerManagement.ViewModel
 {

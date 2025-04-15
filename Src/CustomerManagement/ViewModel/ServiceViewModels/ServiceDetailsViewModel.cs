@@ -4,7 +4,7 @@ using CustomerManagement.Data;
 using CustomerManagement.Windows;
 using log4net;
 
-namespace CustomerManagement.ViewModel
+namespace CustomerManagement.ViewModel.ServiceViewModels
 {
     public class ServiceDetailsViewModel : ValidationViewModelBase
     {
@@ -122,7 +122,7 @@ namespace CustomerManagement.ViewModel
                 }
 
                 decimal price;
-                if (Decimal.TryParse(value, out price))
+                if (decimal.TryParse(value, out price))
                 {
                     this.serviceItemViewModel.Price = price;
                     this.ClearErrors();

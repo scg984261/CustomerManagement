@@ -4,8 +4,9 @@ using CustomerManagement.Data;
 using CustomerManagement.Windows;
 using CDB.Model;
 using log4net;
+using CustomerManagement.ViewModel.ServiceViewModels;
 
-namespace CustomerManagement.ViewModel
+namespace CustomerManagement.ViewModel.CustomerViewModels
 {
     public class CustomerDetailsViewModel : ValidationViewModelBase
     {

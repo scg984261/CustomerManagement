@@ -1,6 +1,6 @@
 ﻿using CustomerManagement.Navigation;
-using CustomerManagement.ViewModel;
 using CDB.Model;
+using CustomerManagement.ViewModel.CustomerViewModels;
 
 namespace CustomerManagement.Test.Navigation
 {
