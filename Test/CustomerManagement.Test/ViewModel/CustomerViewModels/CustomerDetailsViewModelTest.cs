@@ -51,7 +51,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             this.testCustomerDetailsViewModel = new CustomerDetailsViewModel(this.customerItemViewModel, this.navigationStore, this.testCustomerDataProvider, this.mockMessageBoxHelperObject);
 
             // Set the Parent view model to allow backwards navigation.
-            CustomerDetailsViewModel.ParentCustomersViewModel = new CustomersViewModel(this.navigationStore, this.testCustomerDataProvider);
+            CustomerDetailsViewModel.ParentCustomersViewModel = new CustomersViewModel(this.navigationStore, this.testCustomerDataProvider, this.mockMessageBoxHelperObject);
         }
 
         [Test]

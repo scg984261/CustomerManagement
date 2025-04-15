@@ -26,7 +26,7 @@ namespace CustomerManagement
 
             NavigationStore navigationStore = new NavigationStore();
             CustomerDataProvider customerDataProvider = new CustomerDataProvider(dataWrapper);
-            CustomersViewModel customersViewModel = new CustomersViewModel(navigationStore, customerDataProvider);
+            CustomersViewModel customersViewModel = new CustomersViewModel(navigationStore, customerDataProvider, new MessageBoxHelper());
             CustomerDetailsViewModel.ParentCustomersViewModel = customersViewModel;
             NewCustomerViewModel.ParentCustomersViewModel = customersViewModel;
             

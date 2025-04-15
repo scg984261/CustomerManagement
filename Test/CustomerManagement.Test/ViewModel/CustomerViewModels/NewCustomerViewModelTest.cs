@@ -30,7 +30,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             this.mockMessageBoxHelper = new Mock<IMessageBoxHelper>();
             this.mockMessageBoxHelperObject = this.mockMessageBoxHelper.Object;
 
-            this.testCustomersViewModel = new CustomersViewModel(this.testNavigationStore, this.mockCustomerDataProviderObject);
+            this.testCustomersViewModel = new CustomersViewModel(this.testNavigationStore, this.mockCustomerDataProviderObject, this.mockMessageBoxHelperObject);
             NewCustomerViewModel.ParentCustomersViewModel = this.testCustomersViewModel;
 
             this.testNewCustomerViewModel = new NewCustomerViewModel(this.testNavigationStore, this.mockCustomerDataProviderObject, this.mockMessageBoxHelperObject);

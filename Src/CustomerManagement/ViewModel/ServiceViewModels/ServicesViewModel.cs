@@ -9,11 +9,24 @@ namespace CustomerManagement.ViewModel.ServiceViewModels
 {
     public class ServicesViewModel : ViewModelBase
     {
-        public ObservableCollection<ServiceItemViewModel> Services { get; } = new ObservableCollection<ServiceItemViewModel>();
         private NavigationStore navigationStore;
-
         private ServiceItemViewModel? selectedService;
         private readonly IMessageBoxHelper messageBoxHelper;
+        private readonly IServiceDataProvider serviceDataProvider;
+
+        public ObservableCollection<ServiceItemViewModel> Services { get; } = new ObservableCollection<ServiceItemViewModel>();
+
+        public DelegateCommand ServiceDetailsCommand { get; }
+        public DelegateCommand NavigateNewServiceCommand { get; }
+
+        public ServicesViewModel(NavigationStore navigationStore, IServiceDataProvider serviceDataProvider, IMessageBoxHelper messageBoxHelper)
+        {
+            this.navigationStore = navigationStore;
+            this.serviceDataProvider = serviceDataProvider;
+            this.messageBoxHelper = messageBoxHelper;
+            this.ServiceDetailsCommand = new DelegateCommand(this.NavigateToDetails, this.IsServiceSelected);
+            this.NavigateNewServiceCommand = new DelegateCommand(this.NavigateToNewService);
+        }
 
         public ServiceItemViewModel? SelectedService
         {
@@ -28,18 +41,6 @@ namespace CustomerManagement.ViewModel.ServiceViewModels
                 this.ServiceDetailsCommand.RaiseCanExecuteChanged();
             }
         }
-        private readonly IServiceDataProvider serviceDataProvider;
-        public DelegateCommand ServiceDetailsCommand { get; }
-        public DelegateCommand NavigateNewServiceCommand { get; }
-
-        public ServicesViewModel(NavigationStore navigationStore, IServiceDataProvider serviceDataProvider, IMessageBoxHelper messageBoxHelper)
-        {
-            this.navigationStore = navigationStore;
-            this.serviceDataProvider = serviceDataProvider;
-            this.messageBoxHelper = messageBoxHelper;
-            this.ServiceDetailsCommand = new DelegateCommand(this.NavigateToDetails, this.IsServiceSelected);
-            this.NavigateNewServiceCommand = new DelegateCommand(this.NavigateToNewService);
-        }
 
         public override void Load()
         {
@@ -50,7 +51,7 @@ namespace CustomerManagement.ViewModel.ServiceViewModels
                     return;
                 }
            
-                var services = this.serviceDataProvider.GetAll();
+                List<Service> services = this.serviceDataProvider.GetAll();
 
                 if (services != null)
                 {
@@ -63,8 +64,7 @@ namespace CustomerManagement.ViewModel.ServiceViewModels
             }
             catch (Exception exception)
             {
-                string errorMessage = $"{exception.GetType().FullName} ({exception.HResult}) - {exception.Message}";
-                this.messageBoxHelper.ShowErrorDialog(errorMessage, "Error Loading Services");
+                this.messageBoxHelper.ShowErrorDialog(exception, "Error Loading Services");
                 throw;
             }
         }

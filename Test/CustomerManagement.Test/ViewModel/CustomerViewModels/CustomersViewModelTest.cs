@@ -1,16 +1,24 @@
-﻿using CDB.Model;
+﻿using System.Data;
 using CustomerManagement.Data;
 using CustomerManagement.Navigation;
 using CustomerManagement.ViewModel.CustomerViewModels;
+using CustomerManagement.Windows;
+using CDB.Model;
 using Moq;
+
 
 namespace CustomerManagement.Test.ViewModel.CustomerViewModels
 {
     public class CustomersViewModelTest
     {
         private CustomersViewModel testCustomersViewModel;
+
         private Mock<ICustomerDataProvider> mockCustomerDataProvider;
         private ICustomerDataProvider mockCustomerDataProviderObject;
+
+        private Mock<IMessageBoxHelper> mockMessageBoxHelper;
+        private IMessageBoxHelper mockMessageBoxHelperObject;
+
         private NavigationStore testNavigationStore;
         private Customer testCustomer;
         private CustomerItemViewModel testCustomerItemViewModel;
@@ -21,13 +29,16 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
         {
             this.testCustomers = this.GenerateTestCustomers();
 
+            this.mockMessageBoxHelper = new Mock<IMessageBoxHelper>();
+            this.mockMessageBoxHelperObject = this.mockMessageBoxHelper.Object;
+
             this.mockCustomerDataProvider = new Mock<ICustomerDataProvider>();
             this.mockCustomerDataProvider.Setup(dataProvider => dataProvider.GetAll()).Returns(this.testCustomers);
 
             this.mockCustomerDataProviderObject = this.mockCustomerDataProvider.Object;
 
             this.testNavigationStore = new NavigationStore();
-            this.testCustomersViewModel = new CustomersViewModel(this.testNavigationStore, this.mockCustomerDataProviderObject);
+            this.testCustomersViewModel = new CustomersViewModel(this.testNavigationStore, this.mockCustomerDataProviderObject, this.mockMessageBoxHelperObject);
 
             this.testCustomer = new Customer
             {
@@ -103,7 +114,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
         public void TestConstructor()
         {
             // Act.
-            this.testCustomersViewModel = new CustomersViewModel(this.testNavigationStore, this.mockCustomerDataProviderObject);
+            this.testCustomersViewModel = new CustomersViewModel(this.testNavigationStore, this.mockCustomerDataProviderObject, this.mockMessageBoxHelperObject);
 
             // Assert.
             Assert.That(this.testCustomersViewModel.Customers.Count, Is.EqualTo(0));
@@ -145,10 +156,25 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
         [Test]
         public void TestLoad_CustomersNotPopulated_ShouldLoadCustomers()
         {
+            // Mocks have already been setup to load pre-set list of customers.
             this.testCustomersViewModel.Load();
 
             // Assert that Data provider has loaded the test customers.
             Assert.That(this.testCustomersViewModel.Customers.Count, Is.EqualTo(5));
+        }
+
+        [Test]
+        public void TestLoad_ShouldThrowException()
+        {
+            // Arrange.
+            DataException testException = new DataException("Test Exception attempting to load Customers.");
+            this.mockCustomerDataProvider.Setup(dataProvider => dataProvider.GetAll()).Throws(testException);
+
+            // Act.
+            DataException expectedException = Assert.Throws<DataException>(() => this.testCustomersViewModel.Load());
+
+            // Assert.
+            Assert.That(expectedException.Message, Is.EqualTo("Test Exception attempting to load Customers."));
         }
 
         [Test]

@@ -12,6 +12,7 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
     {   
         private static readonly ILog log = LogManager.GetLogger(typeof(CustomersViewModel));
         private readonly ICustomerDataProvider customerDataProvider;
+        private readonly IMessageBoxHelper messageBoxHelper;
         private NavigationStore navigationStore;
         private CustomerItemViewModel? selectedCustomer;
 
@@ -20,10 +21,11 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
         public DelegateCommand NavigateDetailsCommand { get; }
         public DelegateCommand NavigateNewCustomerCommand { get; }
 
-        public CustomersViewModel(NavigationStore navigationStore, ICustomerDataProvider customerDataProvider)
+        public CustomersViewModel(NavigationStore navigationStore, ICustomerDataProvider customerDataProvider, IMessageBoxHelper messageBoxHelper)
         {
             this.navigationStore = navigationStore;
             this.customerDataProvider = customerDataProvider;
+            this.messageBoxHelper = messageBoxHelper;
             this.NavigateDetailsCommand = new DelegateCommand(this.NavigateToCustomerDetails, this.IsCustomerSelected);
             this.NavigateNewCustomerCommand = new DelegateCommand(this.NavigateToNewCustomer);
         }
@@ -66,7 +68,8 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
             }
             catch (Exception exception)
             {
-
+                this.messageBoxHelper.ShowErrorDialog(exception, "Error Loading Customers");
+                throw;
             }
         }
 
