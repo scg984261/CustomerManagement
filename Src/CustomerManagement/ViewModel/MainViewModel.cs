@@ -7,11 +7,21 @@ namespace CustomerManagement.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        public ServicesViewModel ServicesViewModel { get; }
-        public CustomersViewModel CustomersViewModel { get; }
         private NavigationStore navigationStore { get; }
+
+        public CustomersViewModel CustomersViewModel { get; }
+        public ServicesViewModel ServicesViewModel { get; }
         public DelegateCommand SelectViewModelCommand { get; }
-        
+
+        public MainViewModel(NavigationStore navigationStore, CustomersViewModel customersViewModel, ServicesViewModel servicesViewModel)
+        {
+            this.navigationStore = navigationStore;
+            this.CustomersViewModel = customersViewModel;
+            this.ServicesViewModel = servicesViewModel;
+            this.navigationStore.SelectedViewModelChanged += this.NotifySelectedViewModelChanged;
+            this.SelectViewModelCommand = new DelegateCommand(SelectViewModel);
+        }
+
         public ViewModelBase? SelectedViewModel
         {
             get
@@ -25,15 +35,6 @@ namespace CustomerManagement.ViewModel
                 this.navigationStore.SelectedViewModel = value;
                 this.NotifyPropertyChanged();
             }
-        }
-
-        public MainViewModel(NavigationStore navigationStore, CustomersViewModel customersViewModel, ServicesViewModel servicesViewModel)
-        {
-            this.navigationStore = navigationStore;
-            this.CustomersViewModel = customersViewModel;
-            this.ServicesViewModel = servicesViewModel;
-            this.navigationStore.SelectedViewModelChanged += this.NotifySelectedViewModelChanged;
-            this.SelectViewModelCommand = new DelegateCommand(SelectViewModel);
         }
 
         public void NotifySelectedViewModelChanged()

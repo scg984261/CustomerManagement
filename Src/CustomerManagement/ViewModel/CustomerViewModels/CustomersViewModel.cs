@@ -54,7 +54,7 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
                     return;
                 }
 
-                var customers = this.customerDataProvider.GetAll();
+                List<Customer> customers = this.customerDataProvider.GetAll();
 
                 if (customers != null)
                 {

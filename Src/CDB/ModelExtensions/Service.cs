@@ -14,6 +14,13 @@
             this.CreatedDateTime = new DateTime();
         }
 
+        public Service(int id, string? name, decimal price, bool isRecurring, DateTime createdDateTime, DateTime lastUpdateDateTime) : this(name, price, isRecurring)
+        {
+            this.Id = id;
+            this.CreatedDateTime = createdDateTime;
+            this.LastUpdateDateTime = lastUpdateDateTime;
+        }
+
         public Service()
         {
             this.Id = 0;
