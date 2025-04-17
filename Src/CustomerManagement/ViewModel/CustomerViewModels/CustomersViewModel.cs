@@ -68,6 +68,7 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
             }
             catch (Exception exception)
             {
+                log.Error(exception);
                 this.messageBoxHelper.ShowErrorDialog(exception, "Error Loading Customers");
                 throw;
             }

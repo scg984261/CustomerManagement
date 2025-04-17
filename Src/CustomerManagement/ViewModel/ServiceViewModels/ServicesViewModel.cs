@@ -4,6 +4,7 @@ using CustomerManagement.Data;
 using CustomerManagement.Navigation;
 using CustomerManagement.Windows;
 using CDB.Model;
+using log4net;
 
 namespace CustomerManagement.ViewModel.ServiceViewModels
 {
@@ -13,6 +14,8 @@ namespace CustomerManagement.ViewModel.ServiceViewModels
         private ServiceItemViewModel? selectedService;
         private readonly IMessageBoxHelper messageBoxHelper;
         private readonly IServiceDataProvider serviceDataProvider;
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(ServicesViewModel));
 
         public ObservableCollection<ServiceItemViewModel> Services { get; } = new ObservableCollection<ServiceItemViewModel>();
 
@@ -64,6 +67,7 @@ namespace CustomerManagement.ViewModel.ServiceViewModels
             }
             catch (Exception exception)
             {
+                log.Error(exception);
                 this.messageBoxHelper.ShowErrorDialog(exception, "Error Loading Services");
                 throw;
             }
