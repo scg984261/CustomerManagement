@@ -6,7 +6,6 @@ using CustomerManagement.Windows;
 using CDB.Model;
 using Moq;
 
-
 namespace CustomerManagement.Test.ViewModel.CustomerViewModels
 {
     public class CustomersViewModelTest
