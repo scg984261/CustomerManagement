@@ -21,6 +21,22 @@ namespace CDB.Test.Model
         }
 
         [Test]
+        public void TestConstructor_SomeArgsProvided()
+        {
+            Customer testCustomer = new Customer("test company name", "test business contact", "test@emailaddress.com", "01842387429");
+
+            Assert.That(testCustomer.Id, Is.EqualTo(0));
+            Assert.That(testCustomer.CompanyName, Is.EqualTo("test company name"));
+            Assert.That(testCustomer.BusinessContact, Is.EqualTo("test business contact"));
+            Assert.That(testCustomer.EmailAddress, Is.EqualTo("test@emailaddress.com"));
+            Assert.That(testCustomer.ContactNumber, Is.EqualTo("01842387429"));
+            Assert.That(testCustomer.IsActive, Is.True);
+            Assert.That(testCustomer.CreatedDateTime, Is.EqualTo(new DateTime()));
+            Assert.That(testCustomer.LastUpdateDateTime, Is.EqualTo(new DateTime()));
+            Assert.That(testCustomer.Subscriptions?.Count, Is.EqualTo(0));
+        }
+
+        [Test]
         public void TestConstructor() 
         {
             Customer testCustomer = new Customer(1842, "Natwest Group PLC", "Alison Rose", "alison.rose@natwestgroup.co.uk", "+44 20 984 1847 6", new DateTime(2025, 09, 02, 16, 37, 01), new DateTime(2025, 11, 04, 17, 43, 03));

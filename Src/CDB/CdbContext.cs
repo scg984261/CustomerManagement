@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using CDB.Model;
+﻿using CDB.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace CDB;

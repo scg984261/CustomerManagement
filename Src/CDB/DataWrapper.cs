@@ -9,6 +9,7 @@ namespace CDB
     public class DataWrapper : IDataWrapper
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DataWrapper));
+
         public CdbContext context;
         public static string DatabaseConnectionString = string.Empty;
 
