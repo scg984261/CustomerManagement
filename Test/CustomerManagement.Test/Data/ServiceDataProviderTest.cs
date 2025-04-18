@@ -1,14 +1,25 @@
-﻿using System.Data.Common;
+﻿using System.Data;
 using CustomerManagement.Data;
 using CDB;
 using CDB.Model;
 using Moq;
-using System.Data;
 
 namespace CustomerManagement.Test.Data
 {
     public class ServiceDataProviderTest
     {
+        private Mock<IDataWrapper> mockDataWrapper;
+        private IDataWrapper mockDataWrapperObject;
+        private ServiceDataProvider testServiceDataProvider;
+
+        [SetUp]
+        public void Setup()
+        {
+            this.mockDataWrapper = new Mock<IDataWrapper>();
+            this.mockDataWrapperObject = this.mockDataWrapper.Object;
+            this.testServiceDataProvider = new ServiceDataProvider(this.mockDataWrapperObject);
+        }
+
         [Test]
         public void TestGetAll_ShouldReturnServices()
         {
@@ -53,15 +64,10 @@ namespace CustomerManagement.Test.Data
                 }
             };
 
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
-            mockDataWrapper.Setup(dataWrapper => dataWrapper.SelectAllServices()).Returns(testServices);
-
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
-
-            ServiceDataProvider testServiceDataProvider = new ServiceDataProvider(mockDataWrapperObject);
+            this.mockDataWrapper.Setup(dataWrapper => dataWrapper.SelectAllServices()).Returns(testServices);
 
             // Act.
-            List<Service> services = testServiceDataProvider.GetAll();
+            List<Service> services = this.testServiceDataProvider.GetAll();
 
             // Assert.
             Assert.That(services.Count, Is.EqualTo(4));
@@ -72,15 +78,10 @@ namespace CustomerManagement.Test.Data
         {
             // Arrange.
             DataException testException = new DataException("Test SQL Exception attempting to get services.");
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
-            mockDataWrapper.Setup(dataWrapper => dataWrapper.SelectAllServices()).Throws(testException);
-
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
-
-            ServiceDataProvider testServiceDataProvider = new ServiceDataProvider(mockDataWrapperObject);
+            this.mockDataWrapper.Setup(dataWrapper => dataWrapper.SelectAllServices()).Throws(testException);
 
             // Act.
-            DataException expectedException = Assert.Throws<DataException>(() => testServiceDataProvider.GetAll());
+            DataException expectedException = Assert.Throws<DataException>(() => this.testServiceDataProvider.GetAll());
 
             // Assert.
             Assert.That(expectedException.Message, Is.EqualTo("Test SQL Exception attempting to get services."));
@@ -97,15 +98,10 @@ namespace CustomerManagement.Test.Data
                 Price = 5896124.25m
             };
 
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
-            mockDataWrapper.Setup(dataWrapper => dataWrapper.InsertNewService(service)).Returns(1);
-
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
-
-            ServiceDataProvider testServiceDataProvider = new ServiceDataProvider(mockDataWrapperObject);
+            this.mockDataWrapper.Setup(dataWrapper => dataWrapper.InsertNewService(service)).Returns(1);
 
             // Act.
-            int result = testServiceDataProvider.InsertNewService(service);
+            int result = this.testServiceDataProvider.InsertNewService(service);
 
             // Assert.
             Assert.That(result, Is.EqualTo(1));
@@ -124,16 +120,10 @@ namespace CustomerManagement.Test.Data
 
             const string testExceptionMessage = "Test SQL Exception attempting to Insert new service.";
             DataException testException = new DataException(testExceptionMessage);
-
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
             mockDataWrapper.Setup(dataWrapper => dataWrapper.InsertNewService(testService)).Throws(testException);
 
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
-
-            ServiceDataProvider testServiceDataProvider = new ServiceDataProvider(mockDataWrapperObject);
-
             // Act.
-            DataException expectedException = Assert.Throws<DataException>(() => testServiceDataProvider.InsertNewService(testService));
+            DataException expectedException = Assert.Throws<DataException>(() => this.testServiceDataProvider.InsertNewService(testService));
 
             // Assert
             Assert.That(expectedException.Message, Is.EqualTo(testExceptionMessage));
@@ -144,15 +134,10 @@ namespace CustomerManagement.Test.Data
         {
             // Arrange.
             const int testServiceId = 105;
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
             mockDataWrapper.Setup(dataWrapper => dataWrapper.UpdateService(testServiceId)).Returns(1);
 
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
-
-            ServiceDataProvider testServiceDataProvider = new ServiceDataProvider(mockDataWrapperObject);
-
             // Act.
-            int result = testServiceDataProvider.UpdateService(105);
+            int result = this.testServiceDataProvider.UpdateService(105);
 
             // Assert.
             Assert.That(result, Is.EqualTo(1));
@@ -165,12 +150,7 @@ namespace CustomerManagement.Test.Data
             const string testExceptionMessage = "Test SQL Exception attempting to update Service.";
             DataException testException = new DataException(testExceptionMessage);
 
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
             mockDataWrapper.Setup(dataWrapper => dataWrapper.UpdateService(106)).Throws(testException);
-
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
-
-            ServiceDataProvider testServiceDataProvider = new ServiceDataProvider(mockDataWrapperObject);
 
             // Act.
             DataException expectedException = Assert.Throws<DataException>(() => testServiceDataProvider.UpdateService(106));

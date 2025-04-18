@@ -13,8 +13,8 @@ namespace CustomerManagement.Data
 
     public class ServiceDataProvider : IServiceDataProvider
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ServiceDataProvider));
         private readonly IDataWrapper cdbDataWrapper;
+        private static readonly ILog log = LogManager.GetLogger(typeof(ServiceDataProvider));
 
         public ServiceDataProvider()
         {
