@@ -91,12 +91,12 @@
             </Grid.ColumnDefinitions>
 
             <!-- Cancel button -->
-            <Button Grid.Row="0" Grid.Column="0" Command="{Binding CancelCommand}">
+            <Button Grid.Row="0" Grid.Column="0" Command="{Binding NavigateBackCommand}">
                 <Image Source="/Images/BackArrow.png" />
             </Button>
 
             <!-- Save button -->
-            <Button Grid.Row="0" Grid.Column="1" Content="Save" Command="{Binding SaveCommand}" />
+            <Button Grid.Row="0" Grid.Column="1" Content="Save" Command="{Binding SaveCustomerCommand}" />
         </Grid>
     </Grid>
 </UserControl>

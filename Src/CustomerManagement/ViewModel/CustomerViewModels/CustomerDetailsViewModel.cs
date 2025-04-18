@@ -2,18 +2,15 @@
 using CustomerManagement.Navigation;
 using CustomerManagement.Data;
 using CustomerManagement.Windows;
+using CustomerManagement.ViewModel.ServiceViewModels;
 using CDB.Model;
 using log4net;
-using CustomerManagement.ViewModel.ServiceViewModels;
 
 namespace CustomerManagement.ViewModel.CustomerViewModels
 {
-    public class CustomerDetailsViewModel : ValidationViewModelBase
+    public class CustomerDetailsViewModel : CustomerViewModelBase
     {
-        private readonly ICustomerDataProvider customerDataProvider;
         private CustomerItemViewModel customerItemViewModel;
-        private NavigationStore navigationStore;
-        private IMessageBoxHelper messageBoxHelper;
         private List<Subscription> subscriptions;
         private List<ServiceItemViewModel> subscribedServices;
 
@@ -29,16 +26,9 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
         public List<ServiceItemViewModel> RecurringServices { get; set; }
         public List<ServiceItemViewModel> NonRecurringServices { get; set; }
 
-        public DelegateCommand CancelCommand { get; }
-        public DelegateCommand SaveCommand { get; }
-
-        public static CustomersViewModel? ParentCustomersViewModel { get; set; }
-
-        public CustomerDetailsViewModel(CustomerItemViewModel customerItemViewModel, NavigationStore navigationStore, ICustomerDataProvider customerDataProvider, IMessageBoxHelper messageBoxHelper)
+        public CustomerDetailsViewModel(CustomerItemViewModel customerItemViewModel, NavigationStore navigationStore, ICustomerDataProvider customerDataProvider, IMessageBoxHelper messageBoxHelper) : base(navigationStore, customerDataProvider, messageBoxHelper)
         {
-            this.messageBoxHelper = messageBoxHelper;
-            this.customerDataProvider = customerDataProvider;
-
+            this.customerItemViewModel = customerItemViewModel;
             // Save values as readonly in case user cancels.
             this.initialCompanyName = customerItemViewModel.CompanyName;
             this.initialBusinessContact = customerItemViewModel.BusinessContact;
@@ -46,7 +36,11 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
             this.initialEmailAddress = customerItemViewModel.EmailAddress;
             this.initialIsActive = customerItemViewModel.IsActive;
 
-            this.customerItemViewModel = customerItemViewModel;
+            this.CompanyName = this.customerItemViewModel.CompanyName;
+            this.BusinessContact = this.customerItemViewModel.BusinessContact;
+            this.ContactNumber = this.customerItemViewModel.ContactNumber;
+            this.EmailAddress = this.customerItemViewModel.EmailAddress;
+            this.IsActive = this.customerItemViewModel.IsActive;
 
             this.subscribedServices = new List<ServiceItemViewModel>();
             this.RecurringServices = new List<ServiceItemViewModel>();
@@ -57,8 +51,7 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
             this.PopulateServices();
 
             this.navigationStore = navigationStore;
-            this.CancelCommand = new DelegateCommand(this.Cancel);
-            this.SaveCommand = new DelegateCommand(this.SaveCustomer, this.CanSaveCustomer);
+            this.NavigateBackCommand = new DelegateCommand(this.NavigateBack);
         }
 
         public int Id
@@ -66,120 +59,6 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
             get
             {
                 return this.customerItemViewModel.Id;
-            }
-        }
-
-        public string? CompanyName
-        {
-            get
-            {
-                return this.customerItemViewModel.CompanyName;
-            }
-
-            set
-            {
-                this.customerItemViewModel.CompanyName = value;
-
-                if (string.IsNullOrEmpty(this.customerItemViewModel.CompanyName))
-                {
-                    const string errorMessage = "Company name cannot be blank";
-                    this.AddError(errorMessage);
-                }
-                else
-                {
-                    this.ClearErrors();
-                }
-
-                this.NotifyPropertyChanged();
-                this.SaveCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-        public string? BusinessContact
-        {
-            get
-            {
-                return this.customerItemViewModel.BusinessContact;
-            }
-            set
-            {
-                this.customerItemViewModel.BusinessContact = value;
-
-                if (string.IsNullOrEmpty(this.customerItemViewModel.BusinessContact))
-                {
-                    const string errorMessage = "Business contact cannot be blank";
-                    this.AddError(errorMessage);
-                }
-                else
-                {
-                    this.ClearErrors();
-                }
-
-                this.NotifyPropertyChanged();
-                this.SaveCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-        public string? ContactNumber
-        {
-            get
-            {
-                return this.customerItemViewModel.ContactNumber;
-            }
-            set
-            {
-                this.customerItemViewModel.ContactNumber = value;
-
-                if (string.IsNullOrEmpty(this.customerItemViewModel.ContactNumber))
-                {
-                    const string errorMessage = "Contact number cannot be blank";
-                    this.AddError(errorMessage);
-                }
-                else
-                {
-                    this.ClearErrors();
-                }
-
-                this.SaveCommand.RaiseCanExecuteChanged();
-                this.NotifyPropertyChanged();
-            }
-        }
-        
-        public string? EmailAddress
-        {
-            get
-            {
-                return this.customerItemViewModel.EmailAddress;
-            }
-            set
-            {
-                this.customerItemViewModel.EmailAddress = value;
-
-                if (string.IsNullOrEmpty(this.customerItemViewModel.EmailAddress))
-                {
-                    const string errorMessage = "Email address cannot be blank";
-                    this.AddError(errorMessage);
-                }
-                else
-                {
-                    this.ClearErrors();
-                }
-
-                this.NotifyPropertyChanged();
-                this.SaveCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-        public bool IsActive
-        {
-            get
-            {
-                return this.customerItemViewModel.IsActive;
-            }
-            set
-            {
-                this.customerItemViewModel.IsActive = value;
-                this.NotifyPropertyChanged();
             }
         }
 
@@ -225,7 +104,7 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
             this.NonRecurringServices = this.subscribedServices.Where(service => !service.IsRecurring).ToList(); ;
         }
 
-        public void Cancel(object? parameter)
+        public void Cancel()
         {
             // Restore Customer values to their originals.
             this.customerItemViewModel.CompanyName = this.initialCompanyName;
@@ -233,44 +112,30 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
             this.customerItemViewModel.ContactNumber = this.initialContactNumber;
             this.customerItemViewModel.EmailAddress = this.initialEmailAddress;
             this.customerItemViewModel.IsActive = this.initialIsActive;
-            this.NavigateBack();
+            this.NavigateBack(new object());
         }
 
-        public void NavigateBack()
+        public override void SaveCustomer(object? parameter)
         {
-            if (ParentCustomersViewModel != null)
-            {
-                this.navigationStore.SelectedViewModel = ParentCustomersViewModel;
-                this.navigationStore.SelectedViewModel.Load();
-            }
-        }
-
-        public void SaveCustomer(object? parameter)
-        { 
             try
             {
+                this.customerItemViewModel.CompanyName = this.CompanyName;
+                this.customerItemViewModel.BusinessContact = this.BusinessContact;
+                this.customerItemViewModel.ContactNumber = this.ContactNumber;
+                this.customerItemViewModel.EmailAddress = this.EmailAddress;
+                this.customerItemViewModel.IsActive = this.IsActive;
+
                 int result = customerDataProvider.UpdateCustomer(this.Id);
                 this.messageBoxHelper.ShowInfoDialog($"Customer record with ID {this.Id} updated.", "Customer Updated");
-                this.NavigateBack();
+                this.NavigateBack(new object());
             }
             catch (Exception exception)
             {
                 string errorMessage = $"Exception {exception.GetType().FullName} occurred attempting to update customer with ID {this.Id}. Customer values will be reset to their originals.";
                 log.Error(exception);
                 this.messageBoxHelper.ShowErrorDialog(exception, "Error Updating Customer");
-                this.Cancel(parameter);
+                this.Cancel();
             }
-        }
-
-        public bool CanSaveCustomer(object? parameter)
-        {
-            if (this.HasErrors) return false;
-            if (string.IsNullOrEmpty(this.CompanyName)) return false;
-            if (string.IsNullOrEmpty(this.BusinessContact)) return false;
-            if (string.IsNullOrEmpty(this.ContactNumber)) return false;
-            if (string.IsNullOrEmpty(this.EmailAddress)) return false;
-
-            return true;
         }
     }
 }

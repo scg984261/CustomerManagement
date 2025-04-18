@@ -87,7 +87,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             // Assert.
             Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
-            Assert.That(errors.ToList()[0], Is.EqualTo("Company name cannot be blank"));
+            Assert.That(errors.ToList()[0], Is.EqualTo("Company name cannot be blank."));
             Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
         }
 
@@ -118,7 +118,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             // Assert.
             Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
-            Assert.That(errors.ToList()[0], Is.EqualTo("Business contact cannot be blank"));
+            Assert.That(errors.ToList()[0], Is.EqualTo("Business contact cannot be blank."));
             Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
         }
 
@@ -146,7 +146,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
 
             Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
-            Assert.That(errors.ToList()[0], Is.EqualTo("Contact number cannot be blank"));
+            Assert.That(errors.ToList()[0], Is.EqualTo("Contact Number cannot be blank."));
             Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
         }
 
@@ -172,7 +172,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
 
             Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
-            Assert.That(errors.ToList()[0], Is.EqualTo("Email address cannot be blank"));
+            Assert.That(errors.ToList()[0], Is.EqualTo("Email Address cannot be blank."));
             Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
         }
 
@@ -317,13 +317,13 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             this.testCustomerDetailsViewModel.EmailAddress = "Different Email address";
             this.testCustomerDetailsViewModel.ContactNumber = "New contact number";
 
-            this.testCustomerDetailsViewModel.Cancel(new object());
+            this.testCustomerDetailsViewModel.Cancel();
 
             // Check that the fields have been reverted to their original values.
-            Assert.That(this.testCustomerDetailsViewModel.CompanyName, Is.EqualTo("Test company name"));
-            Assert.That(this.testCustomerDetailsViewModel.BusinessContact, Is.EqualTo("Test business contact"));
-            Assert.That(this.testCustomerDetailsViewModel.EmailAddress, Is.EqualTo("test.email@hotmail.com"));
-            Assert.That(this.testCustomerDetailsViewModel.ContactNumber, Is.EqualTo("01425987635"));
+            Assert.That(this.customerItemViewModel.CompanyName, Is.EqualTo("Test company name"));
+            Assert.That(this.customerItemViewModel.BusinessContact, Is.EqualTo("Test business contact"));
+            Assert.That(this.customerItemViewModel.EmailAddress, Is.EqualTo("test.email@hotmail.com"));
+            Assert.That(this.customerItemViewModel.ContactNumber, Is.EqualTo("01425987635"));
 
             // Check that navigation has succeeded.
             Assert.That(this.navigationStore.SelectedViewModel is CustomersViewModel);
@@ -361,10 +361,10 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
 
             // Assert.
             // Check that the fields have been reset.
-            Assert.That(this.testCustomerDetailsViewModel.CompanyName, Is.EqualTo("Test company name"));
-            Assert.That(this.testCustomerDetailsViewModel.BusinessContact, Is.EqualTo("Test business contact"));
-            Assert.That(this.testCustomerDetailsViewModel.EmailAddress, Is.EqualTo("test.email@hotmail.com"));
-            Assert.That(this.testCustomerDetailsViewModel.ContactNumber, Is.EqualTo("01425987635"));
+            Assert.That(this.customerItemViewModel.CompanyName, Is.EqualTo("Test company name"));
+            Assert.That(this.customerItemViewModel.BusinessContact, Is.EqualTo("Test business contact"));
+            Assert.That(this.customerItemViewModel.EmailAddress, Is.EqualTo("test.email@hotmail.com"));
+            Assert.That(this.customerItemViewModel.ContactNumber, Is.EqualTo("01425987635"));
             
             // Assert that navigation has succeeded.
             Assert.That(this.navigationStore.SelectedViewModel is CustomersViewModel);
