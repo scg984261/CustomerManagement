@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using CDB.Model;
+﻿using CDB.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace CDB;
@@ -67,7 +65,7 @@ public partial class CdbContext : DbContext
 
         modelBuilder.Entity<Subscription>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("SubscriptionIdPrimaryKey");
+            entity.HasKey(e => new { e.CustomerId, e.ServiceId }).HasName("SubscriptionPrimaryKey");
 
             entity.ToTable("Subscription");
 

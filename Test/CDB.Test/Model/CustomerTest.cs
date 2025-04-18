@@ -2,7 +2,7 @@
 
 namespace CDB.Test.Model
 {
-    public class TestCustomer
+    public class CustomerTest
     {
         [Test]
         public void TestDefaultNoArgsConstructor()
@@ -15,6 +15,22 @@ namespace CDB.Test.Model
             Assert.That(testCustomer.EmailAddress, Is.EqualTo(string.Empty));
             Assert.That(testCustomer.ContactNumber, Is.EqualTo(string.Empty));
             Assert.That(testCustomer.IsActive, Is.False);
+            Assert.That(testCustomer.CreatedDateTime, Is.EqualTo(new DateTime()));
+            Assert.That(testCustomer.LastUpdateDateTime, Is.EqualTo(new DateTime()));
+            Assert.That(testCustomer.Subscriptions?.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void TestConstructor_SomeArgsProvided()
+        {
+            Customer testCustomer = new Customer("test company name", "test business contact", "test@emailaddress.com", "01842387429");
+
+            Assert.That(testCustomer.Id, Is.EqualTo(0));
+            Assert.That(testCustomer.CompanyName, Is.EqualTo("test company name"));
+            Assert.That(testCustomer.BusinessContact, Is.EqualTo("test business contact"));
+            Assert.That(testCustomer.EmailAddress, Is.EqualTo("test@emailaddress.com"));
+            Assert.That(testCustomer.ContactNumber, Is.EqualTo("01842387429"));
+            Assert.That(testCustomer.IsActive, Is.True);
             Assert.That(testCustomer.CreatedDateTime, Is.EqualTo(new DateTime()));
             Assert.That(testCustomer.LastUpdateDateTime, Is.EqualTo(new DateTime()));
             Assert.That(testCustomer.Subscriptions?.Count, Is.EqualTo(0));

@@ -1,32 +1,37 @@
-﻿using CDB.Model;
-using CustomerManagement.Command;
+﻿using CustomerManagement.Command;
 using CustomerManagement.Data;
 using CustomerManagement.Navigation;
+using CustomerManagement.Windows;
+using CDB.Model;
 using log4net;
-using System.Windows;
 
-namespace CustomerManagement.ViewModel
+namespace CustomerManagement.ViewModel.ServiceViewModels
 {
     public class NewServiceViewModel : ValidationViewModelBase
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(NewServiceViewModel));
-
         private NavigationStore navigationStore;
+        private readonly IServiceDataProvider serviceDataProvider;
+        private IMessageBoxHelper messageBoxHelper;
         private ServiceItemViewModel serviceItemViewModel;
-        public static ServicesViewModel? ParentServicesViewModel { get; set; }
-        private static readonly ServiceDataProvider serviceDataProvider = new ServiceDataProvider();
-        public DelegateCommand NavigateBackDelegateCommand { get; }
-        public DelegateCommand SaveServiceCommand { get; }
         private string priceString;
 
-        public NewServiceViewModel(NavigationStore navigationStore)
+        private static readonly ILog log = LogManager.GetLogger(typeof(NewServiceViewModel));
+
+        public DelegateCommand NavigateBackDelegateCommand { get; }
+        public DelegateCommand SaveServiceCommand { get; }
+
+        public static ServicesViewModel? ParentServicesViewModel { get; set; }
+
+        public NewServiceViewModel(NavigationStore navigationStore, IServiceDataProvider serviceDataProvider, IMessageBoxHelper messageBoxHelper)
         {
             this.navigationStore = navigationStore;
+            this.serviceDataProvider = serviceDataProvider;
+            this.messageBoxHelper = messageBoxHelper;
+
             this.serviceItemViewModel = new ServiceItemViewModel();
             this.priceString = string.Empty;
             this.NavigateBackDelegateCommand = new DelegateCommand(this.NavigateBack);
             this.SaveServiceCommand = new DelegateCommand(this.SaveService, this.CanSaveService);
-
         }
 
         public string? Name
@@ -94,7 +99,7 @@ namespace CustomerManagement.ViewModel
                 }
 
                 decimal price;
-                if (Decimal.TryParse(value, out price))
+                if (decimal.TryParse(value, out price))
                 {
                     this.serviceItemViewModel.Price = price;
                     this.ClearErrors();
@@ -132,13 +137,7 @@ namespace CustomerManagement.ViewModel
             }
         }
 
-
         public void NavigateBack(object? parameter)
-        {
-            this.NavigateBack();
-        }
-
-        public void NavigateBack()
         {
             if (ParentServicesViewModel != null)
             {
@@ -152,7 +151,7 @@ namespace CustomerManagement.ViewModel
             try
             {
                 Service service = new Service(this.Name, this.Price, this.IsRecurring);
-                serviceDataProvider.InsertNewService(service);
+                int insertServiceResult = serviceDataProvider.InsertNewService(service);
                 ServiceItemViewModel serviceItemViewModel = new ServiceItemViewModel(service);
 
                 if (ParentServicesViewModel != null)
@@ -161,27 +160,31 @@ namespace CustomerManagement.ViewModel
                 }
                 
                 log.Debug($"New Service with ID {serviceItemViewModel.Id} successfully added.");
-                MessageBox.Show($"New Service inserted into the database with ID {serviceItemViewModel.Id}.", "New Service Added", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.messageBoxHelper.ShowInfoDialog($"New Service inserted into the database with ID {serviceItemViewModel.Id}.", "New Service Added");
             }
             catch (Exception exception)
             {
-                log.Error(exception);
                 string errorMessage = $"Exception {exception.GetType().FullName} occurred attempting to insert new service record into the database.\r\n";
                 errorMessage += "Service was not inserted. Please see the logs for more information.";
-                MessageBox.Show(errorMessage, "Error Inserting Service", MessageBoxButton.OK, MessageBoxImage.Error);
+                log.Error(errorMessage);
+                log.Error(exception);
+                this.messageBoxHelper.ShowErrorDialog(exception, "Error Inserting Service");
             }
             finally
             {
-                this.NavigateBack();
+                this.NavigateBack(new object());
             }
         }
         
         public bool CanSaveService(object? parameter)
         {
+            if (this.HasErrors)
+            {
+                return false;
+            }
+
             if (string.IsNullOrEmpty(this.Name)) return false;
             if (string.IsNullOrEmpty(this.PriceString)) return false;
-
-            if (this.HasErrors) return false;
 
             return true;
         }

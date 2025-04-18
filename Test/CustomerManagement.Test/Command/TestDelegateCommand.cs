@@ -4,9 +4,17 @@ namespace CustomerManagement.Test.Command
 {
     public class TestDelegateCommand
     {
-        private int? firstNumber = 1;
-        private int? secondNumber = 2;
-        private int? result = 0;
+        private int? firstNumber;
+        private int? secondNumber;
+        private int? result;
+
+        [SetUp]
+        public void Setup()
+        {
+            this.firstNumber = 1;
+            this.secondNumber = 2;
+            this.result = 0;
+        }
 
         public void Add(object? parameter)
         {
@@ -65,8 +73,6 @@ namespace CustomerManagement.Test.Command
             DelegateCommand testDelegateCommand = new DelegateCommand(this.Add, this.CanAdd);
 
             Assert.That(testDelegateCommand.CanExecute(new object()), Is.False);
-
-            this.firstNumber = 1;
         }
     }
 }

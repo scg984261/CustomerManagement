@@ -2,8 +2,6 @@
 
 public partial class Subscription
 {
-    public int Id { get; set; }
-
     public int CustomerId { get; set; }
 
     public int ServiceId { get; set; }

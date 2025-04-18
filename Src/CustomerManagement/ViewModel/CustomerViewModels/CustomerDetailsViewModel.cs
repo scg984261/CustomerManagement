@@ -1,28 +1,21 @@
-﻿using System.Windows;
-using CustomerManagement.Command;
+﻿using CustomerManagement.Command;
 using CustomerManagement.Navigation;
 using CustomerManagement.Data;
+using CustomerManagement.Windows;
 using CDB.Model;
 using log4net;
+using CustomerManagement.ViewModel.ServiceViewModels;
 
-namespace CustomerManagement.ViewModel
+namespace CustomerManagement.ViewModel.CustomerViewModels
 {
     public class CustomerDetailsViewModel : ValidationViewModelBase
     {
-        public static CustomersViewModel? ParentCustomersViewModel { get; set; }
-        private static readonly string dateTimeFormat = "dd-MMM-yyyy HH:mm:ss";
         private readonly ICustomerDataProvider customerDataProvider;
-        private static readonly ILog log = LogManager.GetLogger(typeof(CustomersViewModel));
         private CustomerItemViewModel customerItemViewModel;
         private NavigationStore navigationStore;
-        public DelegateCommand CancelCommand { get; }
-        public DelegateCommand SaveCommand { get; }
-
+        private IMessageBoxHelper messageBoxHelper;
         private List<Subscription> subscriptions;
         private List<ServiceItemViewModel> subscribedServices;
-
-        public List<ServiceItemViewModel> RecurringServices { get; set; }
-        public List<ServiceItemViewModel> NonRecurringServices { get; set; }
 
         private readonly string? initialCompanyName;
         private readonly string? initialBusinessContact;
@@ -30,8 +23,20 @@ namespace CustomerManagement.ViewModel
         private readonly string? initialEmailAddress;
         private readonly bool initialIsActive;
 
-        public CustomerDetailsViewModel(CustomerItemViewModel customerItemViewModel, NavigationStore navigationStore, ICustomerDataProvider customerDataProvider)
+        private static readonly ILog log = LogManager.GetLogger(typeof(CustomersViewModel));
+        private static readonly string dateTimeFormat = "dd-MMM-yyyy HH:mm:ss";
+
+        public List<ServiceItemViewModel> RecurringServices { get; set; }
+        public List<ServiceItemViewModel> NonRecurringServices { get; set; }
+
+        public DelegateCommand CancelCommand { get; }
+        public DelegateCommand SaveCommand { get; }
+
+        public static CustomersViewModel? ParentCustomersViewModel { get; set; }
+
+        public CustomerDetailsViewModel(CustomerItemViewModel customerItemViewModel, NavigationStore navigationStore, ICustomerDataProvider customerDataProvider, IMessageBoxHelper messageBoxHelper)
         {
+            this.messageBoxHelper = messageBoxHelper;
             this.customerDataProvider = customerDataProvider;
 
             // Save values as readonly in case user cancels.
@@ -222,13 +227,12 @@ namespace CustomerManagement.ViewModel
 
         public void Cancel(object? parameter)
         {
-            // Restore Customer values  to their originals.
+            // Restore Customer values to their originals.
             this.customerItemViewModel.CompanyName = this.initialCompanyName;
             this.customerItemViewModel.BusinessContact = this.initialBusinessContact;
             this.customerItemViewModel.ContactNumber = this.initialContactNumber;
             this.customerItemViewModel.EmailAddress = this.initialEmailAddress;
             this.customerItemViewModel.IsActive = this.initialIsActive;
-
             this.NavigateBack();
         }
 
@@ -245,14 +249,15 @@ namespace CustomerManagement.ViewModel
         { 
             try
             {
-                customerDataProvider.UpdateCustomer(this.Id);
-                MessageBox.Show($"Customer record with ID {this.Id} updated.", "Customer Updated", MessageBoxButton.OK, MessageBoxImage.Information);
+                int result = customerDataProvider.UpdateCustomer(this.Id);
+                this.messageBoxHelper.ShowInfoDialog($"Customer record with ID {this.Id} updated.", "Customer Updated");
                 this.NavigateBack();
             }
             catch (Exception exception)
             {
-                log.Error($"Exception {exception.GetType().FullName} occurred attempting to update customer with ID {this.Id}. Customer values will be reset to their originals.");
-                MessageBox.Show($"Error occurred attempting to update customer.\r\nCustomer was not updated.\r\nPlease see the log file for more information.", "Error Updating Customer", MessageBoxButton.OK, MessageBoxImage.Error);
+                string errorMessage = $"Exception {exception.GetType().FullName} occurred attempting to update customer with ID {this.Id}. Customer values will be reset to their originals.";
+                log.Error(exception);
+                this.messageBoxHelper.ShowErrorDialog(exception, "Error Updating Customer");
                 this.Cancel(parameter);
             }
         }

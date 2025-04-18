@@ -1,26 +1,50 @@
-﻿using System.Windows;
-using CustomerManagement.Navigation;
+﻿using CustomerManagement.Navigation;
 using CustomerManagement.Command;
 using CustomerManagement.Data;
+using CustomerManagement.Windows;
 using log4net;
 
-namespace CustomerManagement.ViewModel
+namespace CustomerManagement.ViewModel.ServiceViewModels
 {
     public class ServiceDetailsViewModel : ValidationViewModelBase
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ServiceDetailsViewModel));
-        public static ServicesViewModel? ParentServicesViewModel;
-        private static readonly string dateTimeFormat = "dd-MMM-yyyy HH:mm:ss";
-        private static readonly ServiceDataProvider serviceDataProvider = new ServiceDataProvider();
-        private NavigationStore navigationStore;
-        public DelegateCommand SaveCommand { get; }
-        public DelegateCommand CancelCommand { get; }
         private ServiceItemViewModel serviceItemViewModel;
+        private NavigationStore navigationStore;
+        private IMessageBoxHelper messageBoxHelper;
 
-        
         private readonly string name;
         private readonly decimal price;
         private readonly bool isRecurring;
+
+        private string priceString;
+        private readonly IServiceDataProvider serviceDataProvider;
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(ServiceDetailsViewModel));
+        private static readonly string dateTimeFormat = "dd-MMM-yyyy HH:mm:ss";
+
+        public DelegateCommand SaveCommand { get; }
+        public DelegateCommand CancelCommand { get; }
+
+        public static ServicesViewModel? ParentServicesViewModel;
+
+        public ServiceDetailsViewModel(ServiceItemViewModel serviceItemViewModel, IServiceDataProvider serviceDataProvider, NavigationStore navigationStore, IMessageBoxHelper messageBoxHelper)
+        {
+            this.name = serviceItemViewModel.Name;
+            this.price = serviceItemViewModel.Price;
+            this.isRecurring = serviceItemViewModel.IsRecurring;
+
+            this.serviceDataProvider = serviceDataProvider;
+
+            this.serviceItemViewModel = serviceItemViewModel;
+            this.navigationStore = navigationStore;
+
+            this.messageBoxHelper = messageBoxHelper;
+
+            this.priceString = this.Price.ToString();
+
+            this.SaveCommand = new DelegateCommand(this.SaveService, this.CanSaveService);
+            this.CancelCommand = new DelegateCommand(this.Cancel);
+        }
 
         public int Id
         {
@@ -72,7 +96,7 @@ namespace CustomerManagement.ViewModel
             }
         }
 
-        private string priceString;
+        
 
         public string PriceString
         {
@@ -90,6 +114,7 @@ namespace CustomerManagement.ViewModel
                     this.AddError(errorMessage);
                     this.serviceItemViewModel.Price = 0m;
                     this.NotifyPropertyChanged(nameof(PriceFormatted));
+                    this.SaveCommand.RaiseCanExecuteChanged();
                     return;
                 }
                 else
@@ -98,7 +123,7 @@ namespace CustomerManagement.ViewModel
                 }
 
                 decimal price;
-                if (Decimal.TryParse(value, out price))
+                if (decimal.TryParse(value, out price))
                 {
                     this.serviceItemViewModel.Price = price;
                     this.ClearErrors();
@@ -152,32 +177,19 @@ namespace CustomerManagement.ViewModel
             }
         }
 
-        public ServiceDetailsViewModel(ServiceItemViewModel serviceItemViewModel, NavigationStore navigationStore)
-        {
-            this.name = serviceItemViewModel.Name;
-            this.price = serviceItemViewModel.Price;
-            this.priceString = serviceItemViewModel.Price.ToString();
-            this.isRecurring = serviceItemViewModel.IsRecurring;
-            
-            this.serviceItemViewModel = serviceItemViewModel;
-            this.navigationStore = navigationStore;
-
-            this.SaveCommand = new DelegateCommand(this.SaveService, this.CanSaveService);
-            this.CancelCommand = new DelegateCommand(this.Cancel);
-        }
-
         public void SaveService(object? parameter)
         {
             try
             {
-                serviceDataProvider.UpdateService(this.Id);
-                MessageBox.Show($"Service record with ID {this.Id} updated.", "Service Updated", MessageBoxButton.OK, MessageBoxImage.Information);
+                int inputServiceResult = serviceDataProvider.UpdateService(this.Id);
+                this.messageBoxHelper.ShowInfoDialog($"Service record with ID {this.Id} updated.", "Service Updated");
                 this.NavigateBack();
             }
             catch (Exception exception)
             {
+                log.Error($"Error occurred attempting to update service with ID {this.Id}.");
                 log.Error(exception);
-                MessageBox.Show($"Error occurred attempting to update service.\r\nService was not updated.\r\nPlease see the log file for more information.", "Error Updating Service", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.messageBoxHelper.ShowErrorDialog(exception, "Error updating service");
                 this.Cancel(parameter);
             }
         }
@@ -206,7 +218,6 @@ namespace CustomerManagement.ViewModel
             this.serviceItemViewModel.Name = this.name;
             this.serviceItemViewModel.Price = this.price;
             this.serviceItemViewModel.IsRecurring = this.isRecurring;
-
             this.NavigateBack();
         }
     }

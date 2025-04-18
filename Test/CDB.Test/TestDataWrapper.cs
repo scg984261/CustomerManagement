@@ -1,12 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 using CDB.Model;
-using Moq;
-using System.Data;
 
 namespace CDB.Test
 {
     public class TestDataWrapper
     {
+        private DataWrapper testDataWrapper;
+
+        [SetUp]
+        public void Setup()
+        {
+            this.testDataWrapper = new DataWrapper();
+        }
+
         [Test]
         public void TestGetConnectionStringFromConfig_ShouldGetConnectionString()
         {
@@ -17,9 +24,7 @@ namespace CDB.Test
         [Test]
         public void TestSelectAllCustomers_ShouldReturnListOfCustomers()
         {
-            DataWrapper testWrapper = new DataWrapper();
-
-            List<Customer> customers = testWrapper.SelectAllCustomers();
+            List<Customer> customers = this.testDataWrapper.SelectAllCustomers();
 
             Assert.That(customers, Is.Not.Null);
             Assert.That(customers.Count, Is.GreaterThan(0));
@@ -36,15 +41,13 @@ namespace CDB.Test
 
             Customer testCustomer = new Customer(companyName, businessContact, emailAddress, contactNumber);
 
-            DataWrapper testWrapper = new DataWrapper();
-
-            int numberOfCustomers = testWrapper.context.Customers.Count();
+            int numberOfCustomers = this.testDataWrapper.context.Customers.Count();
 
             // Act.
-            testWrapper.InsertNewCustomer(testCustomer);
-            Customer newlyInsertedCustomer = testWrapper.context.Customers.OrderByDescending(cust => cust.Id).First();
+            this.testDataWrapper.InsertNewCustomer(testCustomer);
+            Customer newlyInsertedCustomer = this.testDataWrapper.context.Customers.OrderByDescending(cust => cust.Id).First();
 
-            int newNumberOfCustomers = testWrapper.context.Customers.Count();
+            int newNumberOfCustomers = this.testDataWrapper.context.Customers.Count();
 
             // Assert
             Assert.That(newNumberOfCustomers, Is.EqualTo(numberOfCustomers + 1));
@@ -76,16 +79,14 @@ namespace CDB.Test
         public void TestUpdateCustomer_ShouldUpdateCustomer()
         {
             // Arrange.
-            DataWrapper testWrapper = new DataWrapper();
-
-            Customer customerToUpdate = testWrapper.SelectAllCustomers().First(customer => customer.Id == 1);
+            Customer customerToUpdate = this.testDataWrapper.SelectAllCustomers().First(customer => customer.Id == 1);
 
             DateTime lastUpdateDateTime = customerToUpdate.LastUpdateDateTime;
 
             customerToUpdate.BusinessContact = "Test new value";
 
             // Act.
-            int updateResult = testWrapper.UpdateCustomer(1);
+            int updateResult = this.testDataWrapper.UpdateCustomer(1);
 
             // Assert.
             // 1 Row should have been updated, therefore Entity Framework should return 1.
@@ -115,12 +116,10 @@ namespace CDB.Test
         public void TestLoadSubscriptions_ShouldLoadSubscriptions()
         {
             // Arrange.
-            DataWrapper testWrapper = new DataWrapper();
-
-            Customer testCustomer = testWrapper.SelectAllCustomers().First(customer => customer.Id == 1);
+            Customer testCustomer = this.testDataWrapper.SelectAllCustomers().First(customer => customer.Id == 1);
 
             // Act.
-            testWrapper.LoadSubscriptions(testCustomer.Id);
+            this.testDataWrapper.LoadSubscriptions(testCustomer.Id);
 
             // Assert.
             const int expectedNumberOfServices = 4;
@@ -136,12 +135,12 @@ namespace CDB.Test
         public void TestLoadSubscriptions_ShouldThrowException()
         {
             // Arrange.
-            DataWrapper testWrapper = new DataWrapper();
             const int invalidCustomerId = -1;
 
             // Act.
-            InvalidOperationException expectedException = Assert.Throws<InvalidOperationException>(() => testWrapper.LoadSubscriptions(invalidCustomerId));
+            InvalidOperationException expectedException = Assert.Throws<InvalidOperationException>(() => this.testDataWrapper.LoadSubscriptions(invalidCustomerId));
 
+            // Cannot have a customer with a negative Customer ID, so this will throw an exception.
             const string expectedExceptionMessage = "Sequence contains no elements";
             Assert.That(expectedException.Message, Is.EqualTo(expectedExceptionMessage));
         }
@@ -149,9 +148,7 @@ namespace CDB.Test
         [Test]
         public void TestSelectAllServices_ShouldSelectAllServices()
         {
-            DataWrapper testWrapper = new DataWrapper();
-
-            List<Service> services = testWrapper.SelectAllServices();
+            List<Service> services = this.testDataWrapper.SelectAllServices();
 
             Assert.That(services, Is.Not.Null);
             Assert.That(services.Count, Is.GreaterThan(0));
@@ -161,9 +158,7 @@ namespace CDB.Test
         public void TestInsertNewService_ShouldInsertNewService()
         {
             // Arrange.
-            DataWrapper testWrapper = new DataWrapper();
-
-            int numberOfServices = testWrapper.context.Services.Count();
+            int numberOfServices = this.testDataWrapper.context.Services.Count();
             const string name = "Test new Service";
             const decimal price = 18425.91m;
             const bool isRecurring = true;
@@ -171,13 +166,13 @@ namespace CDB.Test
             Service testService = new Service(name, price, isRecurring);
 
             // Act.
-            int result = testWrapper.InsertNewService(testService);
+            int result = this.testDataWrapper.InsertNewService(testService);
 
             // Assert.
             const int expectedResult = 1;
             Assert.That(result, Is.EqualTo(expectedResult));
             Assert.That(testService.Id, Is.Not.EqualTo(0));
-            Assert.That(testWrapper.context.Services.Count(), Is.EqualTo(numberOfServices + 1));
+            Assert.That(this.testDataWrapper.context.Services.Count(), Is.EqualTo(numberOfServices + 1));
         }
 
         [Test]
@@ -205,13 +200,11 @@ namespace CDB.Test
         [Test]
         public void TestUpdateService_ShouldUpdateService()
         {
-            DataWrapper testWrapper = new DataWrapper();
-
-            Service serviceToUpdate = testWrapper.SelectAllServices().Where(service => service.Id == 1).First();
+            Service serviceToUpdate = this.testDataWrapper.SelectAllServices().Where(service => service.Id == 1).First();
             serviceToUpdate.Price = 1.99m;
             DateTime lastUpdateDateTime = serviceToUpdate.LastUpdateDateTime;
 
-            int updateServiceResult = testWrapper.UpdateService(1);
+            int updateServiceResult = this.testDataWrapper.UpdateService(1);
 
             Assert.That(updateServiceResult, Is.EqualTo(1));
             Assert.That(serviceToUpdate.LastUpdateDateTime, Is.GreaterThan(lastUpdateDateTime));
@@ -237,14 +230,13 @@ namespace CDB.Test
         [TearDown]
         public void TearDown()
         {
-            DataWrapper testWrapper = new DataWrapper();
-            Customer customerToReset = testWrapper.context.Customers.Where(cust => cust.Id == 1).First();
-            customerToReset.BusinessContact = "Test business contact";
-            testWrapper.UpdateCustomer(1);
+            Customer customerToReset = this.testDataWrapper.context.Customers.Where(cust => cust.Id == 1).First();
+            customerToReset.BusinessContact = "Test Business contact";
+            this.testDataWrapper.UpdateCustomer(1);
 
-            Service serviceToReset = testWrapper.SelectAllServices().Where(service => service.Id == 1).First();
+            Service serviceToReset = this.testDataWrapper.SelectAllServices().Where(service => service.Id == 1).First();
             serviceToReset.Price = 0.99m;
-            testWrapper.UpdateService(1);
+            this.testDataWrapper.UpdateService(1);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace CDB
     public class DataWrapper : IDataWrapper
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(DataWrapper));
+
         public CdbContext context;
         public static string DatabaseConnectionString = string.Empty;
 
@@ -51,6 +52,8 @@ namespace CDB
         {
             try
             {
+                const string storedProcedureName = "dbo.SelectAllCustomers";
+                this.context.RunSql<Customer>(storedProcedureName);
                 List<Customer> customerList = context.Customers.ToList();
                 log.Debug($"Customers successfully queried from CDB database. {customerList.Count} results returned.");
                 return customerList;
@@ -86,15 +89,15 @@ namespace CDB
             }
         }
 
-        public int UpdateCustomer(int id)
+        public int UpdateCustomer(int customerId)
         {
-            Customer customerToUpdate = this.context.Customers.Where(customer => customer.Id == id).First();
+            Customer customerToUpdate = this.context.Customers.Where(customer => customer.Id == customerId).First();
 
             try
             {
                 int dbUpdateResult = context.SaveChanges();
                 this.context.Entry(customerToUpdate).Reload();
-                log.Debug($"Status code {dbUpdateResult} returned. Attempting to update customer with ID {id}.");
+                log.Debug($"Status code {dbUpdateResult} returned. Attempting to update customer with ID {customerId}.");
                 return dbUpdateResult;
             }
             catch (Exception exception)
@@ -110,13 +113,15 @@ namespace CDB
             {
                 Customer customer = this.context.Customers.First(customer => customer.Id == customerId);
 
-                // Load the subscriptions.
-                this.context.Entry(customer).Collection(customer => customer.Subscriptions).Load();
+                List<Subscription> subscriptions = this.context.RunSql<Subscription>($"SelectSubscriptionsForCustomer {customerId}").ToList();
+                log.Debug($"Subscriptions loaded for customer with ID {customerId}. {subscriptions.Count} records returned.");
 
+                // Load the subscriptions.
                 // For each of the subscriptions loaded, load the service from the data context.
                 foreach (Subscription sub in customer.Subscriptions)
                 {
                     this.context.Entry(sub).Reference(sub => sub.Service).Load();
+                    log.Debug($"Service loaded for customer with ID {customer.Id}. Service ID is {sub.Service.Id}.");
                 }
             }
             catch (Exception exception)
@@ -134,6 +139,8 @@ namespace CDB
         {
             try
             {
+                const string storedProcedureName = "dbo.SelectAllServices";
+                this.context.RunSql<Customer>(storedProcedureName);
                 List<Service> services = this.context.Services.ToList();
                 log.Debug($"Services successfully obtained from Data Context. {services.Count} services returned.");
                 return services;

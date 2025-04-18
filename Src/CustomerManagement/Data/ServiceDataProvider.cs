@@ -7,12 +7,24 @@ namespace CustomerManagement.Data
     public interface IServiceDataProvider
     {
         List<Service> GetAll();
+        int InsertNewService(Service service);
+        int UpdateService(int serviceId);
     }
 
     public class ServiceDataProvider : IServiceDataProvider
     {
-        private static readonly DataWrapper cdbDataWrapper = new DataWrapper();
+        private readonly IDataWrapper cdbDataWrapper;
         private static readonly ILog log = LogManager.GetLogger(typeof(ServiceDataProvider));
+
+        public ServiceDataProvider()
+        {
+            this.cdbDataWrapper = new DataWrapper();
+        }
+
+        public ServiceDataProvider(IDataWrapper dataWrapper)
+        {
+            this.cdbDataWrapper = dataWrapper;
+        }
 
         public List<Service> GetAll()
         {
@@ -29,11 +41,12 @@ namespace CustomerManagement.Data
             }
         }
 
-        public void InsertNewService(Service service)
+        public int InsertNewService(Service service)
         {
             try
             {
-                cdbDataWrapper.InsertNewService(service);
+                int insertResult = cdbDataWrapper.InsertNewService(service);
+                return insertResult;
             }
             catch (Exception exception)
             {
@@ -42,11 +55,12 @@ namespace CustomerManagement.Data
             }
         }
 
-        public void UpdateService(int serviceId)
+        public int UpdateService(int serviceId)
         {
             try
             {
-                cdbDataWrapper.UpdateService(serviceId);
+                int updateResult = cdbDataWrapper.UpdateService(serviceId);
+                return updateResult;
             }
             catch (Exception exception)
             {

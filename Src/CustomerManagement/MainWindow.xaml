@@ -6,26 +6,27 @@
         xmlns:userControls="clr-namespace:CustomerManagement.View.UserControls"
         xmlns:local="clr-namespace:CustomerManagement"
         xmlns:view="clr-namespace:CustomerManagement.View"
-        xmlns:viewModel="clr-namespace:CustomerManagement.ViewModel"
+        xmlns:customerViewModels="clr-namespace:CustomerManagement.ViewModel.CustomerViewModels"
+        xmlns:serviceViewModels="clr-namespace:CustomerManagement.ViewModel.ServiceViewModels"
         WindowStartupLocation="CenterScreen"
-        Title="CMS" Height="900" Width="1500">
+        Title="CMS" Height="650" Width="900">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type viewModel:CustomersViewModel}">
+        <DataTemplate DataType="{x:Type customerViewModels:CustomersViewModel}">
             <view:CustomersView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:ServicesViewModel}">
+        <DataTemplate DataType="{x:Type serviceViewModels:ServicesViewModel}">
             <view:ServicesView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:CustomerDetailsViewModel}">
+        <DataTemplate DataType="{x:Type customerViewModels:CustomerDetailsViewModel}">
             <view:CustomerDetailsView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:ServiceDetailsViewModel}">
+        <DataTemplate DataType="{x:Type serviceViewModels:ServiceDetailsViewModel}">
             <view:ServiceDetailsView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:NewCustomerViewModel}">
+        <DataTemplate DataType="{x:Type customerViewModels:NewCustomerViewModel}">
             <view:NewCustomerView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:NewServiceViewModel}">
+        <DataTemplate DataType="{x:Type serviceViewModels:NewServiceViewModel}">
             <view:NewServiceView />
         </DataTemplate>
     </Window.Resources>
@@ -53,7 +54,7 @@
             </Menu>
         </Border>
 
-        <!-- Show either the Customers View Model or the Customers View Model. -->
+        <!-- Show either the Customers View Model or the Services View Model. -->
         <ContentControl Grid.Row="1" Grid.Column="0" Content="{Binding SelectedViewModel}" />
 
         <userControls:FooterBar Grid.Row="2" />

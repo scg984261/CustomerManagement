@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CustomerManagement.ViewModel;
-using CustomerManagement.Data;
+﻿using CustomerManagement.ViewModel;
 
 namespace CustomerManagement.Navigation
 {
     public class NavigationStore : ViewModelBase
     {
         private ViewModelBase? selectedViewModel;
+
+        public event Action? SelectedViewModelChanged;
+
+        public NavigationStore()
+        {
+        }
+
         public ViewModelBase? SelectedViewModel
         {
             get
@@ -30,15 +30,10 @@ namespace CustomerManagement.Navigation
             }
         }
 
-        public event Action? SelectedViewModelChanged;
-
-        public NavigationStore()
-        {
-        }
-
         public void NotifyCurrentViewModelChanged()
         {
-            this.SelectedViewModelChanged?.Invoke();
+            // Notify that the front-end that the selected viewmodel has changed.
+             this.SelectedViewModelChanged?.Invoke();
         }
     }
 }

@@ -15,30 +15,25 @@
             this.Subscriptions = new List<Subscription>();
         }
 
-        public Customer(int id, string companyName, string businessContact, string emailAddress, string contactNumber, DateTime createdDateTime, DateTime lastUpdateDateTime)
-        {
-            this.Id = id;
-            this.CompanyName = companyName;
-            this.BusinessContact = businessContact;
-            this.EmailAddress = emailAddress;
-            this.ContactNumber = contactNumber;
-            this.IsActive = true;
-            this.CreatedDateTime = createdDateTime;
-            this.LastUpdateDateTime = lastUpdateDateTime;
-            this.Subscriptions = new List<Subscription>();
-        }
-
         public Customer(string? companyName, string? businessContact, string? emailAddress, string? contactNumber)
         {
             if (companyName != null)
             {
                 this.CompanyName = companyName;
             }
-            
+
             this.BusinessContact = businessContact;
             this.EmailAddress = emailAddress;
             this.ContactNumber = contactNumber;
             this.IsActive = true;
+        }
+
+        public Customer(int id, string companyName, string businessContact, string emailAddress, string contactNumber, DateTime createdDateTime, DateTime lastUpdateDateTime) : this(companyName, businessContact, emailAddress, contactNumber)
+        {
+            this.Id = id;
+            this.CreatedDateTime = createdDateTime;
+            this.LastUpdateDateTime = lastUpdateDateTime;
+            this.Subscriptions = new List<Subscription>();
         }
 
         public bool Equals(Customer? customer)
