@@ -114,6 +114,7 @@ namespace CustomerManagement.ViewModel.ServiceViewModels
                     this.AddError(errorMessage);
                     this.serviceItemViewModel.Price = 0m;
                     this.NotifyPropertyChanged(nameof(PriceFormatted));
+                    this.SaveCommand.RaiseCanExecuteChanged();
                     return;
                 }
                 else

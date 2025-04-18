@@ -5,6 +5,13 @@ namespace CustomerManagement.Navigation
     public class NavigationStore : ViewModelBase
     {
         private ViewModelBase? selectedViewModel;
+
+        public event Action? SelectedViewModelChanged;
+
+        public NavigationStore()
+        {
+        }
+
         public ViewModelBase? SelectedViewModel
         {
             get
@@ -21,12 +28,6 @@ namespace CustomerManagement.Navigation
                     this.NotifyCurrentViewModelChanged();
                 }
             }
-        }
-
-        public event Action? SelectedViewModelChanged;
-
-        public NavigationStore()
-        {
         }
 
         public void NotifyCurrentViewModelChanged()

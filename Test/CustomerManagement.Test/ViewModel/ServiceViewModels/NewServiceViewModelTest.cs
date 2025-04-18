@@ -54,6 +54,7 @@ namespace CustomerManagement.Test.ViewModel.ServiceViewModels
             IEnumerable<string>? errors = this.testNewServiceViewModel.GetErrors(nameof(this.testNewServiceViewModel.Name)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
             Assert.That(errors.ToList()[0], Is.EqualTo("Name of service cannot be blank"));
             Assert.That(this.testNewServiceViewModel.CanSaveService(new object()), Is.False);
@@ -67,6 +68,7 @@ namespace CustomerManagement.Test.ViewModel.ServiceViewModels
             IEnumerable<string>? errors = this.testNewServiceViewModel.GetErrors(nameof(this.testNewServiceViewModel.Name)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(0));
         }
 
@@ -89,6 +91,7 @@ namespace CustomerManagement.Test.ViewModel.ServiceViewModels
 
             // Assert.
             Assert.That(this.testNewServiceViewModel.Price, Is.EqualTo(0.0m));
+            Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
             Assert.That(errors.ToList()[0], Is.EqualTo("Price cannot be blank!"));
             Assert.That(this.testNewServiceViewModel.CanSaveService(new object()), Is.False);
@@ -102,6 +105,7 @@ namespace CustomerManagement.Test.ViewModel.ServiceViewModels
             IEnumerable<string>? errors = this.testNewServiceViewModel.GetErrors(nameof(this.testNewServiceViewModel.PriceString)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
             Assert.That(errors.ToList()[0], Is.EqualTo("Value must be a valid decimal."));
             Assert.That(this.testNewServiceViewModel.Price, Is.EqualTo(0.0m));
@@ -121,6 +125,7 @@ namespace CustomerManagement.Test.ViewModel.ServiceViewModels
             IEnumerable<string>? errors = this.testNewServiceViewModel.GetErrors(nameof(this.testNewServiceViewModel.PriceString)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(0));
             Assert.That(this.testNewServiceViewModel.Price, Is.EqualTo(expectedPrice));
             Assert.That(this.testNewServiceViewModel.PriceFormatted, Is.EqualTo(expectedPriceFormatted));
@@ -139,6 +144,7 @@ namespace CustomerManagement.Test.ViewModel.ServiceViewModels
             IEnumerable<string>? errors = this.testNewServiceViewModel.GetErrors(nameof(this.testNewServiceViewModel.PriceString)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(expectedNumberOfErrors));
             Assert.That(this.testNewServiceViewModel.PriceFormatted, Is.EqualTo(expectedFormattedPrice));
         }

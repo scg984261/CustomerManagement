@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
-using log4net;
 using CDB.Model;
 using CustomerManagement.Command;
 using CustomerManagement.Data;
 using CustomerManagement.Navigation;
 using CustomerManagement.Windows;
+using log4net;
 
 namespace CustomerManagement.ViewModel.CustomerViewModels
 {

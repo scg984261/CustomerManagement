@@ -161,7 +161,9 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
                     ParentCustomersViewModel.Customers.Add(customerItemViewModel);
                 }
 
-                log.Info($"Customer with ID {customerItemViewModel.Id} successfully added.");
+                string message = $"Customer with ID {customerItemViewModel.Id} successfully added.";
+                this.messageBoxHelper.ShowInfoDialog(message, "New Customer Added");
+                log.Info(message);
             }
             catch (Exception exception)
             {

@@ -58,6 +58,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             IEnumerable<string>? errors = this.testNewCustomerViewModel.GetErrors(nameof(this.testNewCustomerViewModel.CompanyName)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
             Assert.That(errors.ToList()[0], Is.EqualTo("Company name cannot be blank."));
             Assert.That(this.testNewCustomerViewModel.CanSaveCustomer(new object()), Is.False);
@@ -71,6 +72,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             IEnumerable<string>? errors = this.testNewCustomerViewModel.GetErrors(nameof(this.testNewCustomerViewModel.CompanyName)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(this.testNewCustomerViewModel.CompanyName, Is.EqualTo("Test company name."));
             Assert.That(errors.Count, Is.EqualTo(0));
         }
@@ -83,6 +85,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             IEnumerable<string>? errors = this.testNewCustomerViewModel.GetErrors(nameof(this.testNewCustomerViewModel.BusinessContact)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
             Assert.That(errors.ToList()[0], Is.EqualTo("Business contact cannot be blank."));
             Assert.That(this.testNewCustomerViewModel.CanSaveCustomer(new object()), Is.False);
@@ -96,6 +99,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             IEnumerable<string>? errors = this.testNewCustomerViewModel.GetErrors(nameof(this.testNewCustomerViewModel.BusinessContact)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(this.testNewCustomerViewModel.BusinessContact, Is.EqualTo("Test business contact."));
             Assert.That(errors.Count, Is.EqualTo(0));
         }
@@ -108,6 +112,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             IEnumerable<string>? errors = this.testNewCustomerViewModel.GetErrors(nameof(this.testNewCustomerViewModel.ContactNumber)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
             Assert.That(errors.ToList()[0], Is.EqualTo("Contact Number cannot be blank."));
             Assert.That(this.testNewCustomerViewModel.CanSaveCustomer(new object()), Is.False);
@@ -121,6 +126,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             IEnumerable<string>? errors = this.testNewCustomerViewModel.GetErrors(nameof(this.testNewCustomerViewModel.ContactNumber)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(this.testNewCustomerViewModel.ContactNumber, Is.EqualTo("Test contact number"));
             Assert.That(errors.Count, Is.EqualTo(0));
         }
@@ -133,6 +139,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             IEnumerable<string>? errors = this.testNewCustomerViewModel.GetErrors(nameof(this.testNewCustomerViewModel.EmailAddress)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(errors.Count, Is.EqualTo(1));
             Assert.That(errors.ToList()[0], Is.EqualTo("Email Address cannot be blank."));
             Assert.That(this.testNewCustomerViewModel.CanSaveCustomer(new object()), Is.False);
@@ -146,6 +153,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             IEnumerable<string>? errors = this.testNewCustomerViewModel.GetErrors(nameof(this.testNewCustomerViewModel.EmailAddress)) as IEnumerable<string>;
 
             // Assert.
+            Assert.That(errors, Is.Not.Null);
             Assert.That(this.testNewCustomerViewModel.EmailAddress, Is.EqualTo("Test email address"));
             Assert.That(errors.Count, Is.EqualTo(0));
         }
@@ -185,6 +193,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             this.testNewCustomerViewModel.SaveCustomer(new object());
 
             Assert.That(this.testCustomersViewModel.Customers.Count(), Is.EqualTo(0));
+            // Assert that the ViewModel has navigated back.
             Assert.That(this.testNavigationStore.SelectedViewModel is CustomersViewModel);
         }
 

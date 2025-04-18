@@ -12,10 +12,13 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
         private Customer customer;
         private CustomerItemViewModel customerItemViewModel;
         private NavigationStore navigationStore;
+
         private Mock<ICustomerDataProvider> mockCustomerDataProvider;
         private ICustomerDataProvider testCustomerDataProvider;
+
         private Mock<IMessageBoxHelper> mockMessageBoxHelper;
         private IMessageBoxHelper mockMessageBoxHelperObject;
+
         private CustomerDetailsViewModel testCustomerDetailsViewModel;
 
         [SetUp]
