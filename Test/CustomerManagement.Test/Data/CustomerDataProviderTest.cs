@@ -1,18 +1,29 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using CustomerManagement.Data;
 using CDB;
 using CDB.Model;
-using CustomerManagement.Data;
 using Moq;
 
 namespace CustomerManagement.Test.Data
 {
     public class CustomerDataProviderTest
     {
+        private Mock<IDataWrapper> mockDataWrapper;
+        private IDataWrapper mockDataWrapperObject;
+        private CustomerDataProvider testCustomerDataProvider;
+
+        [SetUp]
+        public void Setup()
+        {
+            this.mockDataWrapper = new Mock<IDataWrapper>();
+            this.mockDataWrapperObject = this.mockDataWrapper.Object;
+            this.testCustomerDataProvider = new CustomerDataProvider(this.mockDataWrapperObject);
+        }
+
         [Test]
         public void TestGetAll_ShouldGetAll()
         {
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
-
+            // Arrange.
             List<Customer> mockCustomerList = new List<Customer>
             {
                 new Customer(1, "Test company Name 1", "test business contact 1", "test@emailaddrss.com", "012586942345", new DateTime(2025, 04, 5, 20, 42, 41), new DateTime(2025, 04, 5, 20, 43, 02)),
@@ -20,38 +31,34 @@ namespace CustomerManagement.Test.Data
                 new Customer(3, "Cursus A Incorporated", "Paul Everett", "curabitur.egestas.nunc@aol.ca", "(01746) 433844", new DateTime(2025, 04, 5, 20, 42, 51), new DateTime(2025, 04, 5, 20, 43, 02))
             };
 
-            mockDataWrapper.Setup(wrapper => wrapper.SelectAllCustomers()).Returns(mockCustomerList);
+            this.mockDataWrapper.Setup(wrapper => wrapper.SelectAllCustomers()).Returns(mockCustomerList);
 
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
+            // Act.
+            List<Customer> testCustomers = this.testCustomerDataProvider.GetAll();
 
-            CustomerDataProvider testCustomerDataProvider = new CustomerDataProvider(mockDataWrapperObject);
-
-            List<Customer> testCustomers = testCustomerDataProvider.GetAll();
-
+            // Assert.
             Assert.That(testCustomers.Count, Is.EqualTo(3));
         }
 
         [Test]
         public void TestGetAll_ShouldThrowException()
         {
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
-
+            // Arrange.
             DbUpdateException dbUpdateException = new DbUpdateException("Test database update exception");
 
-            mockDataWrapper.Setup(wrapper => wrapper.SelectAllCustomers()).Throws(dbUpdateException);
+            this.mockDataWrapper.Setup(wrapper => wrapper.SelectAllCustomers()).Throws(dbUpdateException);
 
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
+            // Act.
+            DbUpdateException expectedException = Assert.Throws<DbUpdateException>(() => this.testCustomerDataProvider.GetAll());
 
-            CustomerDataProvider testCustomerDataProvider = new CustomerDataProvider(mockDataWrapperObject);
-
-            DbUpdateException expectedException = Assert.Throws<DbUpdateException>(() => testCustomerDataProvider.GetAll());
-
+            // Assert.
             Assert.That(expectedException.Message, Is.EqualTo("Test database update exception"));
         }
 
         [Test]
         public void TestInsertNewCustomer_ShouldInsertNewCustomer()
         {
+            // Arrange.
             Customer testCustomer = new Customer
             {
                 CompanyName = "Sociosqu Ad Litora Associates",
@@ -59,22 +66,19 @@ namespace CustomerManagement.Test.Data
                 ContactNumber = "056 4025 5806",
                 EmailAddress = "amet.metus.aliquam@yahoo.net",
             };
+            this.mockDataWrapper.Setup(dataWrapper => dataWrapper.InsertNewCustomer(It.IsAny<Customer>())).Returns(1);
 
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
-            mockDataWrapper.Setup(dataWrapper => dataWrapper.InsertNewCustomer(It.IsAny<Customer>())).Returns(1);
+            // Act.
+            int result = this.testCustomerDataProvider.InsertNewCustomer(testCustomer);
 
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
-
-            CustomerDataProvider testCustomerDataProvider = new CustomerDataProvider(mockDataWrapperObject);
-
-            int result = testCustomerDataProvider.InsertNewCustomer(testCustomer);
-
+            // Assert.
             Assert.That(result, Is.EqualTo(1));
         }
 
         [Test]
         public void TestInsertNewCustomer_ShouldThrowException()
         {
+            // Arrange.
             Customer testCustomer = new Customer
             {
                 CompanyName = null,
@@ -84,22 +88,19 @@ namespace CustomerManagement.Test.Data
             };
 
             DbUpdateException dbUpdateException = new DbUpdateException("Test database update exception");
-
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
             mockDataWrapper.Setup(wrapper => wrapper.InsertNewCustomer(It.IsAny<Customer>())).Throws(dbUpdateException);
 
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
-
-            CustomerDataProvider testCustomerDataProvider = new CustomerDataProvider(mockDataWrapperObject);
-
-            DbUpdateException expectedException = Assert.Throws<DbUpdateException>(() => testCustomerDataProvider.InsertNewCustomer(testCustomer));
-
+            // Act.
+            DbUpdateException expectedException = Assert.Throws<DbUpdateException>(() => this.testCustomerDataProvider.InsertNewCustomer(testCustomer));
+            
+            // Assert.
             Assert.That(expectedException.Message, Is.EqualTo("Test database update exception"));
         }
 
         [Test]
         public void TestUpdateCustomer_ShouldUpdateCustomer()
         {
+            // Arrange.
             Customer testCustomer = new Customer
             {
                 Id = 2,
@@ -111,21 +112,19 @@ namespace CustomerManagement.Test.Data
                 LastUpdateDateTime = new DateTime()
             };
 
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
-            mockDataWrapper.Setup(dataWrapper => dataWrapper.UpdateCustomer(2)).Returns(1);
+            this.mockDataWrapper.Setup(dataWrapper => dataWrapper.UpdateCustomer(2)).Returns(1);
 
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
+            // Act.
+            int result = this.testCustomerDataProvider.UpdateCustomer(testCustomer.Id);
 
-            CustomerDataProvider testCustomerDataProvider = new CustomerDataProvider(mockDataWrapperObject);
-
-            int result = testCustomerDataProvider.UpdateCustomer(testCustomer.Id);
-
+            // Assert.
             Assert.That(result, Is.EqualTo(1));
         }
 
         [Test]
         public void TestUpdateCustomer_ShouldThrowException()
         {
+            // Arrange
             Customer testCustomer = new Customer
             {
                 Id = 3,
@@ -139,15 +138,12 @@ namespace CustomerManagement.Test.Data
 
             DbUpdateException dbUpdateException = new DbUpdateException("Test database update exception attempting to update customer");
 
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
-            mockDataWrapper.Setup(dataWrapper => dataWrapper.UpdateCustomer(3)).Throws(dbUpdateException);
+            this.mockDataWrapper.Setup(dataWrapper => dataWrapper.UpdateCustomer(3)).Throws(dbUpdateException);
 
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
+            // Act.
+            DbUpdateException expectedException = Assert.Throws<DbUpdateException>(() => this.testCustomerDataProvider.UpdateCustomer(testCustomer.Id));
 
-            CustomerDataProvider testCustomerDataProvider = new CustomerDataProvider(mockDataWrapperObject);
-
-            DbUpdateException expectedException = Assert.Throws<DbUpdateException>(() => testCustomerDataProvider.UpdateCustomer(testCustomer.Id));
-
+            // Assert.
             Assert.That(expectedException.Message, Is.EqualTo("Test database update exception attempting to update customer"));
         }
 
@@ -170,16 +166,14 @@ namespace CustomerManagement.Test.Data
         [Test]
         public void TestLoadSubscriptions_ShouldThrowException()
         {
+            // Arrange.
             InvalidOperationException testException = new InvalidOperationException("Test Exception occurred attempting to load subscriptions.");
-            Mock<IDataWrapper> mockDataWrapper = new Mock<IDataWrapper>();
-            mockDataWrapper.Setup(dataWrapper => dataWrapper.LoadSubscriptions(It.IsAny<int>())).Throws(testException);
+            this.mockDataWrapper.Setup(dataWrapper => dataWrapper.LoadSubscriptions(It.IsAny<int>())).Throws(testException);
 
-            IDataWrapper mockDataWrapperObject = mockDataWrapper.Object;
+            // Act.
+            InvalidOperationException expectedException = Assert.Throws<InvalidOperationException>(() => this.testCustomerDataProvider.LoadSubscriptions(123));
 
-            CustomerDataProvider testCustomerDataProvider = new CustomerDataProvider(mockDataWrapperObject);
-
-            InvalidOperationException expectedException = Assert.Throws<InvalidOperationException>(() => testCustomerDataProvider.LoadSubscriptions(123));
-
+            // Assert.
             Assert.That(expectedException.Message, Is.EqualTo("Test Exception occurred attempting to load subscriptions."));
         }
     }
