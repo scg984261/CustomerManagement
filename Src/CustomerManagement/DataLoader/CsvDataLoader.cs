@@ -83,7 +83,7 @@ namespace CustomerManagement.DataLoader
                 }
                 catch (Exception exception)
                 {
-                    string errorMessage = $"Exception of type {exception.GetType().FullName} occurred attemtping to insert customer into database from line {line}.\r\nError message: {exception.Message}.";
+                    string errorMessage = $"Exception of type {exception.GetType().FullName} occurred attempting to insert customer into database from line {line}.\r\nError message: {exception.Message}.";
                     log.Error(errorMessage);
                 }
             }

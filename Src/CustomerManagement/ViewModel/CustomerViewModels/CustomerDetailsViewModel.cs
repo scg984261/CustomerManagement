@@ -20,7 +20,7 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
         private readonly string? initialEmailAddress;
         private readonly bool initialIsActive;
 
-        private static readonly ILog log = LogManager.GetLogger(typeof(CustomersViewModel));
+        private static readonly ILog log = LogManager.GetLogger(typeof(CustomerDetailsViewModel));
         private static readonly string dateTimeFormat = "dd-MMM-yyyy HH:mm:ss";
 
         public List<ServiceItemViewModel> RecurringServices { get; set; }
