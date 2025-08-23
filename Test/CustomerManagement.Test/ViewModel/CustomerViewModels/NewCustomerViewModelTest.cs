@@ -44,10 +44,10 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
 
             Assert.That(this.testNewCustomerViewModel.NavigateBackCommand, Is.Not.Null);
             Assert.That(this.testNewCustomerViewModel.SaveCustomerCommand, Is.Not.Null);
-            Assert.That(this.testNewCustomerViewModel.CompanyName, Is.Null);
-            Assert.That(this.testNewCustomerViewModel.BusinessContact, Is.Null);
-            Assert.That(this.testNewCustomerViewModel.EmailAddress, Is.Null);
-            Assert.That(this.testNewCustomerViewModel.ContactNumber, Is.Null);
+            Assert.That(this.testNewCustomerViewModel.CompanyName, Is.EqualTo(string.Empty));
+            Assert.That(this.testNewCustomerViewModel.BusinessContact, Is.EqualTo(string.Empty));
+            Assert.That(this.testNewCustomerViewModel.EmailAddress, Is.EqualTo(string.Empty));
+            Assert.That(this.testNewCustomerViewModel.ContactNumber, Is.EqualTo(string.Empty));
         }
 
         [Test]

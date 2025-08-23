@@ -105,7 +105,7 @@ namespace CustomerManagement.Test.ViewModel
         }
 
         [Test]
-        public void TestSelectViewModel_ShouldSelectVieModel()
+        public void TestSelectViewModel_ShouldSelectViewModel()
         {
             // Arrange.
             // Set the SelectedViewModel to the CustomersViewModel.
