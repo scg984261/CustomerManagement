@@ -164,8 +164,8 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
         [Test]
         public void TestSetIsActive()
         {
-            this.testCustomerViewModelBase.IsActive = false;
-            Assert.That(this.testCustomerViewModelBase.IsActive, Is.False);
+            this.testCustomerViewModelBase.IsActive = true;
+            Assert.That(this.testCustomerViewModelBase.IsActive, Is.True);
         }
 
         [Test]
