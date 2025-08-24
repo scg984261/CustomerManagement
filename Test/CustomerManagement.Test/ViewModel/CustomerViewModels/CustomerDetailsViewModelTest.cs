@@ -229,7 +229,7 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
         }
 
         [Test]
-        public void TestSaveCustomer_ShouldCatchExceptionAndCancel()
+        public void TestSaveCustomer_ShouldCatchExceptionAndCancel_AndResetValues()
         {
             // Arrange.
             this.mockCustomerDataProvider.Setup(dataProvider => dataProvider.UpdateCustomer(52)).Throws(new Exception("Test exception attempting to update customer details."));
@@ -244,6 +244,11 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
 
             // Assert.
             // Check that the fields have been reset.
+            Assert.That(this.testCustomerDetailsViewModel.CompanyName, Is.EqualTo("Test company name"));
+            Assert.That(this.testCustomerDetailsViewModel.BusinessContact, Is.EqualTo("Test business contact"));
+            Assert.That(this.testCustomerDetailsViewModel.EmailAddress, Is.EqualTo("test.email@hotmail.com"));
+            Assert.That(this.testCustomerDetailsViewModel.ContactNumber, Is.EqualTo("01425987635"));
+
             Assert.That(this.customerItemViewModel.CompanyName, Is.EqualTo("Test company name"));
             Assert.That(this.customerItemViewModel.BusinessContact, Is.EqualTo("Test business contact"));
             Assert.That(this.customerItemViewModel.EmailAddress, Is.EqualTo("test.email@hotmail.com"));
