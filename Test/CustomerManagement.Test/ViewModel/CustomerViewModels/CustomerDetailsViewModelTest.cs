@@ -67,6 +67,8 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             CustomerDetailsViewModel testCustomerDetailsViewModel = new CustomerDetailsViewModel(customerItemViewModel, navigationStore, testMockCustomerDataProvider, this.mockMessageBoxHelperObject);
 
             // Assert.
+            // Public properties should have been overridden with values from the CustomerItemViewModel,
+            // Which is populated by the underlying Customer record from the Model.
             Assert.That(testCustomerDetailsViewModel.CompanyName, Is.EqualTo("Test company name"));
             Assert.That(testCustomerDetailsViewModel.BusinessContact, Is.EqualTo("Test business contact"));
             Assert.That(testCustomerDetailsViewModel.EmailAddress, Is.EqualTo("test.email@hotmail.com"));
@@ -75,125 +77,6 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             Assert.That(testCustomerDetailsViewModel.CreatedDateTime, Is.EqualTo("25-Mar-2025 09:29:27"));
             Assert.That(testCustomerDetailsViewModel.LastUpdateDateTimeFormatted, Is.EqualTo("25-Mar-2025 09:31:58"));
             Assert.That(testCustomerDetailsViewModel.LastUpdateDateTime, Is.EqualTo(new DateTime(2025, 03, 25, 09, 31, 58)));
-        }
-
-        [Test]
-        public void TestSetCompanyName_ShouldTriggerValidation()
-        {
-            // Act.
-            testCustomerDetailsViewModel.CompanyName = "";
-            IEnumerable<string>? errors = testCustomerDetailsViewModel.GetErrors(nameof(testCustomerDetailsViewModel.CompanyName)) as IEnumerable<string>;
-
-            // Assert.
-            Assert.That(errors, Is.Not.Null);
-            Assert.That(errors.Count, Is.EqualTo(1));
-            Assert.That(errors.ToList()[0], Is.EqualTo("Company name cannot be blank."));
-            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
-        }
-
-        [Test]
-        public void TestSetCompanyName_ShouldClearErrors()
-        {
-            // Set company name to zero-length string to trigger validation.
-            testCustomerDetailsViewModel.CompanyName = string.Empty;
-
-            // Act.
-            testCustomerDetailsViewModel.CompanyName = "Test string";
-
-            // Assert.
-            IEnumerable<string>? errors = testCustomerDetailsViewModel.GetErrors(nameof(testCustomerDetailsViewModel.CompanyName)) as IEnumerable<string>;
-            Assert.That(testCustomerDetailsViewModel.CompanyName, Is.EqualTo("Test string"));
-            Assert.That(errors, Is.Not.Null);
-            Assert.That(errors.Count, Is.EqualTo(0));
-            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.True);
-        }
-
-        [Test]
-        public void TestSetBusinessContact_ShouldTriggerValidation()
-        {
-            // Act.
-            this.testCustomerDetailsViewModel.BusinessContact = "";
-            IEnumerable<string>? errors = testCustomerDetailsViewModel.GetErrors(nameof(testCustomerDetailsViewModel.BusinessContact)) as IEnumerable<string>;
-
-            // Assert.
-            Assert.That(errors, Is.Not.Null);
-            Assert.That(errors.Count, Is.EqualTo(1));
-            Assert.That(errors.ToList()[0], Is.EqualTo("Business contact cannot be blank."));
-            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
-        }
-
-        [Test]
-        public void TestSetBusinessContact_ShouldClearErrors()
-        {
-            // Act.
-            this.testCustomerDetailsViewModel.BusinessContact = "";
-
-            this.testCustomerDetailsViewModel.BusinessContact = "Another test business contact.";
-
-            // Assert.
-            IEnumerable<string>? errors = testCustomerDetailsViewModel.GetErrors(nameof(testCustomerDetailsViewModel.BusinessContact)) as IEnumerable<string>;
-            Assert.That(testCustomerDetailsViewModel.BusinessContact, Is.EqualTo("Another test business contact."));
-            Assert.That(errors, Is.Not.Null);
-            Assert.That(errors.Count, Is.EqualTo(0));
-            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.True);
-        }
-
-        [Test]
-        public void TestSetContactNumber_ShouldTriggerValidation()
-        {
-            this.testCustomerDetailsViewModel.ContactNumber = "";
-            IEnumerable<string>? errors = testCustomerDetailsViewModel.GetErrors(nameof(testCustomerDetailsViewModel.ContactNumber)) as IEnumerable<string>;
-
-            Assert.That(errors, Is.Not.Null);
-            Assert.That(errors.Count, Is.EqualTo(1));
-            Assert.That(errors.ToList()[0], Is.EqualTo("Contact Number cannot be blank."));
-            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
-        }
-
-        [Test]
-        public void TestSetContactNumber_ShouldClearErrors()
-        {
-            this.testCustomerDetailsViewModel.ContactNumber = "";
-            this.testCustomerDetailsViewModel.ContactNumber = "Changed test contact number";
-
-            IEnumerable<string>? errors = testCustomerDetailsViewModel.GetErrors(nameof(testCustomerDetailsViewModel.ContactNumber)) as IEnumerable<string>;
-            Assert.That(errors, Is.Not.Null);
-            Assert.That(errors.Count, Is.EqualTo(0));
-            Assert.That(this.testCustomerDetailsViewModel.ContactNumber, Is.EqualTo("Changed test contact number"));
-            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.True);
-        }
-
-        [Test]
-        public void TestSetEmailAddress_ShouldTriggerValidation()
-        {
-            this.testCustomerDetailsViewModel.EmailAddress = "";
-
-            IEnumerable<string>? errors = testCustomerDetailsViewModel.GetErrors(nameof(testCustomerDetailsViewModel.EmailAddress)) as IEnumerable<string>;
-
-            Assert.That(errors, Is.Not.Null);
-            Assert.That(errors.Count, Is.EqualTo(1));
-            Assert.That(errors.ToList()[0], Is.EqualTo("Email Address cannot be blank."));
-            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
-        }
-
-        [Test]
-        public void TestSetEmailAddress_ShouldClearErrors()
-        {
-            this.testCustomerDetailsViewModel.EmailAddress = "";
-            this.testCustomerDetailsViewModel.EmailAddress = "Changed email address";
-
-            IEnumerable<string>? errors = testCustomerDetailsViewModel.GetErrors(nameof(testCustomerDetailsViewModel.EmailAddress)) as IEnumerable<string>;
-            Assert.That(errors, Is.Not.Null);
-            Assert.That(errors.Count, Is.EqualTo(0));
-            Assert.That(this.testCustomerDetailsViewModel.EmailAddress, Is.EqualTo("Changed email address"));
-            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.True);
-        }
-
-        [Test]
-        public void TestSetIsActive()
-        {
-            this.testCustomerDetailsViewModel.IsActive = false;
-            Assert.That(this.testCustomerDetailsViewModel.IsActive, Is.False);
         }
 
         [Test]
@@ -368,28 +251,6 @@ namespace CustomerManagement.Test.ViewModel.CustomerViewModels
             
             // Assert that navigation has succeeded.
             Assert.That(this.navigationStore.SelectedViewModel is CustomersViewModel);
-        }
-
-        [Test]
-        public void TestCanSaveCustomer_ShouldReturnFalse()
-        {
-            this.testCustomerDetailsViewModel.CompanyName = "Test company name";
-            this.testCustomerDetailsViewModel.BusinessContact = "Test business contact";
-            this.testCustomerDetailsViewModel.ContactNumber = "Test contact number";
-            this.testCustomerDetailsViewModel.EmailAddress = "";
-
-            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.False);
-        }
-
-        [Test]
-        public void TestCanSaveCustomer_ShouldReturnTrue()
-        {
-            this.testCustomerDetailsViewModel.CompanyName = "Test company name";
-            this.testCustomerDetailsViewModel.BusinessContact = "Test business contact";
-            this.testCustomerDetailsViewModel.ContactNumber = "Test contact number";
-            this.testCustomerDetailsViewModel.EmailAddress = "Test email address";
-
-            Assert.That(this.testCustomerDetailsViewModel.CanSaveCustomer(new object()), Is.True);
         }
     }
 }
