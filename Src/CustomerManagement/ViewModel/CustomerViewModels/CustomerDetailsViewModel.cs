@@ -107,6 +107,12 @@ namespace CustomerManagement.ViewModel.CustomerViewModels
         public void Cancel()
         {
             // Restore Customer values to their originals.
+            this.CompanyName = this.initialCompanyName;
+            this.BusinessContact = this.initialBusinessContact;
+            this.ContactNumber = this.initialContactNumber;
+            this.EmailAddress = this.initialEmailAddress;
+            this.IsActive = this.initialIsActive;
+
             this.customerItemViewModel.CompanyName = this.initialCompanyName;
             this.customerItemViewModel.BusinessContact = this.initialBusinessContact;
             this.customerItemViewModel.ContactNumber = this.initialContactNumber;
